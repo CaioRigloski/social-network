@@ -1,8 +1,9 @@
-'use client'
+'use server'
 
 import { newFriendSchema, newPostSchema } from '@/lib/zod'
 import { toBase64 } from '@/lib/utils'
 import { z } from 'zod'
+import { signOut } from '../api/auth/[nextauth]/route'
 
 
 export async function createNewPost(values: z.infer<typeof newPostSchema>, inputImage: File, userId: string) {
@@ -33,4 +34,8 @@ export async function addNewFriend(values: z.infer<typeof newFriendSchema>) {
   } catch (err) {
     console.log(err)
   }
+}
+
+export async function signOutAction() {
+  await signOut()
 }

@@ -17,10 +17,11 @@ import Image from "next/image"
 
 import useSWR from "swr"
 import { newFriendSchema, newPostSchema } from "@/lib/zod"
-import { addNewFriend, createNewPost } from "./actions"
+import { addNewFriend, createNewPost, signOutAction } from "./actions"
 import { ScrollArea } from "@radix-ui/react-scroll-area"
 import { Separator } from "@/components/ui/separator"
 import UserInterface from "@/interfaces/feed/user.interface"
+
 
 const postsFetcher = (url: string): Promise<PostInterface[]> => fetch(url).then(r => r.json())
 const friendsSuggestionFetcher = (url: string): Promise<UserInterface[]> => fetch(url).then(r => r.json())
@@ -110,6 +111,9 @@ export default function Feed() {
             )}
         </div>
       </ScrollArea>
+      <form action={signOutAction}>
+        <Button type="submit">Sign Out</Button>
+      </form>
     </main>
   )
 }

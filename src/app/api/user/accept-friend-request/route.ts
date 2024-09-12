@@ -1,8 +1,6 @@
-import AcceptFriendRequest from "@/interfaces/api/user/accept-friend-request.interface";
-import { PrismaClient } from "@prisma/client";
-import { NextResponse } from "next/server";
-
-const prisma = new PrismaClient()
+import AcceptFriendRequest from "@/interfaces/api/user/accept-friend-request.interface"
+import { prisma } from "@/lib/prisma"
+import { NextResponse } from "next/server"
 
 export async function PUT(req: Request) {
   const data: AcceptFriendRequest = await req.json()

@@ -1,12 +1,13 @@
-import { z } from "zod";
-import { signInSchema } from "./sign-in.types";
+'use server'
+
+import { z } from "zod"
+import { signInSchema } from "@/lib/zod"
+import { signIn } from "@/app/api/auth/[nextauth]/route"
 
 export async function checkCredentials(values: z.infer<typeof signInSchema>) {
-  try {
-    await fetch("/api/user/check-credentials", {
-      method: "GET",
-      body: JSON.stringify(values)
-    })
-  } catch (err) {
-    console.log(err)
-  }}
+  await signIn("credentials", {
+    ...values,
+    redirect: true,
+    redirectTo: "/feed"
+  })
+}

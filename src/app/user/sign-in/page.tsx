@@ -1,10 +1,12 @@
+'use client'
+
 import { Button } from "@/components/ui/button";
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { FormControl, FormField, FormItem, FormLabel, FormMessage, Form } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { signInSchema } from "./sign-in.types";
+import { signInSchema } from "@/lib/zod";
 import { checkCredentials } from "./actions";
 
 export default function SignIn() {
@@ -18,7 +20,7 @@ export default function SignIn() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(checkCredentials)} className="space-y-8">
+      <form onSubmit={form.handleSubmit((values) => checkCredentials(values))} className="space-y-8" method="POST">
         <FormField
           control={form.control}
           name="username"

@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { createUser } from "./actions"
-import { signUpSchema } from "./sign-up.types"
+import { signUpSchema } from "@/lib/zod"
 
 
 export default function SignUp() {
@@ -30,7 +30,7 @@ export default function SignUp() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(data => createUser(JSON.parse(JSON.stringify(data))))} className="space-y-8">
+      <form onSubmit={form.handleSubmit(data => createUser(JSON.parse(JSON.stringify(data))))} className="space-y-8" method="POST">
         <FormField
           control={form.control}
           name="username"

@@ -16,7 +16,7 @@ import { useState } from "react"
 import Image from "next/image"
 
 import useSWR from "swr"
-import { newFriendSchema, newPostSchema } from "./feed.types"
+import { newFriendSchema, newPostSchema } from "@/lib/zod"
 import { addNewFriend, createNewPost } from "./actions"
 import { ScrollArea } from "@radix-ui/react-scroll-area"
 import { Separator } from "@/components/ui/separator"
@@ -40,13 +40,13 @@ export default function Feed() {
   const addNewFriendForm = useForm<z.infer<typeof newFriendSchema>>({
     resolver: zodResolver(newFriendSchema),
     defaultValues: {
-      userId: 1,
+      userId: "1",
     }
   })
 
   const postsData = useSWR("/api/feed/get-posts", postsFetcher, { refreshInterval: 1000 })
-  const friendsSuggestionData = useSWR("/api/user/get-friend-suggestions", friendsSuggestionFetcher)
- 
+  const friendsSuggestion = useSWR("/api/user/get-friend-suggestions", friendsSuggestionFetcher)
+  
   return (
     <main className="grid grid-rows-[auto_1fr] grid-cols-1 h-screen">
       <AlertDialog>
@@ -58,7 +58,7 @@ export default function Feed() {
             <AlertDialogTitle>Add post</AlertDialogTitle>
           </AlertDialogHeader>
             <Form {...newPostForm}>
-              <form onSubmit={newPostForm.handleSubmit(postData => createNewPost(postData, inputImage as File, 1))}>
+              <form onSubmit={newPostForm.handleSubmit(postData => createNewPost(postData, inputImage as File, "1"))}>
                 <FormField
                   control={newPostForm.control}
                   name="picture"
@@ -90,23 +90,24 @@ export default function Feed() {
           <Alert>
             <AlertTitle>:(</AlertTitle>
             <AlertDescription>
-              Não há postagens. Faça amigos e crie poasts para começar!
+              There's no posts. Make friends and add some posts!
             </AlertDescription>
           </Alert>
         }
       </div>
       <ScrollArea className="h-72 w-48 rounded-md border">
         <div className="p-4">
-          <h4 className="mb-4 text-sm font-medium leading-none">Tags</h4>
-          {friendsSuggestionData.data && friendsSuggestionData.data.map((suggestion) => 
-            <div key={"suggestion" + suggestion.id}>
-              <div className="text-sm">
-                {suggestion.username}
+          <h4 className="mb-4 text-sm font-medium leading-none">Friend suggestions</h4>
+          {
+            friendsSuggestion.data?.map((suggestion) => 
+              <div key={"suggestion" + suggestion.id}>
+                <div className="text-sm">
+                  {suggestion.username}
+                </div>
+                  <Button type="button" onClick={() => {addNewFriendForm.setValue("newFriendId", suggestion.id), addNewFriend(addNewFriendForm.getValues())}}>ADD</Button>
+                <Separator className="my-2" />
               </div>
-                <Button type="button" onClick={() => {addNewFriendForm.setValue("newFriendId", suggestion.id), addNewFriend(addNewFriendForm.getValues())}}>ADD</Button>
-              <Separator className="my-2" />
-            </div>
-          )}
+            )}
         </div>
       </ScrollArea>
     </main>

@@ -10,8 +10,8 @@ export async function GET(req: Request) {
         user: true
       }
     })
-    return NextResponse.json(posts)
+    return NextResponse.json( posts )
   } catch (err) {
-    return NextResponse.json({error: err}, {status: 500})
+    return NextResponse.json({ error: err }, { status: 500 })
   }
 }

@@ -4,32 +4,42 @@ import { auth } from "../../auth/[nextauth]/route"
 
 
 export async function GET() {
-    const idsOfFriends = new Promise(async(resolve, reject) => {
+  const session = await auth()
+
+  const idsOfFriendsAndRequests = async() => {
     const ids: string[] = []
-    
-    const res = await prisma.user.findMany({
+
+    const res = await prisma.user.findUnique({
+      where: {
+        id: session?.user?.id
+      },
       select: {
-        friends: true
+        friends: true,
+        friendRequestOf: true,
+        friendRequests: true
       }
     })
+
+    res?.friends.map(userFriends => ids.push(userFriends.id))
+    res?.friendRequests.map(userFriendRequests => ids.push(userFriendRequests.id))
+    res?.friendRequestOf.map(userFriendRequestsOf => ids.push(userFriendRequestsOf.id))
     
-    res.map(userFriends => userFriends.friends.map(friend => ids.push(friend.id)))
-    
-    resolve(ids)
-  })
-  const session = await auth()
+    return ids
+  }
+  
 
   try {
     const suggestions = await prisma.user.findMany({
       where: {
         id: {
-          notIn: await idsOfFriends as string[],
-          not: session?.user?.id
+          notIn: await idsOfFriendsAndRequests(),
+          not: session?.user?.id,
         }
       }
     })
-    return NextResponse.json(suggestions)
+
+    return NextResponse.json( suggestions )
   } catch (err) {
-    return NextResponse.json({"error": err})
+    return NextResponse.json({ "error": err })
   }
 }

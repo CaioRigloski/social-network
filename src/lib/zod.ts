@@ -19,6 +19,5 @@ export const newPostSchema = z.object({
 })
 
 export const newFriendSchema = z.object({
-  userId: z.string(),
   newFriendId: z.string()
 })

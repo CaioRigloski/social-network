@@ -1,38 +1,71 @@
 'use server'
 
 import { newFriendSchema, newPostSchema } from '@/lib/zod'
-import { toBase64 } from '@/lib/utils'
 import { z } from 'zod'
-import { signOut } from '../api/auth/[nextauth]/route'
+import { auth, signOut } from '../api/auth/[nextauth]/route'
+import { prisma } from '@/lib/prisma'
 
 
-export async function createNewPost(values: z.infer<typeof newPostSchema>, inputImage: File, userId: string) {
-  const imageAsBase64 = inputImage && await toBase64(inputImage)
-
-  const newValues = {
-    ...values,
-    userId: userId,
-    picture: btoa(imageAsBase64 as string)
-  }
+export async function createNewPost(values: z.infer<typeof newPostSchema>) {
+  const session = await auth()
+  const imageBuffer = Buffer.from(btoa(values.picture))
 
   try {
-    const response = await fetch("/api/feed/post-publication", {
-        method: "POST",
-        body: JSON.stringify(newValues)
+    const res = await prisma.post.create({
+      data: {
+        user: {
+          connect: {id: session?.user?.id}
+        },
+        picture: imageBuffer
+      }
     })
+    console.log(res)
   } catch (err) {
     console.log(err)
   }
 }
 
-export async function addNewFriend(values: z.infer<typeof newFriendSchema>) {
+export async function sendFriendRequest(values: z.infer<typeof newFriendSchema>) {
+  const session = await auth()
+  
   try {
-    const response = await fetch("/api/user/accept-friend-request", {
-      method: "PUT",
-      body: JSON.stringify(values)
+    await prisma.user.update({
+      where: {
+        id: session?.user?.id
+      },
+      data: {
+        friendRequests: {
+          connect: [{id: values.newFriendId}]
+        }
+      }
     })
+    
+    return { response: "Friend request sent"}
   } catch (err) {
-    console.log(err)
+    return { error: err }
+  }
+}
+
+export async function acceptFriendRequest(values: z.infer<typeof newFriendSchema>) {
+  const session = await auth()
+
+  try {
+    const res = await prisma.user.update({
+      where: {
+        id: session?.user?.id
+      },
+      data: {
+        friends: {
+          connect: [{id: values.newFriendId}]
+        },
+        friendRequestOf: {
+          disconnect: [{id: values.newFriendId}]
+        }
+      }
+    })
+    return { response: "Friend request accepted"}
+  } catch (err) {
+    return { error: err }
   }
 }
 

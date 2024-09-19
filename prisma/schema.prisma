@@ -14,14 +14,16 @@ datasource db {
 }
 
 model User {
-  id String @id @default(cuid())
+  id String @id @default(cuid()) @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   username String @db.VarChar(255)
   password String @db.VarChar(255)
   posts Post[]
-  friends User[] @relation("UserFriends")
-  symmetricFriends  User[] @relation("UserFriends")
+  friends User[] @relation("friends")
+  friendOf User[] @relation("friends")
+  friendRequests User[] @relation("friendRequests")
+  friendRequestOf User[] @relation("friendRequests")
   accounts Account[]
   sessions Session[]
 }
@@ -65,7 +67,7 @@ model VerificationRequest {
 }
 
 model Post {
-  id Int @id @default(autoincrement())
+  id String @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   user User @relation(fields: [userId], references: [id])

@@ -1,7 +1,7 @@
 import User from "./user.interface"
 
 export default interface Post {
-  id: number
+  id: string
   user: User
   picture: string
 }

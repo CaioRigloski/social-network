@@ -47,74 +47,71 @@ export default function Feed() {
   }
   
   return (
-    <>
-      <Header/>
-      <main className="grid grid-rows-[auto_1fr] grid-cols-1 h-screen">
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
-            <Button variant="outline" className="w-fit place-self-end">Add post</Button>
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Add post</AlertDialogTitle>
-            </AlertDialogHeader>
-              <Form {...newPostForm}>
-                <form onSubmit={newPostForm.handleSubmit(async (postData) => createNewPost({picture: await toBase64(inputImage as File) as string}))}>
-                  <FormField
-                    control={newPostForm.control}
-                    name="picture"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Picture</FormLabel>
-                        <FormControl>
-                          <Input type="file" accept="image/*" {...field} onChange={e => setInputImage(e.target.files?.[0])}/>
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                  {inputImage && <Image src={URL.createObjectURL(inputImage)} width={500} height={500} alt="image"/>}
-                  <FormMessage/>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction type="submit">Add</AlertDialogAction>
-                  </AlertDialogFooter>
-                </form>
-              </Form>
-          </AlertDialogContent>
-        </AlertDialog>
-        <div className="grid auto-rows-auto grid-cols-1">
+    <main className="grid grid-rows-[auto_1fr] grid-cols-1 h-screen">
+      <AlertDialog>
+        <AlertDialogTrigger asChild>
+          <Button variant="outline" className="w-fit place-self-end">Add post</Button>
+        </AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Add post</AlertDialogTitle>
+          </AlertDialogHeader>
+            <Form {...newPostForm}>
+              <form onSubmit={newPostForm.handleSubmit(async (postData) => createNewPost({picture: await toBase64(inputImage as File) as string}))}>
+                <FormField
+                  control={newPostForm.control}
+                  name="picture"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Picture</FormLabel>
+                      <FormControl>
+                        <Input type="file" accept="image/*" {...field} onChange={e => setInputImage(e.target.files?.[0])}/>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                {inputImage && <Image src={URL.createObjectURL(inputImage)} width={500} height={500} alt="image"/>}
+                <FormMessage/>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction type="submit">Add</AlertDialogAction>
+                </AlertDialogFooter>
+              </form>
+            </Form>
+        </AlertDialogContent>
+      </AlertDialog>
+      <div className="grid auto-rows-auto grid-cols-1">
+        {
+          postsData.data && postsData.data.map(post => <Post key={"post" + post.id} id={post.id} user={post.user} picture={post.picture}/>)
+        }
+        {
+          postsData.data?.length === 0 || postsData.error &&
+          <Alert>
+            <AlertTitle>:(</AlertTitle>
+            <AlertDescription>
+              There's no posts. Make friends and add some posts!
+            </AlertDescription>
+          </Alert>
+        }
+      </div>
+      <ScrollArea className="h-72 w-48 rounded-md border">
+        <div className="p-4">
+          <h4 className="mb-4 text-sm font-medium leading-none">Friend suggestions</h4>
           {
-            postsData.data && postsData.data.map(post => <Post key={"post" + post.id} id={post.id} user={post.user} picture={post.picture}/>)
-          }
-          {
-            postsData.data?.length === 0 || postsData.error &&
-            <Alert>
-              <AlertTitle>:(</AlertTitle>
-              <AlertDescription>
-                There's no posts. Make friends and add some posts!
-              </AlertDescription>
-            </Alert>
-          }
-        </div>
-        <ScrollArea className="h-72 w-48 rounded-md border">
-          <div className="p-4">
-            <h4 className="mb-4 text-sm font-medium leading-none">Friend suggestions</h4>
-            {
-              friendsSuggestions.data?.map((suggestion) => 
-                <div key={"suggestion" + suggestion.id}>
-                  <div className="text-sm">
-                    {suggestion.username}
-                  </div>
-                  <Button type="button" onClick={() => mutateFriendsSuggestions(suggestion.id)}>ADD</Button>
-                  <Separator className="my-2" />
+            friendsSuggestions.data?.map((suggestion) => 
+              <div key={"suggestion" + suggestion.id}>
+                <div className="text-sm">
+                  {suggestion.username}
                 </div>
-              )}
-          </div>
-        </ScrollArea>
-        <form action={signOutAction}>
-          <Button type="submit">Sign Out</Button>
-        </form>
-      </main>
-    </>
+                <Button type="button" onClick={() => mutateFriendsSuggestions(suggestion.id)}>ADD</Button>
+                <Separator className="my-2" />
+              </div>
+            )}
+        </div>
+      </ScrollArea>
+      <form action={signOutAction}>
+        <Button type="submit">Sign Out</Button>
+      </form>
+    </main>
   )
 }

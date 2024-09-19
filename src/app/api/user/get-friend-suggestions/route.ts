@@ -25,7 +25,7 @@ export async function GET() {
     res?.friendOf.map(userFriendOf => ids.push(userFriendOf.id))
     res?.friendRequests.map(userFriendRequests => ids.push(userFriendRequests.id))
     res?.friendRequestOf.map(userFriendRequestsOf => ids.push(userFriendRequestsOf.id))
-    console.log(res)
+ 
     return ids
   }
   

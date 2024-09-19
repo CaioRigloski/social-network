@@ -15,15 +15,17 @@ export async function GET() {
       },
       select: {
         friends: true,
+        friendOf: true,
         friendRequestOf: true,
         friendRequests: true
       }
     })
 
     res?.friends.map(userFriends => ids.push(userFriends.id))
+    res?.friendOf.map(userFriendOf => ids.push(userFriendOf.id))
     res?.friendRequests.map(userFriendRequests => ids.push(userFriendRequests.id))
     res?.friendRequestOf.map(userFriendRequestsOf => ids.push(userFriendRequestsOf.id))
-    
+    console.log(res)
     return ids
   }
   

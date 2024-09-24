@@ -41,13 +41,18 @@ export default function Header() {
       <NavigationMenu>
         <NavigationMenuList>
           <NavigationMenuItem>
-            <Link href="/docs" legacyBehavior passHref>
+            <Link href="/feed" legacyBehavior passHref>
               <NavigationMenuLink className={navigationMenuTriggerStyle()}>Feed</NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
           <NavigationMenuItem>
+            <Link href="/user/friends" legacyBehavior passHref>
+              <NavigationMenuLink className={navigationMenuTriggerStyle()}>Friends list</NavigationMenuLink>
+            </Link>
+          </NavigationMenuItem>
+          <NavigationMenuItem>
             <NavigationMenuTrigger>
-              <p>Friends</p>
+              <p>Friend requests</p>
               <NotificationCount count={friendRequests.data ? friendRequests.data.length : 0}></NotificationCount>
               <NavigationMenuContent>
                 {

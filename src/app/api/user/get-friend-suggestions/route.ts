@@ -32,6 +32,9 @@ export async function GET() {
 
   try {
     const suggestions = await prisma.user.findMany({
+      omit: {
+        password: true
+      },
       where: {
         id: {
           notIn: await idsOfFriendsAndRequests(),

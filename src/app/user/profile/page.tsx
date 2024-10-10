@@ -9,7 +9,7 @@ import { path } from "@/lib/utils"
 export default function Profile() {
   const session = useSession()
   const posts = useSWR(`/api/user/get-posts?id=${session.data?.user?.id}`, postsOfUserFetcher)
-  
+
   return (
     <main>
       <section>

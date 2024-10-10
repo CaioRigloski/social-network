@@ -44,6 +44,6 @@ export async function GET() {
 
     return NextResponse.json( friends )
   } catch (err) {
-    return NextResponse.json({ error: err})
+    throw new Error("User's friends retrieving error")
   }
 }

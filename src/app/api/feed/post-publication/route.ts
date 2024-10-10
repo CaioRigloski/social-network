@@ -10,6 +10,7 @@ export async function POST(req: Request){
     })
     return NextResponse.json( data )
   } catch (err) {
-    return NextResponse.json({ error: err }, { status: 500 })
+    throw new Error("Post publication error")
+
   }
 }

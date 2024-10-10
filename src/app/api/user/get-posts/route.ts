@@ -1,5 +1,6 @@
 'use server'
 
+import PostInterface from "@/interfaces/feed/post.interface"
 import { prisma } from "@/lib/prisma"
 import { NextRequest, NextResponse } from "next/server"
 
@@ -8,7 +9,7 @@ export async function GET(req: NextRequest) {
   const id = searchParams.get("id")
 
   try {
-    const res = await prisma.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: {
         id: id as string
       },
@@ -17,8 +18,8 @@ export async function GET(req: NextRequest) {
       }
     })
   
-    return NextResponse.json( res?.posts )
+    return NextResponse.json( user?.posts )
   } catch (err) {
-    return NextResponse.json({ error: err }, { status: 400 })
+    throw new Error("User's posts retrieving error")
   }
 }

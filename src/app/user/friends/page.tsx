@@ -1,5 +1,6 @@
 'use client'
 
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import {
   Table,
@@ -16,6 +17,28 @@ import useSWR from "swr"
 export default function Friends() {
   const friends = useSWR("/api/user/get-friends", friendsFetcher)
 
+  if(friends.data?.length === 0) {
+    return (
+      <Alert>
+        <AlertTitle>:(</AlertTitle>
+        <AlertDescription>
+          You don't have friends, make some!
+        </AlertDescription>
+      </Alert>
+    )
+  }
+
+  if(friends.error) {
+    return (
+      <Alert>
+        <AlertTitle>:(</AlertTitle>
+        <AlertDescription>
+          Error. Please contact the administrator.
+        </AlertDescription>
+      </Alert>
+    )
+  }
+
   return (
     <Table>
       <TableCaption>A list of your friends!</TableCaption>
@@ -29,7 +52,7 @@ export default function Friends() {
       </TableHeader>
       <TableBody>
         {
-          friends.data && friends.data?.map(friend => (
+          friends.data?.map(friend => (
             <TableRow key={"friend" + friend.id}>
               <TableCell className="font-medium">{friend.id}</TableCell>
               <TableCell>{friend.username}</TableCell>

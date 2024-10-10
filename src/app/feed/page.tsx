@@ -21,7 +21,6 @@ import NewPost from "@/components/common/NewPost"
 
 export default function Feed() {
   const postsData = useSWR("/api/feed/get-posts", postsFetcher)
-  console.log(postsData)
   const friendsSuggestions = useSWR("/api/user/get-friend-suggestions", friendsSuggestionsFetcher)
 
   const addNewFriendForm = useForm<z.infer<typeof newFriendSchema>>({
@@ -49,10 +48,10 @@ export default function Feed() {
       </AlertDialog>
       <div className="grid auto-rows-auto grid-cols-1">
         {
-          postsData.data && postsData.data.map(post => <Post key={"post" + post.id} id={post.id} user={post.user} picture={post.picture}/>)
+          postsData?.data?.map(post => <Post key={"post" + post.id} id={post.id} user={post.user} picture={post.picture}/>)
         }
         {
-          postsData.data?.length === 0 || postsData.error &&
+          postsData.data?.length === 0 && !postsData.error &&
           <Alert>
             <AlertTitle>:(</AlertTitle>
             <AlertDescription>
@@ -60,6 +59,16 @@ export default function Feed() {
             </AlertDescription>
           </Alert>
         }
+        {
+          postsData.error &&
+          <Alert>
+            <AlertTitle>:(</AlertTitle>
+            <AlertDescription>
+              Error. Please contact the administrator.
+            </AlertDescription>
+          </Alert>
+        }
+        
       </div>
       <ScrollArea className="h-72 w-48 rounded-md border">
         <div className="p-4">

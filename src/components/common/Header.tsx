@@ -3,16 +3,14 @@
 import {
   NavigationMenu,
   NavigationMenuContent,
-  NavigationMenuIndicator,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-  NavigationMenuViewport,
   navigationMenuTriggerStyle
 } from "@/components/ui/navigation-menu"
 import Link from "next/link"
-import NotificationCount from "./NotificationCount"
+import NotificationCount from "../NotificationCount"
 import useSWR from "swr"
 import { friendsRequestsFetcher } from "@/lib/swr"
 import { useForm } from "react-hook-form"
@@ -35,7 +33,7 @@ export default function Header() {
     await acceptFriendRequest(addNewFriendForm.getValues())
     friendRequests.mutate(friendRequests.data)
   }
-
+  
   return (
     <header>
       <NavigationMenu>
@@ -56,7 +54,7 @@ export default function Header() {
               <NotificationCount count={friendRequests.data ? friendRequests.data.length : 0}></NotificationCount>
               <NavigationMenuContent>
                 {
-                  friendRequests.data && friendRequests.data.map(user =>
+                  friendRequests?.data?.map(user =>
                     <div key={"request" + user.id}>
                       <div className="text-sm">
                         {user.username}
@@ -68,6 +66,11 @@ export default function Header() {
                 }
               </NavigationMenuContent>
             </NavigationMenuTrigger>
+          </NavigationMenuItem>
+          <NavigationMenuItem>
+            <Link href="/user/profile" legacyBehavior passHref>
+              <NavigationMenuLink className={navigationMenuTriggerStyle()}>Profile</NavigationMenuLink>
+            </Link>
           </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>

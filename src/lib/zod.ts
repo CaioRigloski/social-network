@@ -15,7 +15,7 @@ export const signInSchema = z.object({
 })
 
 export const newPostSchema = z.object({
-  picture: z.string()
+  picture: z.any().refine(file => "image/".includes(file))
 })
 
 export const newFriendSchema = z.object({

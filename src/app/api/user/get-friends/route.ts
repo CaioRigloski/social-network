@@ -42,7 +42,6 @@ export async function GET() {
       }
     })
 
-    console.log(friends)
     return NextResponse.json( friends )
   } catch (err) {
     return NextResponse.json({ error: err})

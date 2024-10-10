@@ -21,6 +21,6 @@ export async function GET(req: Request) {
     })
     return NextResponse.json( res?.friendRequestOf, { status: 200 })
   } catch (err) {
-    return NextResponse.json({ error: err }, { status: 400 })
+    throw new Error('Friend requests retrieving error')
   }
 }

@@ -46,6 +46,5 @@ export async function GET() {
     return NextResponse.json( suggestions )
   } catch (err) {
     throw new Error("Friend suggestions retrieving error")
-
   }
 }

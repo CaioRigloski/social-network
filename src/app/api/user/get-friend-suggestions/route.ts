@@ -14,10 +14,26 @@ export async function GET() {
         id: session?.user?.id
       },
       select: {
-        friends: true,
-        friendOf: true,
-        friendRequestOf: true,
-        friendRequests: true
+        friends: {
+          select: {
+            id: true
+          }
+        },
+        friendOf: {
+          select: {
+            id: true
+          }
+        },
+        friendRequestOf: {
+          select: {
+            id: true
+          }
+        },
+        friendRequests: {
+          select: {
+            id: true
+          }
+        }
       }
     })
 
@@ -28,7 +44,6 @@ export async function GET() {
  
     return ids
   }
-  
 
   try {
     const suggestions = await prisma.user.findMany({

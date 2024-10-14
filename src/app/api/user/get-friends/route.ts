@@ -6,7 +6,12 @@ import UserInterface from "@/interfaces/feed/user.interface"
 
 export async function GET() {
   const session = await auth()
-  
+
+  // API route "/feed/get-posts" needs to do a fetch and be forced to pass the headers necessary for credentials retrieving.
+  if(!session?.user) {
+    throw new Error("Session is null")
+  }
+
   try {
     const friends: UserInterface[] = []
 
@@ -31,7 +36,7 @@ export async function GET() {
         }
       }
     })
-
+  
     res.map(select => {
       if(select.friends.length !== 0) {
         select.friends.map(friend => friends.push(friend))
@@ -41,8 +46,8 @@ export async function GET() {
         select.friendOf.map(friend => friends.push(friend))
       }
     })
-
-    return NextResponse.json( friends )
+ 
+    return NextResponse.json( friends, { status: 200 } )
   } catch (err) {
     throw new Error("User's friends retrieving error")
   }

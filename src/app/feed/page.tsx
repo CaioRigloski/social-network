@@ -10,7 +10,7 @@ import useSWR from "swr"
 
 import { signOutAction } from "./actions"
 import { postsFetcher } from "@/lib/swr"
-import FriendSuggestions from "@/components/feed/FriendsSugestions"
+import FriendSuggestions from "@/components/feed/FriendSuggestions"
 
 
 export default function Feed() {

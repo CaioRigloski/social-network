@@ -18,9 +18,10 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { newFriendSchema } from "@/lib/zod"
 import { Separator } from "@radix-ui/react-separator"
-import { acceptFriendRequest } from "@/app/feed/actions"
+import { acceptFriendRequest, signOutAction } from "@/app/feed/actions"
 import { useSession } from "next-auth/react"
 import PostInterface from "@/interfaces/feed/post.interface"
+import { Button } from "../ui/button"
 
 
 export default function Header() {
@@ -58,6 +59,9 @@ export default function Header() {
           </p>
         </div>
       </div>
+      <form className="flex justify-end" action={signOutAction}>
+        <Button type="submit">Sign Out</Button>
+      </form>
       <NavigationMenu>
         <NavigationMenuList>
           <NavigationMenuItem>

@@ -26,7 +26,6 @@ export default function NewPost() {
 
   async function mutatePostsData() {
     const newPostData = await createNewPost({picture: await toBase64(inputImage as File)})
-    console.log(newPostData)
     mutate("/api/feed/get-posts", (data: any) => [...data, newPostData], { revalidate: true, populateCache: true })
   }
 

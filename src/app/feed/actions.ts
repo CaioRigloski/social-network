@@ -21,7 +21,7 @@ export async function sendFriendRequest(values: z.infer<typeof newFriendSchema>)
       }
     })
     
-    return { response: "Friend request sent"}
+    return { response: "Friend request sent" }
   } catch (err) {
     return { error: err }
   }
@@ -44,7 +44,7 @@ export async function acceptFriendRequest(values: z.infer<typeof newFriendSchema
         }
       }
     })
-    return { response: "Friend request accepted"}
+    return { response: "Friend request accepted" }
   } catch (err) {
     return { error: err }
   }

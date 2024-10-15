@@ -14,11 +14,29 @@ export async function GET(req: NextRequest) {
         id: id as string
       },
       select: {
-        posts: true
+        id: true,
+        username: true,
+        posts: {
+          omit: {
+            userId: true
+          }
+        }
       }
     })
-  
-    return NextResponse.json( user?.posts )
+    
+    if(user) {
+      const modeledPosts: PostInterface[] = user?.posts.map(post => {
+        return {
+          id: post.id,
+          user: {
+            id: user.id,
+            username: user.username
+          },
+          picture: post.picture
+        }
+      })
+      return NextResponse.json( modeledPosts )
+    }
   } catch (err) {
     throw new Error("User's posts retrieving error")
   }

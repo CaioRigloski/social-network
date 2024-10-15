@@ -15,7 +15,7 @@ import FriendSuggestions from "@/components/feed/FriendSuggestions"
 
 export default function Feed() {
   const postsData = useSWR("/api/feed/get-posts", postsFetcher)
-
+  console.log(postsData)
   return (
     <main className="grid grid-rows-[auto_1fr] grid-cols-1 h-screen">
       <AlertDialog>
@@ -31,7 +31,7 @@ export default function Feed() {
       </AlertDialog>
       <div className="grid auto-rows-auto grid-cols-1">
         {
-          postsData?.data?.map(post => <Post key={"post" + post.id} id={post.id} user={post.user} picture={post.picture}/>)
+          postsData?.data?.map(post => <Post key={"post" + post?.id} id={post?.id} user={post?.user} picture={post?.picture}/>)
         }
         {
           postsData.data?.length === 0 && !postsData.error &&

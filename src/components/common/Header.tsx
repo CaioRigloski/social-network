@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/navigation-menu"
 import Link from "next/link"
 import NotificationCount from "../NotificationCount"
-import useSWR from "swr"
+import useSWR, { mutate } from "swr"
 import { friendsRequestsFetcher } from "@/lib/swr"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -20,6 +20,7 @@ import { newFriendSchema } from "@/lib/zod"
 import { Separator } from "@radix-ui/react-separator"
 import { acceptFriendRequest } from "@/app/feed/actions"
 import { useSession } from "next-auth/react"
+import PostInterface from "@/interfaces/feed/post.interface"
 
 
 export default function Header() {
@@ -33,7 +34,13 @@ export default function Header() {
   async function mutateFriendRequests(newFriendId: string) {
     addNewFriendForm.setValue("newFriendId", newFriendId)
     await acceptFriendRequest(addNewFriendForm.getValues())
-    friendRequests.mutate(friendRequests.data)
+    friendRequests.mutate(friendRequests.data?.filter(user => user.id ! == newFriendId))
+
+    const newFriendPostsResult = await fetch(`/api/user/get-posts?id=${newFriendId}`)
+    const newFriendPosts: PostInterface[] =  await newFriendPostsResult.json()
+    console.log(newFriendPostsResult, newFriendPosts)
+ 
+    mutate("/api/feed/get-posts", (data: any) => [...data, newFriendPosts.forEach(post => {return post})], { populateCache: true })
   }
   
   return (
@@ -74,7 +81,7 @@ export default function Header() {
                       <div className="text-sm">
                         {user.username}
                       </div>
-                      <div onClick={() => {mutateFriendRequests(user.id)}}>ADD</div>
+                      <div onClick={() => {mutateFriendRequests(user.id)}}>Accept</div>
                       <Separator className="my-2" />
                     </div>
                   )

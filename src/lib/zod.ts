@@ -18,6 +18,11 @@ export const newPostSchema = z.object({
   picture: z.any().refine(file => "image/".includes(file))
 })
 
+export const newCommentSchema = z.object({
+  postId: z.string(),
+  text: z.string()
+})
+
 export const newFriendSchema = z.object({
   newFriendId: z.string()
 })

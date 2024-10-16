@@ -2,7 +2,7 @@
 
 import { prisma } from "@/lib/prisma"
 import { auth } from "./api/auth/[nextauth]/route"
-import { newPostSchema } from "@/lib/zod"
+import { newCommentSchema, newPostSchema } from "@/lib/zod"
 import { z } from "zod"
 import { randomUUID } from "crypto"
 import { writeFileSync } from "fs"
@@ -39,6 +39,32 @@ export async function createNewPost(values: z.infer<typeof newPostSchema>) {
       user: res.user,
       picture: res.picture
     } as PostInterface
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+export async function createNewComment(values: z.infer<typeof newCommentSchema>) {
+  const session = await auth()
+
+  try {
+    const res = await prisma.post.update({
+      where: {
+        id: values.postId
+      },
+      data: {
+        comments: {
+          create: {
+            text: values.text,
+            user: {
+              connect: {
+                id: session?.user?.id
+              }
+            }
+          }
+        }
+      }
+    })
   } catch (err) {
     console.log(err)
   }

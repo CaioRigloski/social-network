@@ -35,6 +35,19 @@ export async function GET(req: Request) {
             id: true,
             username: true
           }
+        },
+        comments: {
+          select: {
+            id: true,
+            text: true,
+            user: {
+              select: {
+                id: true,
+                username: true,
+                profilePicture: true,
+              }
+            }
+          }
         }
       }
     })
@@ -43,7 +56,8 @@ export async function GET(req: Request) {
       return {
         id: post.id,
         user: post.user,
-        picture: post.picture
+        picture: post.picture,
+        comments: post.comments
       }
     })
 

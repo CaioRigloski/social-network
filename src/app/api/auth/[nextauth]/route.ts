@@ -14,6 +14,7 @@ declare module "next-auth" {
   interface User {
     id?: string | undefined
     username: string | undefined
+    profilePicture?: string | null
     email?: string | null | undefined
     emailVerified?: Date | null
   }
@@ -50,7 +51,8 @@ export const { handlers: { GET, POST }, auth, signIn, signOut } = NextAuth({
           if(user) {
             return {
               id: user.id.toString(),
-              username: user.username
+              username: user.username,
+              profilePicture: user.profilePicture
             }
           } else {
             throw new Error("User not found.")
@@ -63,19 +65,25 @@ export const { handlers: { GET, POST }, auth, signIn, signOut } = NextAuth({
     })
   ],
   callbacks: {
-    async session({ session, token, user }) {
+    async session({ session, token, user, trigger, newSession}) {
       // Attach the user information to the session
       if (token.user) {
         // @ts-ignore
         session.user = token.user
       }
+
       return session;
     },
-    async jwt({ token, user }) {
+    async jwt({ token, trigger, user, session }) {
       if (user) {
-        token.user = {id: user.id as string, username: user.username as string};
+        token.user = {id: user.id, username: user.username, profilePicture: user.profilePicture}
       }
-      return token;
+
+      if (trigger === "update" && session?.user?.profilePicture) {
+        token.user.profilePicture = session.user.profilePicture
+      }
+
+      return token
     },
   },
 })

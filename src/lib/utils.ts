@@ -18,5 +18,6 @@ export function base64toBytes(picture: string) {
 }
 
 export const path = {
-  posts: "uploads/posts"
+  posts: "uploads/posts",
+  profile: "uploads/profile"
 }

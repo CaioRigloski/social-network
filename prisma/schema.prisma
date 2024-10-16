@@ -16,6 +16,7 @@ datasource db {
 
 model User {
   id String @id @default(cuid()) @unique
+  profilePicture String? @db.VarChar(255)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   username String @db.VarChar(255)

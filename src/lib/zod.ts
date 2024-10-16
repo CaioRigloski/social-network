@@ -21,3 +21,7 @@ export const newPostSchema = z.object({
 export const newFriendSchema = z.object({
   newFriendId: z.string()
 })
+
+export const newProfilePictureSchema = z.object({
+  picture: z.any().refine(file => "image/".includes(file))
+})

@@ -35,3 +35,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# development public folders
+/public/images/uploads/posts/*
+/public/images/uploads/profile/*

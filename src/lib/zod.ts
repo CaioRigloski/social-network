@@ -23,6 +23,10 @@ export const newCommentSchema = z.object({
   text: z.string()
 })
 
+export const newLikeSchema = z.object({
+  postId: z.string()
+})
+
 export const newFriendSchema = z.object({
   newFriendId: z.string()
 })

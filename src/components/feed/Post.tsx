@@ -4,7 +4,8 @@ import { path } from "@/lib/utils"
 import Comment from "@/components/common/Comment"
 import { Textarea } from "../ui/textarea"
 import { KeyboardEvent, useState } from "react"
-import { createNewComment } from "@/app/actions"
+import { createNewComment, createNewLike } from "@/app/actions"
+import { Button } from "../ui/button"
 
 
 export default function Post(props: PostInterface) {
@@ -26,6 +27,11 @@ export default function Post(props: PostInterface) {
         <img alt="post picture" width={0} height={0} src={`/images/${path.posts}/${props.picture}.jpeg`} className="w-80 h-auto"/>
       </CardContent>
       <CardFooter className="flex flex-col">
+        <Button onClick={() => createNewLike({postId: props.id})}>Send like</Button>
+        <p>Like count: {props.likes.count}</p>
+        {
+          props.likes.users.map(like => <div>{like.username} liked!</div>)
+        }
         <Textarea placeholder="Leave a comment!" onChange={e => setComment(e.target.value)} onKeyUp={e => detectEnterKey(e)}/>
         {
           props.comments.map(comment => <Comment key={comment.id} id={comment.id} text={comment.text} user={comment.user}/>)

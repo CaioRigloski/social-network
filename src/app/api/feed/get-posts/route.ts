@@ -48,16 +48,39 @@ export async function GET(req: Request) {
               }
             }
           }
+        },
+        likes: {
+          select: {
+            user: {
+              select: {
+                id: true,
+                username: true,
+                profilePicture: true
+              }
+            }
+          }
+        }
+        ,
+        _count: {
+          select: {
+            likes: true
+          }
         }
       }
     })
 
     const modeledPosts: PostInterface[] = posts.map(post => {
+      const postLikes = post.likes.map(like => like.user)
+
       return {
         id: post.id,
         user: post.user,
         picture: post.picture,
-        comments: post.comments
+        comments: post.comments,
+        likes: {
+          users: postLikes,
+          count:post._count.likes
+        }
       }
     })
 

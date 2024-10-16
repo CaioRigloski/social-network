@@ -28,7 +28,7 @@ export default function Feed() {
       </AlertDialog>
       <div className="grid auto-rows-auto grid-cols-1">
         {
-          postsData?.data?.map(post => <Post key={"post" + post?.id} id={post?.id} user={post?.user} picture={post?.picture} comments={post.comments}/>)
+          postsData?.data?.map(post => <Post key={"post" + post?.id} id={post?.id} user={post?.user} picture={post?.picture} comments={post.comments} likes={post.likes}/>)
         }
         {
           postsData.data?.length === 0 && !postsData.error &&

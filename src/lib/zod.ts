@@ -34,3 +34,13 @@ export const newFriendSchema = z.object({
 export const newProfilePictureSchema = z.object({
   picture: z.any().refine(file => "image/".includes(file))
 })
+
+export const chatSchema = z.object({
+  rommId: z.string().optional()
+})
+
+export const messageSchema = z.object({
+  text: z.string(),
+  friendId: z.string(),
+  chatSchema
+})

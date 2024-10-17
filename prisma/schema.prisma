@@ -30,6 +30,9 @@ model User {
   sessions Session[]
   comments Comment[]
   likes Like[]
+  chats Chat[] @relation("userChat")
+  friendChats Chat[] @relation("userFriendChat")
+  messages Message[]
 }
 
 model Account {
@@ -102,4 +105,28 @@ model Like {
   postId String
 
   @@unique([userId, postId])
+}
+
+model Chat {
+  id String @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user User @relation("userChat", fields: [userId], references: [id])
+  userId String
+  friend User @relation("userFriendChat", fields: [friendId], references: [id])
+  friendId String
+  messages Message[]
+
+  @@unique([userId, friendId])
+}
+
+model Message {
+  id String @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user User @relation(fields: [userId], references: [id])
+  userId String
+  chat Chat @relation(fields: [chatId], references: [id])
+  chatId String
+  text String @db.VarChar(500) 
 }

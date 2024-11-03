@@ -21,6 +21,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/middleware.js", "src/interfaces/NotificationCount.interfacets", "server.js", "src/socket.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/middleware.js", "src/interfaces/NotificationCount.interfacets", "server.ts", "src/socket.ts"],
   "exclude": ["node_modules"]
 }

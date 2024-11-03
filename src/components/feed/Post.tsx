@@ -28,9 +28,9 @@ export default function Post(props: PostInterface) {
       </CardContent>
       <CardFooter className="flex flex-col">
         <Button onClick={() => createNewLike({postId: props.id})}>Send like</Button>
-        <p>Like count: {props.likes.count}</p>
+        <p>Like count: {props.likesCount}</p>
         {
-          props.likes.users.map(like => <div>{like.username} liked!</div>)
+          props.likes.map(like => <div key={like.id}>{like.user.username} liked!</div>)
         }
         <Textarea placeholder="Leave a comment!" onChange={e => setComment(e.target.value)} onKeyUp={e => detectEnterKey(e)}/>
         {

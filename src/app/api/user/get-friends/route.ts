@@ -11,7 +11,7 @@ export async function GET() {
   if(!session?.user) {
     throw new Error("Session is null")
   }
-
+  
   try {
     const friends: UserInterface[] = []
 
@@ -36,7 +36,7 @@ export async function GET() {
         }
       }
     })
-  
+
     res.map(select => {
       if(select.friends.length !== 0) {
         select.friends.map(friend => friends.push(friend))
@@ -46,7 +46,7 @@ export async function GET() {
         select.friendOf.map(friend => friends.push(friend))
       }
     })
- 
+    
     return NextResponse.json( friends, { status: 200 } )
   } catch (err) {
     throw new Error("User's friends retrieving error")

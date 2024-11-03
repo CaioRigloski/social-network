@@ -51,6 +51,7 @@ export async function GET(req: Request) {
         },
         likes: {
           select: {
+            id: true,
             user: {
               select: {
                 id: true,
@@ -70,17 +71,16 @@ export async function GET(req: Request) {
     })
 
     const modeledPosts: PostInterface[] = posts.map(post => {
-      const postLikes = post.likes.map(like => like.user)
-
       return {
         id: post.id,
-        user: post.user,
+        user: {
+          id: post.user.id,
+          username: post.user.username
+        },
         picture: post.picture,
         comments: post.comments,
-        likes: {
-          users: postLikes,
-          count:post._count.likes
-        }
+        likes: post.likes,
+        likesCount: post._count.likes
       }
     })
 

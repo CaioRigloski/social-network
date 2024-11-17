@@ -7,7 +7,5 @@ import { signIn } from "@/app/api/auth/[nextauth]/route"
 export async function checkCredentials(values: z.infer<typeof signInSchema>) {
   await signIn("credentials", {
     ...values,
-    redirect: true,
-    redirectTo: "/feed"
   })
 }

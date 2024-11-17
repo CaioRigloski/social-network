@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/table"
 import { friendsFetcher } from "@/lib/swr"
 import useSWR from "swr"
+import removeFriend from "./actions"
 
 export default function Friends() {
   const friends = useSWR("/api/user/get-friends", friendsFetcher)
@@ -57,7 +58,7 @@ export default function Friends() {
               <TableCell className="font-medium">{friend.id}</TableCell>
               <TableCell>{friend.username}</TableCell>
               <TableCell>{friend.createdAt ? new Date(friend.createdAt).toLocaleDateString("en-US") : "No info"}</TableCell>
-              <TableCell className="text-right"><Button>Remove</Button></TableCell>
+              <TableCell className="text-right" onClick={() => removeFriend({friendId: friend.id})}><Button>Remove</Button></TableCell>
             </TableRow>
           ))
         }

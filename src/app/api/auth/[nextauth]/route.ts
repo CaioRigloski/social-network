@@ -6,6 +6,7 @@ import { prisma } from "@/lib/prisma"
 import { signInSchema } from "@/lib/zod"
 
 
+
 declare module "next-auth" {
   interface Session {
     user: DefaultSession['user']
@@ -26,7 +27,7 @@ declare module "next-auth/jwt" {
   }
 }
 
-export const { handlers: { GET, POST }, auth, signIn, signOut } = NextAuth({
+export const { handlers: { GET, POST }, auth, signIn, signOut, unstable_update } = NextAuth({
   adapter: PrismaAdapter(prisma),
   session: {
     strategy: "jwt"
@@ -34,8 +35,8 @@ export const { handlers: { GET, POST }, auth, signIn, signOut } = NextAuth({
   providers: [
     Credentials({
       credentials: {
-        username: {},
-        password: {}
+        username: { label: "username" },
+        password: { label: "password" , type: "password" }
       },
       authorize: async (credentials) => {
         try {
@@ -75,13 +76,13 @@ export const { handlers: { GET, POST }, auth, signIn, signOut } = NextAuth({
       return session;
     },
     async jwt({ token, trigger, user, session }) {
-      if (user) {
+      if (trigger === "signIn" && user || trigger === "update" && user) {
         token.user = {id: user.id, username: user.username, profilePicture: user.profilePicture}
       }
-
-      if (trigger === "update" && session?.user?.profilePicture) {
+  
+      /* if (trigger === "update" && session?.user?.profilePicture) {
         token.user.profilePicture = session.user.profilePicture
-      }
+      } */
 
       return token
     },

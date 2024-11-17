@@ -51,5 +51,5 @@ export async function acceptFriendRequest(values: z.infer<typeof newFriendSchema
 }
 
 export async function signOutAction() {
-  await signOut()
+  await signOut({ redirectTo: "/user/sign-in" })
 }

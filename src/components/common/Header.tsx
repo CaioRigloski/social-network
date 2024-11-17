@@ -26,6 +26,7 @@ import { Button } from "../ui/button"
 
 export default function Header() {
   const session = useSession()
+
   const friendRequests = useSWR("/api/user/get-friend-requests", friendsRequestsFetcher)
 
   const addNewFriendForm = useForm<z.infer<typeof newFriendSchema>>({
@@ -39,11 +40,10 @@ export default function Header() {
 
     const newFriendPostsResult = await fetch(`/api/user/get-posts?id=${newFriendId}`)
     const newFriendPosts: PostInterface[] =  await newFriendPostsResult.json()
-    console.log(newFriendPostsResult, newFriendPosts)
  
     mutate("/api/feed/get-posts", (data: any) => [...data, newFriendPosts.forEach(post => {return post})], { populateCache: true })
   }
-  
+
   return (
     <header>
       <div className="relative mt-8 flex items-center justify-end gap-x-4">
@@ -53,7 +53,7 @@ export default function Header() {
             <Link href="/user/profile">
               <>
                 <span className="absolute inset-0"></span>
-                {session.data?.user?.username}
+                {session.status === "authenticated" && session.data.user?.username}
               </>
             </Link>
           </p>

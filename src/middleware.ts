@@ -1,4 +1,3 @@
-import NextAuth from 'next-auth'
 import { auth } from '@/app/api/auth/[nextauth]/route'
 import { NextResponse } from 'next/server'
 import { AUTHENTICATED_REDIRECT, PUBLIC_ROUTES } from './lib/routes'
@@ -6,8 +5,9 @@ import { AUTHENTICATED_REDIRECT, PUBLIC_ROUTES } from './lib/routes'
 
 export default auth((req) => {
  const { nextUrl } = req
-
+ 
  const isAuthenticated = !!req.auth
+
  const isPublicRoute = PUBLIC_ROUTES.includes(nextUrl.pathname)
 
  if(nextUrl.pathname === "/") {

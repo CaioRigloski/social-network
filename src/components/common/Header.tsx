@@ -18,10 +18,11 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { newFriendSchema } from "@/lib/zod"
 import { Separator } from "@radix-ui/react-separator"
-import { acceptFriendRequest, signOutAction } from "@/app/feed/actions"
+import { acceptFriendRequest } from "@/app/feed/actions"
 import { useSession } from "next-auth/react"
 import PostInterface from "@/interfaces/feed/post.interface"
 import { Button } from "../ui/button"
+import { signOutAction } from "@/app/user/sign-out/actions"
 
 
 export default function Header() {

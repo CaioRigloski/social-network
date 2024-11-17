@@ -2,7 +2,7 @@
 
 import { newFriendSchema } from '@/lib/zod'
 import { z } from 'zod'
-import { auth, signOut } from '../api/auth/[nextauth]/route'
+import { auth } from '../api/auth/[nextauth]/route'
 import { prisma } from '@/lib/prisma'
 
 
@@ -48,8 +48,4 @@ export async function acceptFriendRequest(values: z.infer<typeof newFriendSchema
   } catch (err) {
     return { error: err }
   }
-}
-
-export async function signOutAction() {
-  await signOut({ redirectTo: "/user/sign-in" })
 }

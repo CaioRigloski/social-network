@@ -79,11 +79,7 @@ export const { handlers: { GET, POST }, auth, signIn, signOut, unstable_update }
       if (trigger === "signIn" && user || trigger === "update" && user) {
         token.user = {id: user.id, username: user.username, profilePicture: user.profilePicture}
       }
-  
-      /* if (trigger === "update" && session?.user?.profilePicture) {
-        token.user.profilePicture = session.user.profilePicture
-      } */
-
+      
       return token
     },
   },

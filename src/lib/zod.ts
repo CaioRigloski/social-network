@@ -27,6 +27,11 @@ export const newLikeSchema = z.object({
   postId: z.string()
 })
 
+export const unlikeSchema = z.object({
+  postId: z.string(),
+  likeId: z.string()
+})
+
 export const newFriendSchema = z.object({
   newFriendId: z.string()
 })

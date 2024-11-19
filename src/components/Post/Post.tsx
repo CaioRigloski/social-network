@@ -1,14 +1,15 @@
 import PostInterface from "@/interfaces/feed/post.interface"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card"
 import { path } from "@/lib/utils"
-import Comment from "@/components/common/Comment"
+import { Comment } from "@/components/Post/Comment/Comment"
 import { Textarea } from "../ui/textarea"
 import { KeyboardEvent, useState } from "react"
-import { createNewComment, createNewLike } from "@/app/actions"
 import { Button } from "../ui/button"
+import { createNewComment } from "@/app/post/comment/actions"
+import { createNewLike } from "@/app/post/like/actions"
 
 
-export default function Post(props: PostInterface) {
+export function Post(props: PostInterface) {
   const [ comment, setComment ] = useState<string>("")
 
   // Save the comment just if only the ENTER key is pressed, SHIFT + ENDER breaks the line.

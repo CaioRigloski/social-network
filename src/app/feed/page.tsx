@@ -3,9 +3,9 @@
 import { Button } from "@/components/ui/button"
 import { AlertDialog, AlertDialogHeader, AlertDialogContent, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import Post from "@/components/feed/Post"
-import NewPost from "@/components/common/NewPost"
-import FriendSuggestions from "@/components/feed/FriendSuggestions"
+import { Post } from "@/components/Post/Post"
+import { NewPostModal } from "@/components/Post/NewPostModal/NewPostModal"
+import { FriendSuggestions } from "@/components/feed/FriendSuggestions/FriendSuggestions"
 import { postsFetcher } from "@/lib/swr"
 import useSWR from "swr"
 
@@ -23,7 +23,7 @@ export default function Feed() {
           <AlertDialogHeader>
             <AlertDialogTitle>Add post</AlertDialogTitle>
           </AlertDialogHeader>
-          <NewPost/>
+          <NewPostModal/>
         </AlertDialogContent>
       </AlertDialog>
       <div className="grid auto-rows-auto grid-cols-1">

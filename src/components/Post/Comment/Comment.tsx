@@ -6,7 +6,7 @@ import {
 import CommentInterface from "@/interfaces/feed/comment.interface"
 import { path } from "@/lib/utils"
 
-export default function Comment(props: CommentInterface) {
+export function Comment(props: CommentInterface) {
   const profilePicture = props.user.profilePicture || undefined
   const username = props.user.username
 

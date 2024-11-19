@@ -10,7 +10,7 @@ import { Separator } from "@/components/ui/separator"
 import { z } from "zod"
 
 
-export default function FriendSuggestions() {
+export function FriendSuggestions() {
   const friendsSuggestions = useSWR("/api/user/get-friend-suggestions", friendsSuggestionsFetcher)
 
   const addNewFriendForm = useForm<z.infer<typeof newFriendSchema>>({

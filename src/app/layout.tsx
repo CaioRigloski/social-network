@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
-import Header from "@/components/common/Header"
+import Header from "@/components/Header/Header"
 import { auth } from "./api/auth/[nextauth]/route"
 import { SessionProvider } from 'next-auth/react'
 

@@ -8,6 +8,7 @@ import { Button } from "../ui/button"
 import { createNewComment } from "@/app/post/comment/actions"
 import { createNewLike, unlike } from "@/app/post/like/actions"
 import { useSession } from "next-auth/react"
+import { mutate } from "swr"
 
 
 export function Post(props: PostInterface) {
@@ -23,10 +24,20 @@ export function Post(props: PostInterface) {
     }
   }
 
-  function setLikeIdState(likeId: string) {
-    setLikeId(likeId)
-  }
+  async function mutatePostsData(postId: string, likeId: string) {
+    await unlike({postId, likeId})
 
+    mutate("/api/feed/get-posts", () => {
+      (posts: PostInterface[]) => {
+        posts.map(post => {
+          if(post.id === postId) {
+            post.likes.slice(post.likes.findIndex(like => like.id === likeId))
+          }
+        })
+      }
+    })
+  }
+  
   return (
     <Card>
       <CardHeader>
@@ -36,12 +47,12 @@ export function Post(props: PostInterface) {
         <img alt="post picture" width={0} height={0} src={`/images/${path.posts}/${props.picture}.jpeg`} className="w-80 h-auto"/>
       </CardContent>
       <CardFooter className="flex flex-col">
-        {likeId.length > 0 ? <Button onClick={() => unlike({postId: props.id, likeId: likeId})}>Unlike</Button> : <Button onClick={() => createNewLike({postId: props.id})}>Send like</Button>}
+        {likeId.length > 0 ? <Button onClick={() => mutatePostsData(props.id, likeId)}>Unlike</Button> : <Button onClick={() => createNewLike({postId: props.id})}>Send like</Button>}
         <p>Like count: {props.likesCount}</p>
         {
           props.likes.map(like => {
             if(like.user.id === session.data?.user?.id) {
-              useEffect(() => setLikeIdState(like.id))
+              useEffect(() => setLikeId(like.id))
               return <p key={like.id}><strong>{like.user.username}</strong> <strong className="text-sky-500">(you)</strong> liked!</p>
             }
             return <p key={like.id}><strong>{like.user.username}</strong> liked!</p>

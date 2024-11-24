@@ -3,15 +3,16 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card
 import { detectEnterKey, path } from "@/lib/utils"
 import { Comment } from "@/components/Post/Comment/Comment"
 import { Textarea } from "../ui/textarea"
-import { KeyboardEvent, useEffect, useState } from "react"
+import { KeyboardEvent, MouseEventHandler, useEffect, useState } from "react"
 import { Button } from "../ui/button"
 import { createNewComment } from "@/app/post/comment/actions"
 import { createNewLike, unlike } from "@/app/post/like/actions"
 import { useSession } from "next-auth/react"
 import { mutate } from "swr"
+import { deletePost } from "@/app/post/actions"
 
 
-export function Post(props: {post: PostInterface}) {
+export function Post(props: { post: PostInterface }) {
   const session = useSession()
 
   const [ likeId, setLikeId ] = useState<string>("")
@@ -35,11 +36,17 @@ export function Post(props: {post: PostInterface}) {
     )
   }
 
+  async function deletePostAndMutatePostsData() {
+    await deletePost({postId: props.post.id}).then(() => 
+        mutate<PostInterface[]>("/api/feed/get-posts", data => data?.filter((post: PostInterface) => post.id !== props.post.id), false)
+    )
+  }
   
   return (
     <Card>
       <CardHeader>
         <CardTitle>{props.post.user?.username}</CardTitle>
+        {props.post.user.id === session.data?.user?.id && <Button onClick={deletePostAndMutatePostsData}>Delete</Button>}
       </CardHeader>
       <CardContent>
         <img alt="post picture" width={0} height={0} src={`/images/${path.posts}/${props.post.picture}.jpeg`} className="w-80 h-auto"/>

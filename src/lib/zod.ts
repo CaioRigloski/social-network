@@ -18,6 +18,10 @@ export const newPostSchema = z.object({
   picture: z.any().refine(file => "image/".includes(file))
 })
 
+export const deletePostSchema = z.object({
+  postId: z.string()
+})
+
 export const newCommentSchema = z.object({
   postId: z.string(),
   text: z.string()

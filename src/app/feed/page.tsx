@@ -8,6 +8,7 @@ import { NewPostModal } from "@/components/Post/NewPostModal/NewPostModal"
 import { FriendSuggestions } from "@/components/feed/FriendSuggestions/FriendSuggestions"
 import { postsFetcher } from "@/lib/swr"
 import useSWR from "swr"
+import PostInterface from "@/interfaces/feed/post.interface"
 
 
 export default function Feed() {

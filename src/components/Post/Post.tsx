@@ -34,6 +34,7 @@ export function Post(props: {post: PostInterface}) {
       mutate("/api/feed/get-posts", () => {})
     )
   }
+
   
   return (
     <Card>
@@ -47,7 +48,7 @@ export function Post(props: {post: PostInterface}) {
         {likeId.length > 0 ? <Button onClick={unlikeAndMutatePostsData}>Unlike</Button> : <Button onClick={likeAndMutatePostsData}>Send like</Button>}
         <p>Like count: {props.post.likesCount}</p>
         {
-          props.post.likes.map(like => {
+          props.post.likes?.map(like => {
             if(like.user.id === session.data?.user?.id) {
               useEffect(() => setLikeId(like.id), [])
               return <p key={like.id}><strong>{like.user.username}</strong> <strong className="text-sky-500">(you)</strong> liked!</p>
@@ -57,7 +58,7 @@ export function Post(props: {post: PostInterface}) {
         }
         <Textarea placeholder="Leave a comment!" onChange={e => setComment(e.target.value)} onKeyUp={e => detectEnterKey(e) && commentAndMutatePostsData()}/>
         {
-          props.post.comments.map(comment => {
+          props.post.comments?.map(comment => {
             if(comment.user.id === session.data?.user?.id) {
               return <Comment key={comment.id} comment={comment} isOwn/>
             }

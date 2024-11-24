@@ -1,6 +1,6 @@
 import PostInterface from "@/interfaces/feed/post.interface"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card"
-import { path } from "@/lib/utils"
+import { detectEnterKey, path } from "@/lib/utils"
 import { Comment } from "@/components/Post/Comment/Comment"
 import { Textarea } from "../ui/textarea"
 import { KeyboardEvent, useEffect, useState } from "react"
@@ -16,13 +16,6 @@ export function Post(props: {post: PostInterface}) {
 
   const [ likeId, setLikeId ] = useState<string>("")
   const [ comment, setComment ] = useState<string>("")
-
-  // Save the comment just if only the ENTER key is pressed, SHIFT + ENDER breaks the line.
-  function detectEnterKey(event: KeyboardEvent<HTMLTextAreaElement>) {
-    if (event.key === "Enter" && !event.shiftKey) {
-      commentAndMutatePostsData()
-    }
-  }
 
   async function unlikeAndMutatePostsData() {
     await unlike({postId: props.post.id, likeId: likeId}).then(() => 
@@ -62,7 +55,7 @@ export function Post(props: {post: PostInterface}) {
             return <p key={like.id}><strong>{like.user.username}</strong> liked!</p>
           })
         }
-        <Textarea placeholder="Leave a comment!" onChange={e => setComment(e.target.value)} onKeyUp={e => detectEnterKey(e)}/>
+        <Textarea placeholder="Leave a comment!" onChange={e => setComment(e.target.value)} onKeyUp={e => detectEnterKey(e) && commentAndMutatePostsData()}/>
         {
           props.post.comments.map(comment => {
             if(comment.user.id === session.data?.user?.id) {

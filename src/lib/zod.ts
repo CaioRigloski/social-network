@@ -27,6 +27,11 @@ export const deleteCommentSchema = z.object({
   commentId: z.string()
 })
 
+export const editCommentSchema = z.object({
+  commentId: z.string(),
+  text: z.string()
+})
+
 export const newLikeSchema = z.object({
   postId: z.string()
 })

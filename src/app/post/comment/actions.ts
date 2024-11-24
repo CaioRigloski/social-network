@@ -1,6 +1,8 @@
+'use server'
+
 import { auth } from "@/app/api/auth/[nextauth]/route"
 import { prisma } from "@/lib/prisma"
-import { newCommentSchema } from "@/lib/zod"
+import { deleteCommentSchema, newCommentSchema } from "@/lib/zod"
 import { z } from "zod"
 
 export async function createNewComment(values: z.infer<typeof newCommentSchema>) {
@@ -21,6 +23,23 @@ export async function createNewComment(values: z.infer<typeof newCommentSchema>)
               }
             }
           }
+        }
+      }
+    })
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+export async function deleteComment(values: z.infer<typeof deleteCommentSchema>) {
+  const session = await auth()
+
+  try {
+    await prisma.comment.delete({
+      where: {
+        id: values.commentId,
+        user: {
+          id: session?.user?.id
         }
       }
     })

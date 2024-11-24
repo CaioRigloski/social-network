@@ -1,14 +1,23 @@
+import { deleteComment } from "@/app/post/comment/actions"
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
 } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
 import CommentInterface from "@/interfaces/feed/comment.interface"
 import { path } from "@/lib/utils"
+import { mutate } from "swr"
 
-export function Comment(props: CommentInterface) {
-  const profilePicture = props.user.profilePicture || undefined
-  const username = props.user.username
+export function Comment(props: { comment: CommentInterface, isOwn?: boolean }) {
+  const profilePicture = props.comment.user.profilePicture || undefined
+  const username = props.comment.user.username
+
+  async function deleteCommentAndMutatePostsData() {
+    await deleteComment({commentId: props.comment.id}).then(() =>
+      mutate("/api/feed/get-posts", () => {})
+    )
+  }
 
   return (
     <ul role="list" className="divide-y divide-gray-100">
@@ -20,8 +29,9 @@ export function Comment(props: CommentInterface) {
           </Avatar>
           <div className="min-w-0 flex-auto">
             <p className="text-sm font-semibold leading-6 text-gray-900">{username}</p>
-            <p className="mt-1 truncate text-xs leading-5 text-gray-500">{props.text}</p>
+            <p className="mt-1 truncate text-xs leading-5 text-gray-500">{props.comment.text}</p>
           </div>
+          {props.isOwn && <Button onClick={deleteCommentAndMutatePostsData}>Delete</Button>}
         </div>
       </li>
     </ul>

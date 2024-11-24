@@ -18,9 +18,9 @@ export function Post(props: {post: PostInterface}) {
   const [ comment, setComment ] = useState<string>("")
 
   // Save the comment just if only the ENTER key is pressed, SHIFT + ENDER breaks the line.
-  async function detectEnterKey(event: KeyboardEvent<HTMLTextAreaElement>) {
+  function detectEnterKey(event: KeyboardEvent<HTMLTextAreaElement>) {
     if (event.key === "Enter" && !event.shiftKey) {
-      await createNewComment({postId: props.post.id, text: comment})
+      commentAndMutatePostsData()
     }
   }
 
@@ -32,6 +32,12 @@ export function Post(props: {post: PostInterface}) {
 
   async function likeAndMutatePostsData() {
     await createNewLike({postId: props.post.id}).then(() => 
+      mutate("/api/feed/get-posts", () => {})
+    )
+  }
+
+  async function commentAndMutatePostsData() {
+    await createNewComment({postId: props.post.id, text: comment}).then(() => 
       mutate("/api/feed/get-posts", () => {})
     )
   }
@@ -58,7 +64,12 @@ export function Post(props: {post: PostInterface}) {
         }
         <Textarea placeholder="Leave a comment!" onChange={e => setComment(e.target.value)} onKeyUp={e => detectEnterKey(e)}/>
         {
-          props.post.comments.map(comment => <Comment key={comment.id} id={comment.id} text={comment.text} user={comment.user}/>)
+          props.post.comments.map(comment => {
+            if(comment.user.id === session.data?.user?.id) {
+              return <Comment key={comment.id} comment={comment} isOwn/>
+            }
+            return <Comment key={comment.id} comment={comment}/>
+          })
         }
       </CardFooter>
     </Card>

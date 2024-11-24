@@ -11,7 +11,7 @@ import { useSession } from "next-auth/react"
 import { mutate } from "swr"
 
 
-export function Post(props: PostInterface) {
+export function Post(props: {post: PostInterface}) {
   const session = useSession()
 
   const [ likeId, setLikeId ] = useState<string>("")
@@ -20,37 +20,35 @@ export function Post(props: PostInterface) {
   // Save the comment just if only the ENTER key is pressed, SHIFT + ENDER breaks the line.
   async function detectEnterKey(event: KeyboardEvent<HTMLTextAreaElement>) {
     if (event.key === "Enter" && !event.shiftKey) {
-      await createNewComment({postId: props.id, text: comment})
+      await createNewComment({postId: props.post.id, text: comment})
     }
   }
 
-  async function mutatePostsData(postId: string, likeId: string) {
-    await unlike({postId, likeId})
+  async function unlikeAndMutatePostsData() {
+    await unlike({postId: props.post.id, likeId: likeId}).then(() => 
+      mutate("/api/feed/get-posts", () => {})
+    )
+  }
 
-    mutate("/api/feed/get-posts", () => {
-      (posts: PostInterface[]) => {
-        posts.map(post => {
-          if(post.id === postId) {
-            post.likes.slice(post.likes.findIndex(like => like.id === likeId))
-          }
-        })
-      }
-    })
+  async function likeAndMutatePostsData() {
+    await createNewLike({postId: props.post.id}).then(() => 
+      mutate("/api/feed/get-posts", () => {})
+    )
   }
   
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{props?.user?.username}</CardTitle>
+        <CardTitle>{props.post.user?.username}</CardTitle>
       </CardHeader>
       <CardContent>
-        <img alt="post picture" width={0} height={0} src={`/images/${path.posts}/${props.picture}.jpeg`} className="w-80 h-auto"/>
+        <img alt="post picture" width={0} height={0} src={`/images/${path.posts}/${props.post.picture}.jpeg`} className="w-80 h-auto"/>
       </CardContent>
       <CardFooter className="flex flex-col">
-        {likeId.length > 0 ? <Button onClick={() => mutatePostsData(props.id, likeId)}>Unlike</Button> : <Button onClick={() => createNewLike({postId: props.id})}>Send like</Button>}
-        <p>Like count: {props.likesCount}</p>
+        {likeId.length > 0 ? <Button onClick={unlikeAndMutatePostsData}>Unlike</Button> : <Button onClick={likeAndMutatePostsData}>Send like</Button>}
+        <p>Like count: {props.post.likesCount}</p>
         {
-          props.likes.map(like => {
+          props.post.likes.map(like => {
             if(like.user.id === session.data?.user?.id) {
               useEffect(() => setLikeId(like.id))
               return <p key={like.id}><strong>{like.user.username}</strong> <strong className="text-sky-500">(you)</strong> liked!</p>
@@ -60,7 +58,7 @@ export function Post(props: PostInterface) {
         }
         <Textarea placeholder="Leave a comment!" onChange={e => setComment(e.target.value)} onKeyUp={e => detectEnterKey(e)}/>
         {
-          props.comments.map(comment => <Comment key={comment.id} id={comment.id} text={comment.text} user={comment.user}/>)
+          props.post.comments.map(comment => <Comment key={comment.id} id={comment.id} text={comment.text} user={comment.user}/>)
         }
       </CardFooter>
     </Card>

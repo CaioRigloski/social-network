@@ -12,7 +12,7 @@ import useSWR from "swr"
 
 export default function Feed() {
   const postsData = useSWR("/api/feed/get-posts", postsFetcher)
-
+  
   return (
     <main className="grid grid-rows-[auto_1fr] grid-cols-1 h-screen">
       <AlertDialog>
@@ -28,7 +28,7 @@ export default function Feed() {
       </AlertDialog>
       <div className="grid auto-rows-auto grid-cols-1">
         {
-          postsData?.data?.map(post => <Post key={"post" + post?.id} id={post?.id} user={post?.user} picture={post?.picture} comments={post.comments} likes={post.likes} likesCount={post.likesCount}/>)
+          postsData?.data?.map(post => <Post key={"post" + post?.id} post={post}/>)
         }
         {
           postsData.data?.length === 0 && !postsData.error &&

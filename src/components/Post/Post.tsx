@@ -50,7 +50,7 @@ export function Post(props: {post: PostInterface}) {
         {
           props.post.likes.map(like => {
             if(like.user.id === session.data?.user?.id) {
-              useEffect(() => setLikeId(like.id))
+              useEffect(() => setLikeId(like.id), [])
               return <p key={like.id}><strong>{like.user.username}</strong> <strong className="text-sky-500">(you)</strong> liked!</p>
             }
             return <p key={like.id}><strong>{like.user.username}</strong> liked!</p>

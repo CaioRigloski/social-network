@@ -9,8 +9,14 @@ import { z } from "zod";
 import { signInSchema } from "@/lib/zod";
 import { checkCredentials } from "./actions";
 import { useSession } from "next-auth/react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { useSearchParams } from "next/navigation";
+import { SignInParamsInterface } from "@/interfaces/params/user/sign-in.interface";
 
 export default function SignIn() {
+  const searchParams = useSearchParams() as SignInParamsInterface
+  const status = searchParams.get("status")
+
   const session = useSession()
 
   const form = useForm<z.infer<typeof signInSchema>>({
@@ -57,6 +63,13 @@ export default function SignIn() {
           )}
         />
         <Button type="submit">Submit</Button>
+        {
+          status === "created" &&
+            <Alert className="bg-green-400 text-white">
+              <AlertTitle>User succesfully created!</AlertTitle>
+              <AlertDescription>Sign-in with your credentials</AlertDescription>
+            </Alert>
+        }
       </form>
     </Form>
   )

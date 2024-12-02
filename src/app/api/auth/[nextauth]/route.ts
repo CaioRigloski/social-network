@@ -32,6 +32,7 @@ export const { handlers: { GET, POST }, auth, signIn, signOut, unstable_update }
   session: {
     strategy: "jwt"
   },
+  secret: process.env.SECRET,
   providers: [
     Credentials({
       credentials: {

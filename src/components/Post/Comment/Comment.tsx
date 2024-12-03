@@ -7,6 +7,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import CommentInterface from "@/interfaces/feed/comment.interface"
+import PostInterface from "@/interfaces/feed/post.interface"
 import { detectEnterKey, path } from "@/lib/utils"
 import { useState } from "react"
 import { mutate } from "swr"
@@ -20,14 +21,27 @@ export function Comment(props: { comment: CommentInterface, isOwn?: boolean }) {
 
   async function deleteCommentAndMutatePostsData() {
     await deleteComment({commentId: props.comment.id}).then(() =>
-      mutate("/api/feed/get-posts", () => {})
+      mutate<PostInterface[]>("/api/feed/get-posts", data => {
+        if (data) {
+          data.map(post => post.comments.filter(comment => comment.id !== props.comment.id))
+        }
+        return data
+      })
     )
   }
 
   async function editCommentAndMutatePostsData() {
     await editComment({commentId: props.comment.id, text: editedComment}).then(() =>
-      mutate("/api/feed/get-posts", () => {})
+      mutate<PostInterface[]>("/api/feed/get-posts", data => {
+        if (data) {
+          data.map(post => post.comments.map(comment => {
+            if (comment.id === props.comment.id) comment.text = editedComment
+          }))
+        }
+        return data
+      })
     )
+    setCommentEditionIsOpen(false)
   }
 
   return (
@@ -49,6 +63,6 @@ export function Comment(props: { comment: CommentInterface, isOwn?: boolean }) {
       </li>
     </ul>
     :
-    <Textarea placeholder={props.comment.text} onChange={e => setEditedComment(e.target.value)} onKeyUp={e => detectEnterKey(e) && editCommentAndMutatePostsData()}/>
+    <Textarea placeholder={props.comment.text} onChange={e => setEditedComment(e.target.value)} onKeyUp={e => detectEnterKey(e) && editCommentAndMutatePostsData() }/>
   )
 }

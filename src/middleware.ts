@@ -1,12 +1,15 @@
 import { auth } from '@/app/api/auth/[nextauth]/route'
 import { NextResponse } from 'next/server'
 import { AUTHENTICATED_REDIRECT, PUBLIC_ROUTES, SIGN_IN_URL } from './lib/routes'
+import { GlobalParamsInterface } from './interfaces/params/common/global.interface'
 
 
 export default auth((req) => {
  const { nextUrl } = req
+ const searchParams = nextUrl.searchParams as GlobalParamsInterface
 
- const from = nextUrl.searchParams.get("from")
+ const from = searchParams.get("from")
+ 
  // Check if is authenticated
  const isAuthenticated = !!req.auth
 

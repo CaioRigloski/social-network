@@ -10,7 +10,7 @@ import {
   navigationMenuTriggerStyle
 } from "@/components/ui/navigation-menu"
 import Link from "next/link"
-import NotificationCount from "../NotificationCount"
+import NotificationCount from "./NotificationsCount/NotificationCount"
 import useSWR, { mutate } from "swr"
 import { friendsRequestsFetcher } from "@/lib/swr"
 import { useForm } from "react-hook-form"
@@ -42,7 +42,10 @@ export default function Header() {
     const newFriendPostsResult = await fetch(`/api/user/get-posts?id=${newFriendId}`)
     const newFriendPosts: PostInterface[] =  await newFriendPostsResult.json()
  
-    mutate("/api/feed/get-posts", (data: any) => [...data, newFriendPosts.forEach(post => {return post})], { populateCache: true })
+    mutate<PostInterface[]>("/api/feed/get-posts", data => {
+      if (data) return [...data, ...newFriendPosts]
+    }, { populateCache: true })
+    
   }
 
   return (

@@ -49,7 +49,7 @@ export function NewPostModal() {
         <FormMessage/>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction type="submit">Add</AlertDialogAction>
+          <AlertDialogAction type="submit" disabled={!inputImage}>Add</AlertDialogAction>
         </AlertDialogFooter>
       </form>
     </Form>

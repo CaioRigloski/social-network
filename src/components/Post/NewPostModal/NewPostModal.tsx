@@ -13,6 +13,7 @@ import { z } from "zod"
 import { useState } from "react"
 import { toBase64 } from "@/lib/utils"
 import { mutate } from "swr"
+import PostInterface from "@/interfaces/feed/post.interface"
 
 
 export function NewPostModal() {
@@ -27,7 +28,11 @@ export function NewPostModal() {
 
   async function mutatePostsData() {
     const newPostData = await createNewPost({picture: await toBase64(inputImage as File)})
-    mutate("/api/feed/get-posts", (data: any) => [...data, newPostData], { revalidate: true, populateCache: true })
+    
+    mutate<PostInterface[]>("/api/feed/get-posts", data => {
+      if (data && newPostData) return [...data, newPostData]
+    },
+    { populateCache: true })
   }
 
   return (

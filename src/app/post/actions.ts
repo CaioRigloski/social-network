@@ -5,15 +5,20 @@ import { auth } from "../api/auth/[nextauth]/route"
 import { deletePostSchema, newPostSchema } from "@/lib/zod"
 import { z } from "zod"
 import { randomUUID } from "crypto"
-import { writeFileSync } from "fs"
+import { existsSync, writeFileSync } from "fs"
 import { path } from "@/lib/utils"
 import PostInterface from "@/interfaces/feed/post.interface"
+import { mkdir } from "fs/promises"
 
 
 export async function createNewPost(values: z.infer<typeof newPostSchema>) {
   const session = await auth()
-
+  
   try {
+    if (!existsSync(path.public_post_images)) {
+      await mkdir(path.public_post_images, {recursive: true})
+    }
+
     const UUID = randomUUID()
     writeFileSync(`./public/images/${path.posts}/${UUID}.jpeg`, Buffer.from(values.picture.replace(/^data:image\/\w+;base64,/, ""), "base64"))
 

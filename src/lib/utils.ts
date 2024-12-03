@@ -9,7 +9,8 @@ export function cn(...inputs: ClassValue[]) {
 
 export const path = {
   posts: "uploads/posts",
-  profile: "uploads/profile"
+  profile: "uploads/profile",
+  public_post_images: "./public/images/uploads/posts"
 }
 
 export const toBase64 = (file: File) => new Promise((resolve, reject) => {

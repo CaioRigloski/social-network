@@ -25,8 +25,13 @@ export function Post(props: { post: PostInterface }) {
   }
 
   async function likeAndMutatePostsData() {
-    await createNewLike({postId: props.post.id}).then(() => 
-      mutate("/api/feed/get-posts", () => {})
+    await createNewLike({postId: props.post.id}).then((newLike) => 
+      mutate<PostInterface[]>("/api/feed/get-posts", data => {
+        data?.map(post => {
+          if (post.id === props.post.id && newLike) post.likes.unshift(newLike)
+        })
+      return data
+      })
     )
   }
 
@@ -62,7 +67,6 @@ export function Post(props: { post: PostInterface }) {
         {
           props.post.likes?.map(like => {
             if(like.user.id === session.data?.user?.id) {
-              useEffect(() => setLikeId(like.id), [])
               return <p key={like.id}><strong>{like.user.username}</strong> <strong className="text-sky-500">(you)</strong> liked!</p>
             }
             return <p key={like.id}><strong>{like.user.username}</strong> liked!</p>

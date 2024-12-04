@@ -18,6 +18,11 @@ export function Post(props: { post: PostInterface }) {
   const [ likeId, setLikeId ] = useState<string>("")
   const [ comment, setComment ] = useState<string>("")
 
+  useEffect(() => {
+    const userLikeId = props.post.likes.find(like => like.user.id === session.data?.user?.id)
+    if(userLikeId) setLikeId(userLikeId.id)
+  }, [props.post.likes, likeId])
+
   async function unlikeAndMutatePostsData() {
     await unlike({postId: props.post.id, likeId: likeId}).then(() => 
       mutate("/api/feed/get-posts", () => {})

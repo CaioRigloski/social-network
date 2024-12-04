@@ -45,7 +45,11 @@ export default function Header() {
     mutate<PostInterface[]>("/api/feed/get-posts", data => {
       if (data) return [...data, ...newFriendPosts]
     }, { populateCache: true })
-    
+  }
+
+  async function clearCacheAndSignout() {
+    await mutate(() => true, undefined, false)
+    signOutAction()
   }
 
   return (
@@ -63,7 +67,7 @@ export default function Header() {
           </p>
         </div>
       </div>
-      <form className="flex justify-end" action={signOutAction}>
+      <form className="flex justify-end" action={clearCacheAndSignout}>
         <Button type="submit">Sign Out</Button>
       </form>
       <NavigationMenu>

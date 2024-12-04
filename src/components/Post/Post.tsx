@@ -31,8 +31,13 @@ export function Post(props: { post: PostInterface }) {
   }
 
   async function commentAndMutatePostsData() {
-    await createNewComment({postId: props.post.id, text: comment}).then(() => 
-      mutate("/api/feed/get-posts", () => {})
+    await createNewComment({postId: props.post.id, text: comment}).then((newComment) => 
+      mutate<PostInterface[]>("/api/feed/get-posts", data => {
+        data?.map(post => {
+          if (post.id === props.post.id && newComment) post.comments.unshift(newComment)
+        })
+      return data
+      })
     )
   }
 

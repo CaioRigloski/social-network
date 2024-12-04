@@ -47,6 +47,9 @@ export async function GET(req: Request) {
                 profilePicture: true,
               }
             }
+          },
+          orderBy: {
+            createdAt: "desc"
           }
         },
         likes: {

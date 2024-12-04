@@ -13,6 +13,10 @@ export const path = {
   public_post_images: "./public/images/uploads/posts"
 }
 
+export const imageFormats = {
+  posts: "jpeg"
+}
+
 export const toBase64 = (file: File) => new Promise((resolve, reject) => {
   const reader = new FileReader();
     reader.readAsDataURL(file);

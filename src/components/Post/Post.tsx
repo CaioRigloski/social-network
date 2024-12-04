@@ -37,7 +37,7 @@ export function Post(props: { post: PostInterface }) {
   }
 
   async function deletePostAndMutatePostsData() {
-    await deletePost({postId: props.post.id}).then(() => 
+    await deletePost({postId: props.post.id, imageName: props.post.picture}).then(() => 
         mutate<PostInterface[]>("/api/feed/get-posts", data => data?.filter((post: PostInterface) => post.id !== props.post.id), false)
     )
   }

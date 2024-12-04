@@ -5,8 +5,8 @@ import { auth } from "../api/auth/[nextauth]/route"
 import { deletePostSchema, newPostSchema } from "@/lib/zod"
 import { z } from "zod"
 import { randomUUID } from "crypto"
-import { existsSync, writeFileSync } from "fs"
-import { path } from "@/lib/utils"
+import { existsSync, unlinkSync, writeFileSync } from "fs"
+import { imageFormats, path } from "@/lib/utils"
 import PostInterface from "@/interfaces/feed/post.interface"
 import { mkdir } from "fs/promises"
 
@@ -20,7 +20,7 @@ export async function createNewPost(values: z.infer<typeof newPostSchema>) {
     }
 
     const UUID = randomUUID()
-    writeFileSync(`./public/images/${path.posts}/${UUID}.jpeg`, Buffer.from(values.picture.replace(/^data:image\/\w+;base64,/, ""), "base64"))
+    writeFileSync(`${path.public_post_images}/${UUID}.${imageFormats.posts}`, Buffer.from(values.picture.replace(/^data:image\/\w+;base64,/, ""), "base64"))
 
     const res = await prisma.post.create({
       data: {
@@ -61,6 +61,7 @@ export async function deletePost(values: z.infer<typeof deletePostSchema>) {
         }
       }
     })
+    unlinkSync(`${path.public_post_images}/${values.imageName}.${imageFormats.posts}`)
   } catch (err) {
     console.log(err)
   }

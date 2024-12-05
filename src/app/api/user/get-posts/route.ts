@@ -2,16 +2,19 @@ import { prisma } from "@/lib/prisma"
 import PostInterface from "@/interfaces/feed/post.interface"
 import { NextRequest, NextResponse } from "next/server"
 import { auth } from "../../auth/[nextauth]/route"
+import { ThirdProfileInterface } from "@/interfaces/params/user/third-profile.interface"
 
 export async function GET(req: NextRequest) {
   const session = await auth()
-  const searchParams = req.nextUrl.searchParams
-  const id = searchParams.get("id") || session?.user
-  
+  const searchParams = req.nextUrl.searchParams as ThirdProfileInterface
+  const userId = searchParams.get("id") || session?.user?.id
+
+  if(!userId) return NextResponse.json("ID do usuário não especificado", { status: 400 })
+
   try {
     const user = await prisma.user.findUnique({
       where: {
-        id: session?.user?.id
+        id: userId
       },
       select: {
         id: true,

@@ -67,7 +67,7 @@ export function Post(props: { post: PostInterface }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{props.post.user?.username}</CardTitle>
+        <CardTitle><a href={`/user/profile/${props.post.user.id}`}>{props.post.user?.username}</a></CardTitle>
         {props.post.user.id === session.data?.user?.id && <Button onClick={deletePostAndMutatePostsData}>Delete</Button>}
       </CardHeader>
       <CardContent>

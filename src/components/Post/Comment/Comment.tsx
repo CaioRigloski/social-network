@@ -8,14 +8,15 @@ import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import CommentInterface from "@/interfaces/feed/comment.interface"
 import PostInterface from "@/interfaces/feed/post.interface"
-import { detectEnterKey, path } from "@/lib/utils"
-import { useState } from "react"
+import { checkiIfIsOwnProfile, detectEnterKey, path } from "@/lib/utils"
+import { useEffect, useState } from "react"
 import { mutate } from "swr"
 
 export function Comment(props: { comment: CommentInterface, isOwn?: boolean }) {
   const [ editedComment, setEditedComment ] = useState<string>("")
   const [ commentEditionIsOpen, setCommentEditionIsOpen ] = useState<boolean>(false)
 
+  const id = props.comment.user.id
   const profilePicture = props.comment.user.profilePicture || undefined
   const username = props.comment.user.username
 
@@ -54,7 +55,7 @@ export function Comment(props: { comment: CommentInterface, isOwn?: boolean }) {
             <AvatarFallback>{username.charAt(0)}</AvatarFallback>
           </Avatar>
           <div className="min-w-0 flex-auto">
-            <p className="text-sm font-semibold leading-6 text-gray-900">{username}</p>
+            <p className="text-sm font-semibold leading-6 text-gray-900"><a href={props.isOwn ? "/user/profile" : `user/profile/${id}`}>{username}</a></p>
             <p className="mt-1 truncate text-xs leading-5 text-gray-500">{props.comment.text}</p>
           </div>
           {props.isOwn && <Button onClick={deleteCommentAndMutatePostsData}>Delete</Button>}

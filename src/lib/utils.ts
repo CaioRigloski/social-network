@@ -1,3 +1,4 @@
+import { auth } from "@/app/api/auth/[nextauth]/route"
 import { type ClassValue, clsx } from "clsx"
 import { KeyboardEvent } from "react"
 import { twMerge } from "tailwind-merge"
@@ -11,6 +12,15 @@ export const path = {
   posts: "uploads/posts",
   profile: "uploads/profile",
   public_post_images: "./public/images/uploads/posts"
+}
+
+export async function checkiIfIsOwnProfile(id: string) {
+  const session = await auth()
+  if (id === session?.user?.id) {
+    return "/api/user/profile"
+  } else {
+    return `/api/user/profile/${id}`
+  }
 }
 
 export const imageFormats = {

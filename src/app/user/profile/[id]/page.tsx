@@ -5,12 +5,12 @@ import { postsOfUserFetcher, userFetcher } from "@/lib/swr"
 import { path} from "@/lib/utils"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { ThirdProfileInterface } from "@/interfaces/params/user/third-profile.interface"
+import { ThirdUserProfileParamsInterface } from "@/interfaces/params/user/third-profile.interface"
 import { useParams } from "next/navigation"
 
 
 export default function Profile() {
-  const params: ThirdProfileInterface = useParams()
+  const params: ThirdUserProfileParamsInterface = useParams()
   const user = useSWR(`/api/user/get-user-info?id=${params.id}`, userFetcher)
   const posts = useSWR(`/api/user/get-posts?id=${params.id}`, postsOfUserFetcher)
 

@@ -26,26 +26,3 @@ export async function sendFriendRequest(values: z.infer<typeof newFriendSchema>)
     return { error: err }
   }
 }
-
-export async function acceptFriendRequest(values: z.infer<typeof newFriendSchema>) {
-  const session = await auth()
-
-  try {
-    const res = await prisma.user.update({
-      where: {
-        id: session?.user?.id
-      },
-      data: {
-        friends: {
-          connect: [{id: values.newFriendId}]
-        },
-        friendRequestOf: {
-          disconnect: [{id: values.newFriendId}]
-        }
-      }
-    })
-    return { response: "Friend request accepted" }
-  } catch (err) {
-    return { error: err }
-  }
-}

@@ -19,7 +19,7 @@ export function Post(props: { post: PostInterface }) {
   const [ comment, setComment ] = useState<string>("")
 
   useEffect(() => {
-    const userLikeId = props.post.likes.find(like => like.user.id === session.data?.user?.id)
+    const userLikeId = props.post?.likes?.find(like => like.user.id === session.data?.user?.id)
     if(userLikeId) {
       setLikeId(userLikeId.id)
     } else {

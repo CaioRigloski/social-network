@@ -40,6 +40,11 @@ export default function Friends() {
     )
   }
 
+  async function removeFriendAndMutateFriendsData(friendId: string) {
+    await removeFriend({ friendId: friendId })
+    friends.mutate(data => data?.filter(user => user.id !== friendId))
+  }
+
   return (
     <Table>
       <TableCaption>A list of your friends!</TableCaption>
@@ -58,7 +63,7 @@ export default function Friends() {
               <TableCell className="font-medium">{friend.id}</TableCell>
               <TableCell>{friend.username}</TableCell>
               <TableCell>{friend.createdAt ? new Date(friend.createdAt).toLocaleDateString("en-US") : "No info"}</TableCell>
-              <TableCell className="text-right" onClick={() => removeFriend({friendId: friend.id})}><Button>Remove</Button></TableCell>
+              <TableCell className="text-right" onClick={() => removeFriendAndMutateFriendsData(friend.id)}><Button>Remove</Button></TableCell>
             </TableRow>
           ))
         }

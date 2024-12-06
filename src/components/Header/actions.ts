@@ -9,7 +9,7 @@ export async function acceptFriendRequest(values: z.infer<typeof newFriendSchema
   const session = await auth()
 
   try {
-    const res = await prisma.user.update({
+    const user = await prisma.user.update({
       where: {
         id: session?.user?.id
       },
@@ -22,7 +22,7 @@ export async function acceptFriendRequest(values: z.infer<typeof newFriendSchema
         }
       }
     })
-    return { response: "Friend request accepted" }
+    return { response: "Friend request accepted", user: user }
   } catch (err) {
     return { error: err }
   }

@@ -23,10 +23,13 @@ import { useSession } from "next-auth/react"
 import PostInterface from "@/interfaces/feed/post.interface"
 import { Button } from "../ui/button"
 import { signOutAction } from "@/app/user/sign-out/actions"
+import UserInterface from "@/interfaces/feed/user.interface"
+import { usePathname } from "next/navigation"
 
 
 export default function Header() {
   const session = useSession()
+  const pathName = usePathname()
 
   const friendRequests = useSWR("/api/user/get-friend-requests", friendsRequestsFetcher)
 
@@ -34,17 +37,26 @@ export default function Header() {
     resolver: zodResolver(newFriendSchema),
   })
 
-  async function mutateFriendRequests(newFriendId: string) {
+  async function mutateFriendAndPostDatas(newFriendId: string) {
+
     addNewFriendForm.setValue("newFriendId", newFriendId)
-    await acceptFriendRequest(addNewFriendForm.getValues())
+    const res = await acceptFriendRequest(addNewFriendForm.getValues())
     friendRequests.mutate(friendRequests.data?.filter(user => user.id ! == newFriendId))
 
-    const newFriendPostsResult = await fetch(`/api/user/get-posts?id=${newFriendId}`)
-    const newFriendPosts: PostInterface[] =  await newFriendPostsResult.json()
- 
-    mutate<PostInterface[]>("/api/feed/get-posts", data => {
-      if (data) return [...data, ...newFriendPosts]
-    }, { populateCache: true })
+    if(pathName === "/feed") {
+      const newFriendPostsResult = await fetch(`/api/user/get-posts?id=${newFriendId}`)
+      const newFriendPosts: PostInterface[] =  await newFriendPostsResult.json()
+
+      mutate<PostInterface[]>("/api/feed/get-posts", data => {
+        if (data) return [...data, ...newFriendPosts]
+      }, { populateCache: true })
+    }
+
+    if(pathName === "/user/friends") {
+      mutate<UserInterface[]>("/api/user/get-friends", data => {
+        if (data && res.user) return [...data, res.user]
+      }, { populateCache: true })
+    }
   }
 
   async function clearCacheAndSignout() {
@@ -93,7 +105,7 @@ export default function Header() {
                       <div className="text-sm">
                         {user.username}
                       </div>
-                      <div onClick={() => {mutateFriendRequests(user.id)}}>Accept</div>
+                      <div onClick={() => {mutateFriendAndPostDatas(user.id)}}>Accept</div>
                       <Separator className="my-2" />
                     </div>
                   )

@@ -3,7 +3,7 @@
 import useSWR from "swr"
 import { useSession } from "next-auth/react"
 import { postsOfUserFetcher } from "@/lib/swr"
-import { detectEnterKey, path, toBase64 } from "@/lib/utils"
+import { detectEnterKey, path, toDataUrl } from "@/lib/utils"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
@@ -38,7 +38,7 @@ export default function Profile() {
   })
 
   async function updateSessionData() {
-    const { fileName } = await changeProfilePicture({ picture: await toBase64(inputImage as File) })
+    const { fileName } = await changeProfilePicture({ picture: await toDataUrl(inputImage as File) })
     const newSession = {
       ...data,
       user: {

@@ -11,7 +11,7 @@ import { AlertDialogAction, AlertDialogCancel, AlertDialogFooter } from "../../u
 import Image from "next/image"
 import { z } from "zod"
 import { useState } from "react"
-import { toBase64 } from "@/lib/utils"
+import { toDataUrl } from "@/lib/utils"
 import { mutate } from "swr"
 import PostInterface from "@/interfaces/feed/post.interface"
 
@@ -27,7 +27,7 @@ export function NewPostModal() {
   })
 
   async function mutatePostsData() {
-    const newPostData = await createNewPost({picture: await toBase64(inputImage as File)})
+    const newPostData = await createNewPost({picture: await toDataUrl(inputImage as File)})
     
     mutate<PostInterface[]>("/api/feed/get-posts", data => {
       if (data && newPostData) return [...data, newPostData]

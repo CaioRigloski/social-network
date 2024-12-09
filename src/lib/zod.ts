@@ -58,6 +58,10 @@ export const newProfilePictureSchema = z.object({
   picture: z.any().refine(file => "image/".includes(file))
 })
 
+export const newUsernameSchema = z.object({
+  newUsername: z.string()
+})
+
 export const chatSchema = z.object({
   rommId: z.string().optional()
 })

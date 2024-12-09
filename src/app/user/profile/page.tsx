@@ -3,7 +3,7 @@
 import useSWR from "swr"
 import { useSession } from "next-auth/react"
 import { postsOfUserFetcher } from "@/lib/swr"
-import { path, toBase64 } from "@/lib/utils"
+import { detectEnterKey, path, toBase64 } from "@/lib/utils"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
@@ -15,17 +15,20 @@ import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/
 import { Input } from "@/components/ui/input"
 import { useState } from "react"
 import Image from "next/image"
-import { changeProfilePicture } from "./actions"
+import { changeProfilePicture, changeUsername } from "./actions"
 
 
 export default function Profile() {
-  const [ inputImage, setInputImage ] = useState<File | undefined>(undefined)
-
   const { data, update } = useSession()
+
+  const [ username, setUsername ] = useState<string | undefined>(data?.user?.username || undefined)
+  const [ newUsername, setNewUsername ] = useState<string | null>(null)
+  const [ inputImage, setInputImage ] = useState<File | undefined>(undefined)
+  const [ usernameEditIsOpen, setusernameEditIsOpen] = useState<boolean>(false)
+
   const posts = useSWR(`/api/user/get-posts?id=${data?.user?.id}`, postsOfUserFetcher)
 
   const profilePicture = data?.user?.profilePicture || null
-  const username = data?.user?.username
 
   const newProfilePictureForm = useForm<z.infer<typeof newProfilePictureSchema>>({
     resolver: zodResolver(newProfilePictureSchema),
@@ -45,6 +48,13 @@ export default function Profile() {
     }
     
     await update(newSession)
+  }
+ 
+  async function changeUsernameAndMutate() {
+    newUsername && await changeUsername({newUsername: newUsername}).then(() => {
+      setUsername(newUsername)
+      setusernameEditIsOpen(false)
+    })
   }
 
   return (
@@ -84,7 +94,12 @@ export default function Profile() {
             </Form>
           </DialogContent>
         </Dialog>
-        <p>{username}</p>
+        {
+          usernameEditIsOpen ?
+          <input type="text" placeholder={username} autoFocus onChange={e => setNewUsername(e.target.value)} onKeyUp={e => detectEnterKey(e) && newUsername && changeUsernameAndMutate()}/>
+          :
+          <p onClick={() => setusernameEditIsOpen(true)}>{username}</p>
+        }
       </section>
       <section>
         <div>

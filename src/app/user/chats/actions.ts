@@ -8,10 +8,17 @@ import { z } from 'zod'
 export default async function createOrUpdateChat(values: z.infer<typeof messageSchema>) {
   const session = await auth()
 
+  if (!session?.user?.id || !values.friendId) {
+    throw new Error('User ID or Friend ID is missing');
+  }
+
   try {
    const chat = await prisma.chat.upsert({
     where: {
-      id: values.chatSchema.rommId
+      userId_friendId: {
+        userId: session?.user?.id,
+        friendId: values.friendId
+      }
     },
     create: {
       user: {

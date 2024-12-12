@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { socket } from '@/socket'
 import { useEffect, useState } from 'react'
-import createOrUpdateChat from './actions'
+import createOrUpdateChat from '@/app/user/chats/actions'
 
 export default function Chat() {
   const [inputValue, setInputValue] = useState('')
@@ -50,7 +50,7 @@ export default function Chat() {
 
   async function sendMessage() {
     if (inputValue.trim()) {
-      const newRoomId = await createOrUpdateChat({text: inputValue, friendId: "cm29il7qe0004ljs4nujwiykh", chatSchema: { rommId: undefined }})
+      const newRoomId = await createOrUpdateChat({text: inputValue, friendId: "cm47dksrq0000gahs9y29k5dc", chatSchema: { rommId: undefined }})
       socket.emit("send_message", {message: inputValue, roomId: newRoomId})
       setInputValue('')
     }

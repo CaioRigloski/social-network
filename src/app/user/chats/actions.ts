@@ -11,51 +11,53 @@ export default async function createOrUpdateChat(values: z.infer<typeof messageS
   if (!session?.user?.id || !values.friendId) {
     throw new Error('User ID or Friend ID is missing');
   }
-
+  
   try {
-   const chat = await prisma.chat.upsert({
-    where: {
-      userId_friendId: {
-        userId: session?.user?.id,
-        friendId: values.friendId
-      }
-    },
-    create: {
-      user: {
-        connect: {
-          id: session?.user?.id
+    const [sortedUserId, sortedFriendId] = [session?.user?.id, values.friendId].sort()
+
+    const chat = await prisma.chat.upsert({
+      where: {
+        userId_friendId: {
+          userId: sortedUserId,
+          friendId: sortedFriendId
         }
       },
-      friend: {
-        connect: {
-          id: values.friendId
+      create: {
+        user: {
+          connect: {
+            id: session?.user?.id
+          }
+        },
+        friend: {
+          connect: {
+            id: values.friendId
+          }
+        },
+        messages: {
+          create: {
+            text: values.text,
+            user: {
+              connect: {
+                id: session?.user?.id
+              }
+            }
+          }
         }
       },
-      messages: {
-        create: {
-          text: values.text,
-          user: {
-            connect: {
-              id: session?.user?.id
+      update: {
+        messages: {
+          create: {
+            text: values.text,
+            user: {
+              connect: {
+                id: session?.user?.id
+              }
             }
           }
         }
       }
-    },
-    update: {
-      messages: {
-        create: {
-          text: values.text,
-          user: {
-            connect: {
-              id: session?.user?.id
-            }
-          }
-        }
-      }
-    }
-   })
-   return chat.id
+    })
+    return chat.id
   } catch (err) {
     console.log(err)
   }

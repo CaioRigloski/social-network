@@ -6,19 +6,23 @@ import { Textarea } from '@/components/ui/textarea'
 import { socket } from '@/socket'
 import createOrUpdateChat from "./actions"
 import ChatInterface from "@/interfaces/chat/chat.interface"
-import { chatsFetcher } from "@/lib/swr"
+import { chatsFetcher, friendsFetcher } from "@/lib/swr"
 import { useSession } from "next-auth/react"
 import { useEffect, useState } from "react"
 import useSWR from "swr"
+import { detectEnterKey } from "@/lib/utils"
+import UserInterface from "@/interfaces/feed/user.interface"
 
 export default function Chats() {
   const session = useSession()
 
   const chats = useSWR("/api/user/get-chats", chatsFetcher)
+  const friends = useSWR("/api/user/get-friends", friendsFetcher)
 
   const [ activeChat, setActiveChat ] = useState<ChatInterface | null>()
-  const [ inputValue, setInputValue ] = useState('')
-  const [ message, setMessage ] = useState('')
+  const [ newFriendChat, setNewFriendChat ] = useState<UserInterface | null>()
+  const [ inputValue, setInputValue ] = useState("")
+  const [ message, setMessage ] = useState("")
 
   useEffect(() => {
     // chat functions
@@ -28,9 +32,16 @@ export default function Chats() {
   }, [])
 
   async function sendMessage() {
-    const friendId = activeChat?.friend === session.data?.user?.id ? activeChat?.user.id : activeChat?.friend.id
+    let friendId: string | undefined = undefined
+
+    if(newFriendChat) {
+      friendId = newFriendChat.id
+    } else {
+      friendId = activeChat?.friend.id === session.data?.user?.id ? activeChat?.user.id : activeChat?.friend.id 
+    }
 
     if (inputValue.trim() && friendId) {
+      console.log('send')
       const newRoomId = await createOrUpdateChat({text: inputValue, friendId: friendId, chatSchema: { rommId: activeChat?.id }})
       socket.emit("send_message", {message: inputValue, roomId: newRoomId})
       setInputValue('')
@@ -38,9 +49,21 @@ export default function Chats() {
   }
 
   if(!chats.data) return <p>No chat available</p>
-
   return (
     <main>
+      <div>
+        <h1>Friends</h1>
+        {
+          friends.data?.map(friend => (
+            <p key={friend.id} onClick={() => setNewFriendChat(friend)}>
+              {friend.username}
+            </p>
+          ))
+        }
+        {
+          newFriendChat && <Textarea onChange={e => setInputValue(e.target.value)} onKeyUp={e => detectEnterKey(e) && sendMessage()}/>
+        }
+      </div>
       <SidebarProvider>
         <Sidebar collapsible="none">
           <SidebarHeader>Chats</SidebarHeader>
@@ -97,7 +120,7 @@ export default function Chats() {
                     <p key={message.id}>{message.text}</p>
                   )
                 }
-                <Textarea/>
+                <Textarea onChange={e => setInputValue(e.target.value)} onKeyUp={e => detectEnterKey(e) && sendMessage()}/>
               </div>
             </>
           }

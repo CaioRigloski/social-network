@@ -88,10 +88,10 @@ export default function Chats() {
                             <span>{chat.friend.username}</span>
                           </a>
                         }
-                        <time className="ml-auto text-xs" dateTime={chat.messages.at(0)?.createdAt.toString()}/>
+                        <time className="ml-auto text-xs" dateTime={chat.messages.at(-1)?.createdAt.toString()}/>
                       </div>
                       <span className="line-clamp-2 whitespace-break-spaces text-xs">
-                        {chat.messages.at(0)?.text}
+                        {chat.messages.at(-1)?.text}
                       </span>
                     </div>
                   ))

@@ -111,9 +111,9 @@ model Chat {
   id String @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  user User @relation("userChat", fields: [userId], references: [id])
+  user User @relation("userChat", fields: [userId], references: [id], onDelete: Cascade)
   userId String
-  friend User @relation("userFriendChat", fields: [friendId], references: [id])
+  friend User @relation("userFriendChat", fields: [friendId], references: [id], onDelete: Cascade)
   friendId String
   messages Message[]
 
@@ -124,9 +124,9 @@ model Message {
   id String @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
-  chat Chat @relation(fields: [chatId], references: [id])
+  chat Chat @relation(fields: [chatId], references: [id], onDelete: Cascade)
   chatId String
   text String @db.VarChar(500) 
 }

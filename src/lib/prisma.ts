@@ -58,7 +58,7 @@ export const messageSelect = {
   createdAt: true
 }
 
-export const frendSuggestionsSelect= {
+export const friendSuggestionsSelect= {
   friends: {
     select: {
       id: true

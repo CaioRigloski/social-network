@@ -50,7 +50,7 @@ export async function GET(req: Request) {
       }
     })
 
-    const modeledPosts: PostInterface[] = posts.map(post => {
+    const modeledPosts = posts.map(post => {
       return {
         id: post.id,
         user: {
@@ -62,7 +62,7 @@ export async function GET(req: Request) {
         likes: post.likes,
         likesCount: post._count.likes
       }
-    })
+    }) as PostInterface[]
  
     return NextResponse.json( modeledPosts ) 
   } catch (err) {

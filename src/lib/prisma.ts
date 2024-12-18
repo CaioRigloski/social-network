@@ -16,12 +16,16 @@ export const userSelect = {
 export const commentSelect = {
   id: true,
   text: true,
-  user: userSelect
+  user: {
+    select: userSelect
+  }
 }
 
 export const likeSelect = {
   id: true,
-  user: userSelect
+  user: {
+    select: userSelect
+  }
 }
 
 export const postSelect = {

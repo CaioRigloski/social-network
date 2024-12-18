@@ -43,6 +43,11 @@ export const postSelect = {
         select: {
           ...likeSelect
         }
+      },
+      _count: {
+        select: {
+          likes: true
+        }
       }
     }
   }

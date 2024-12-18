@@ -50,7 +50,9 @@ export const postSelect = {
 
 export const messageSelect = {
   id: true,
-  user: userSelect,
+  user: {
+    select: userSelect
+  },
   chatId: true,
   text: true,
   createdAt: true

@@ -71,7 +71,7 @@ export default function Profile() {
           <DialogTrigger asChild>
             <Avatar>
               <AvatarImage src={`/images/${path.profile}/${profilePicture}.jpeg`} alt={`@${username}`} />
-              <AvatarFallback>{username?.charAt(0)}</AvatarFallback>
+              <AvatarFallback>{username?.charAt(0).toUpperCase()}</AvatarFallback>
             </Avatar>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px]">

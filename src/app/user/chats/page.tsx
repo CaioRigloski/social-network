@@ -12,6 +12,9 @@ import { useEffect, useState } from "react"
 import useSWR from "swr"
 import { detectEnterKey } from "@/lib/utils"
 import UserInterface from "@/interfaces/feed/user.interface"
+import { SocketEvent } from "@/types/socket/event.type"
+import { ReceiveMessage } from "@/interfaces/socket/data/receiveMessage.interface"
+
 
 export default function Chats() {
   const session = useSession()
@@ -26,11 +29,17 @@ export default function Chats() {
 
   useEffect(() => {
     // chat functions
-    socket.on("receive_message", (message) => {
-      setMessage(message)
-    })
-  }, [])
+    socket.on<SocketEvent>("receive_message", (msg: ReceiveMessage) => {
+      if(msg.receiverId === session.data?.user?.id) {
 
+        setMessage(msg.message)
+      }
+    })
+
+    return () => {
+      socket.off("receive_message")
+    }
+  }, [])
   async function sendMessage() {
     let friendId: string | undefined = undefined
 
@@ -41,9 +50,8 @@ export default function Chats() {
     }
 
     if (inputValue.trim() && friendId) {
-      console.log('send')
-      const newRoomId = await createOrUpdateChat({text: inputValue, friendId: friendId, chatSchema: { rommId: activeChat?.id }})
-      socket.emit("send_message", {message: inputValue, roomId: newRoomId})
+      const newRoomId = await createOrUpdateChat({ text: inputValue, friendId: friendId, chatSchema: { rommId: activeChat?.id } })
+      socket.emit<SocketEvent>("send_message", { message: inputValue, roomId: newRoomId })
       setInputValue('')
     }
   }

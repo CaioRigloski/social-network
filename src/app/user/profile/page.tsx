@@ -3,7 +3,7 @@
 import useSWR from "swr"
 import { useSession } from "next-auth/react"
 import { postsOfUserFetcher } from "@/lib/swr"
-import { detectEnterKey, path, toDataUrl } from "@/lib/utils"
+import { detectEnterKey, imageFormats, path, toDataUrl } from "@/lib/utils"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
@@ -70,7 +70,7 @@ export default function Profile() {
         <Dialog>
           <DialogTrigger asChild>
             <Avatar>
-              <AvatarImage src={`/images/${path.profile}/${profilePicture}.jpeg`} alt={`@${username}`} />
+              <AvatarImage src={`/images/${path.profile}/${profilePicture}.${imageFormats.profilePicture}`} alt={`@${username}`} />
               <AvatarFallback>{username?.charAt(0).toUpperCase()}</AvatarFallback>
             </Avatar>
           </DialogTrigger>

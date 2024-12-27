@@ -13,7 +13,7 @@ export async function changeProfilePicture(values: z.infer<typeof newProfilePict
 
   try {
     const UUID = randomUUID()
-    writeFileSync(`./public/images/${path.profile}/${UUID}.jpeg`, Buffer.from(values.picture.replace(/^data:image\/\w+;base64,/, ""), "base64"))
+    writeFileSync(`${path.public_profile_images}/${UUID}.jpeg`, new Uint8Array(Buffer.from(values.picture.replace(/^data:image\/\w+;base64,/, ""), "base64")))
 
     await prisma.user.update({
       where: {
@@ -24,7 +24,7 @@ export async function changeProfilePicture(values: z.infer<typeof newProfilePict
       }
     })
     
-    return { fileName: UUID}
+    return { fileName: UUID }
   } catch (err) {
     throw new Error("Error saving the image. Please contact the administrator.")
   }

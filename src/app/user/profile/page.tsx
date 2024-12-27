@@ -51,8 +51,15 @@ export default function Profile() {
   }
  
   async function changeUsernameAndMutate() {
-    newUsername && await changeUsername({newUsername: newUsername}).then(() => {
-      setUsername(newUsername)
+    newUsername && await changeUsername({newUsername: newUsername}).then(async () => {
+      const newSession = {
+        ...data,
+        user: {
+          ...data?.user,
+          username: newUsername
+        }
+      }
+      await update(newSession)
       setusernameEditIsOpen(false)
     })
   }

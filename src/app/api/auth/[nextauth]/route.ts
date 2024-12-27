@@ -77,8 +77,12 @@ export const { handlers: { GET, POST }, auth, signIn, signOut, unstable_update }
       return session;
     },
     async jwt({ token, trigger, user, session }) {
-      if (trigger === "signIn" && user || trigger === "update" && user) {
+      if (trigger === "signIn" && user) {
         token.user = {id: user.id, username: user.username, profilePicture: user.profilePicture}
+      }
+
+      if(trigger === "update" && session?.user) {
+        token.user = {id: session.user.id, username: session.user.username, profilePicture: session.user.profilePicture}
       }
       
       return token

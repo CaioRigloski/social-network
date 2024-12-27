@@ -13,7 +13,7 @@ import PostInterface from "@/interfaces/feed/post.interface"
 
 export default function Feed() {
   const postsData = useSWR("/api/feed/get-posts", postsFetcher)
-  
+  console.log(postsData)
   return (
     <main className="grid grid-rows-[auto_1fr] grid-cols-1 h-screen">
       <AlertDialog>

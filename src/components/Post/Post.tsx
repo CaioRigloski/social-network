@@ -1,6 +1,6 @@
 import PostInterface from "@/interfaces/feed/post.interface"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card"
-import { detectEnterKey, path } from "@/lib/utils"
+import { detectEnterKey, imageFormats, path } from "@/lib/utils"
 import { Comment } from "@/components/Post/Comment/Comment"
 import { Textarea } from "../ui/textarea"
 import { KeyboardEvent, MouseEventHandler, useEffect, useState } from "react"
@@ -10,6 +10,7 @@ import { createNewLike, unlike } from "@/app/post/like/actions"
 import { useSession } from "next-auth/react"
 import { mutate } from "swr"
 import { deletePost } from "@/app/post/actions"
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 
 
 export function Post(props: { post: PostInterface }) {
@@ -63,10 +64,14 @@ export function Post(props: { post: PostInterface }) {
         mutate<PostInterface[]>("/api/feed/get-posts", data => data?.filter((post: PostInterface) => post.id !== props.post.id), false)
     )
   }
-  
+  console.log(props.post.user)
   return (
     <Card>
-      <CardHeader>
+      <CardHeader className="flex flex-row gap-2">
+        <Avatar>
+          <AvatarImage src={`/images/${path.profile}/${props.post.user.profilePicture}.${imageFormats.profilePicture}`} alt={`@${props.post.user.username}`} />
+          <AvatarFallback>{props.post.user.username.charAt(0).toUpperCase()}</AvatarFallback>
+        </Avatar>
         <CardTitle><a href={`/user/profile/${props.post.user.id}`}>{props.post.user?.username}</a></CardTitle>
         {props.post.user.id === session.data?.user?.id && <Button onClick={deletePostAndMutatePostsData}>Delete</Button>}
       </CardHeader>

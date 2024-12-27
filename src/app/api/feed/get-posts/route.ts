@@ -33,7 +33,8 @@ export async function GET(req: Request) {
         user: {
           select: {
             id: true,
-            username: true
+            username: true,
+            profilePicture: true
           }
         },
         comments: {
@@ -78,7 +79,8 @@ export async function GET(req: Request) {
         id: post.id,
         user: {
           id: post.user.id,
-          username: post.user.username
+          username: post.user.username,
+          profilePicture: post.user.profilePicture
         },
         picture: post.picture,
         comments: post.comments,

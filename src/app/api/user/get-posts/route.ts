@@ -26,7 +26,7 @@ export async function GET(req: NextRequest) {
           user: {
             id: user.id,
             username: user.username,
-
+            profilePicture: user.profilePicture
           },
           picture: post.picture,
           comments: post.comments,

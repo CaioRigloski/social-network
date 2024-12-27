@@ -21,11 +21,12 @@ import { Separator } from "@radix-ui/react-separator"
 import { acceptFriendRequest } from "./actions"
 import { useSession } from "next-auth/react"
 import PostInterface from "@/interfaces/feed/post.interface"
-import { Button } from "../ui/button"
 import { signOutAction } from "@/app/user/sign-out/actions"
 import UserInterface from "@/interfaces/feed/user.interface"
 import { usePathname } from "next/navigation"
 import { ExitIcon } from "@radix-ui/react-icons"
+import { imageFormats, path } from "@/lib/utils"
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 
 export default function Header() {
   const session = useSession()
@@ -69,7 +70,10 @@ export default function Header() {
       <div className="relative flex gap-x-4 justify-center">
         <div className="text-sm leading-6">
           <Link href="/user/profile" className="flex items-center gap-x-2">
-            <img src="" alt="" className="h-10 w-10 rounded-full bg-gray-50"/>
+            <Avatar>
+              <AvatarImage src={`/images/${path.profile}/${session.data?.user?.profilePicture}.jpeg`} alt={`@${session.data?.user?.username}`} />
+              <AvatarFallback>{session.data?.user?.username?.charAt(0).toUpperCase()}</AvatarFallback>
+            </Avatar>
             <p className="font-semibold text-gray-900 text-white">
                 {session.status === "authenticated" && session.data.user?.username}
             </p>

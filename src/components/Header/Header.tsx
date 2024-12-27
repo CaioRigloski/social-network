@@ -25,7 +25,7 @@ import { Button } from "../ui/button"
 import { signOutAction } from "@/app/user/sign-out/actions"
 import UserInterface from "@/interfaces/feed/user.interface"
 import { usePathname } from "next/navigation"
-
+import { ExitIcon } from "@radix-ui/react-icons"
 
 export default function Header() {
   const session = useSession()
@@ -65,23 +65,22 @@ export default function Header() {
   }
 
   return (
-    <header>
-      <div className="relative mt-8 flex items-center justify-end gap-x-4">
-        <img src="" alt="" className="h-10 w-10 rounded-full bg-gray-50"/>
+    <header className="flex flex-row-reverse place-content-around after:content-[''] after:flex-1 *:flex-1 items-end bg-cyan-950 p-4">
+      <div className="relative flex gap-x-4 justify-center">
         <div className="text-sm leading-6">
-          <p className="font-semibold text-gray-900">
-            <Link href="/user/profile">
-              <>
-                <span className="absolute inset-0"></span>
+          <Link href="/user/profile" className="flex items-center gap-x-2">
+            <img src="" alt="" className="h-10 w-10 rounded-full bg-gray-50"/>
+            <p className="font-semibold text-gray-900 text-white">
                 {session.status === "authenticated" && session.data.user?.username}
-              </>
-            </Link>
-          </p>
+            </p>
+          </Link>
         </div>
+        <form className="flex justify-end w-fit text-white" action={clearCacheAndSignout}>
+          <button type="submit" title="Sign out">
+            <ExitIcon/>
+          </button>
+        </form>
       </div>
-      <form className="flex justify-end" action={clearCacheAndSignout}>
-        <Button type="submit">Sign Out</Button>
-      </form>
       <NavigationMenu>
         <NavigationMenuList>
           <NavigationMenuItem>

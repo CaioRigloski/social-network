@@ -71,7 +71,7 @@ export default function Header() {
         <div className="text-sm leading-6">
           <Link href="/user/profile" className="flex items-center gap-x-2">
             <Avatar>
-              <AvatarImage src={`/images/${path.profile}/${session.data?.user?.profilePicture}.jpeg`} alt={`@${session.data?.user?.username}`} />
+              <AvatarImage src={`/images/${path.profile}/${session.data?.user?.profilePicture}.${imageFormats.profilePicture}`} alt={`@${session.data?.user?.username}`} />
               <AvatarFallback>{session.data?.user?.username?.charAt(0).toUpperCase()}</AvatarFallback>
             </Avatar>
             <p className="font-semibold text-gray-900 text-white">

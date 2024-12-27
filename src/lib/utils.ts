@@ -11,7 +11,8 @@ export function cn(...inputs: ClassValue[]) {
 export const path = {
   posts: "uploads/posts",
   profile: "uploads/profile",
-  public_post_images: "./public/images/uploads/posts"
+  public_post_images: "./public/images/uploads/posts",
+  public_profile_images: "./public/images/uploads/profile"
 }
 
 export async function checkiIfIsOwnProfile(id: string) {
@@ -24,7 +25,8 @@ export async function checkiIfIsOwnProfile(id: string) {
 }
 
 export const imageFormats = {
-  posts: "jpeg"
+  posts: "jpeg",
+  profilePicture: "jpeg"
 }
 
 export const toDataUrl = (file: File) => new Promise((resolve, reject) => {

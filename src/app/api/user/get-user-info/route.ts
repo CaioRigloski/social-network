@@ -1,6 +1,6 @@
 import UserInterface from "@/interfaces/feed/user.interface";
 import { UserParamsInterface } from "@/interfaces/params/user/user.interface";
-import { prisma } from "@/lib/prisma";
+import { prisma, userSelect } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -16,11 +16,7 @@ export async function GET(req: NextRequest) {
         where: {
           id: userId
         },
-        select: {
-          id: true,
-          username: true,
-          profilePicture: true
-        }
+        select: userSelect
       })
 
       return NextResponse.json(user, { status: 200 })

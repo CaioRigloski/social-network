@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma"
+import { prisma, userSelect } from "@/lib/prisma"
 import { auth } from "../../auth/[nextauth]/route"
 import { NextResponse } from "next/server"
 
@@ -12,10 +12,7 @@ export async function GET() {
       },
       select: {
         friendRequestOf: {
-          select: {
-            id: true,
-            username: true
-          }
+          select: userSelect
         },
       }
     })

@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma"
+import { postSelect, prisma } from "@/lib/prisma"
 import PostInterface from "@/interfaces/feed/post.interface"
 import { NextRequest, NextResponse } from "next/server"
 import { auth } from "../../auth/[nextauth]/route"
@@ -16,55 +16,17 @@ export async function GET(req: NextRequest) {
       where: {
         id: userId
       },
-      select: {
-        id: true,
-        username: true,
-        posts: {
-          select: {
-            id: true,
-            picture: true,
-            comments: {
-              select: {
-                id: true,
-                user: {
-                  select: {
-                    id: true,
-                    username: true,
-                    profilePicture: true,
-                  }
-                },
-                text: true
-              }
-            },
-            likes: {
-              select: {
-                id: true,
-                user: {
-                  select: {
-                    id: true,
-                    username: true,
-                    profilePicture: true,
-                  }
-                }
-              }
-            },
-            _count: {
-              select: {
-                likes: true
-              }
-            }
-          }
-        }
-      }
+      select: postSelect
     })
- 
+    
     if(user) {
       const modeledPosts: PostInterface[] = user?.posts.map(post => {
         return {
           id: post.id,
           user: {
             id: user.id,
-            username: user.username
+            username: user.username,
+
           },
           picture: post.picture,
           comments: post.comments,

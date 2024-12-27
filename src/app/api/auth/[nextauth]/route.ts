@@ -2,7 +2,7 @@ import NextAuth, { DefaultSession, User } from "next-auth"
 import { JWT } from "next-auth/jwt"
 import Credentials from "next-auth/providers/credentials"
 import { PrismaAdapter } from "@auth/prisma-adapter"
-import { prisma } from "@/lib/prisma"
+import { prisma, userSelect } from "@/lib/prisma"
 import { signInSchema } from "@/lib/zod"
 
 
@@ -47,15 +47,14 @@ export const { handlers: { GET, POST }, auth, signIn, signOut, unstable_update }
             where: {
               username: username,
               password: password
+            },
+            select: {
+              ...userSelect
             }
           })
 
           if(user) {
-            return {
-              id: user.id.toString(),
-              username: user.username,
-              profilePicture: user.profilePicture
-            }
+            return user
           } else {
             throw new Error("User not found.")
           }

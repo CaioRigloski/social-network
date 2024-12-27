@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma"
+import { friendSuggestionsSelect, prisma } from "@/lib/prisma"
 import { NextResponse } from "next/server"
 import { auth } from "../../auth/[nextauth]/route"
 
@@ -13,28 +13,7 @@ export async function GET() {
       where: {
         id: session?.user?.id
       },
-      select: {
-        friends: {
-          select: {
-            id: true
-          }
-        },
-        friendOf: {
-          select: {
-            id: true
-          }
-        },
-        friendRequestOf: {
-          select: {
-            id: true
-          }
-        },
-        friendRequests: {
-          select: {
-            id: true
-          }
-        }
-      }
+      select: friendSuggestionsSelect
     })
 
     res?.friends.map(userFriends => ids.push(userFriends.id))

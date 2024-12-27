@@ -1,6 +1,6 @@
 import PostInterface from "@/interfaces/feed/post.interface"
 import UserInterface from "@/interfaces/feed/user.interface"
-import { prisma } from "@/lib/prisma"
+import { commentSelect, likeSelect, prisma, userSelect } from "@/lib/prisma"
 import { NextResponse } from "next/server"
 import { auth } from "../../auth/[nextauth]/route"
 
@@ -31,41 +31,17 @@ export async function GET(req: Request) {
       },
       include: {
         user: {
-          select: {
-            id: true,
-            username: true,
-            profilePicture: true
-          }
+          select: userSelect
         },
         comments: {
-          select: {
-            id: true,
-            text: true,
-            user: {
-              select: {
-                id: true,
-                username: true,
-                profilePicture: true,
-              }
-            }
-          },
+          select: commentSelect,
           orderBy: {
             createdAt: "desc"
           }
         },
         likes: {
-          select: {
-            id: true,
-            user: {
-              select: {
-                id: true,
-                username: true,
-                profilePicture: true
-              }
-            }
-          }
-        }
-        ,
+          select: likeSelect
+        },
         _count: {
           select: {
             likes: true
@@ -74,7 +50,7 @@ export async function GET(req: Request) {
       }
     })
 
-    const modeledPosts: PostInterface[] = posts.map(post => {
+    const modeledPosts = posts.map(post => {
       return {
         id: post.id,
         user: {
@@ -87,8 +63,8 @@ export async function GET(req: Request) {
         likes: post.likes,
         likesCount: post._count.likes
       }
-    })
-
+    }) as PostInterface[]
+ 
     return NextResponse.json( modeledPosts ) 
   } catch (err) {
     console.log(err)

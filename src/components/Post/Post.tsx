@@ -11,6 +11,7 @@ import { useSession } from "next-auth/react"
 import { mutate } from "swr"
 import { deletePost } from "@/app/post/actions"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
+import { ChatBubbleIcon, HeartFilledIcon, HeartIcon } from "@radix-ui/react-icons"
 
 
 export function Post(props: { post: PostInterface }) {
@@ -79,16 +80,19 @@ export function Post(props: { post: PostInterface }) {
         <img alt="post picture" width={0} height={0} src={`/images/${path.posts}/${props.post.picture}.${imageFormats.posts}`} className="w-full h-full object-scale-down"/>
       </CardContent>
       <CardFooter className="flex flex-col">
-        {likeId.length > 0 ? <Button onClick={unlikeAndMutatePostsData}>Unlike</Button> : <Button onClick={likeAndMutatePostsData}>Send like</Button>}
-        <p>Like count: {props.post.likesCount}</p>
-        {
-          props.post.likes?.map(like => {
-            if(like.user.id === session.data?.user?.id) {
-              return <p key={like.id}><strong>{like.user.username}</strong> <strong className="text-sky-500">(you)</strong> liked!</p>
-            }
-            return <p key={like.id}><strong>{like.user.username}</strong> liked!</p>
-          })
-        }
+        <div>
+          <ChatBubbleIcon width={25} height={25} cursor={"pointer"}/>
+          <p>{props.post.commentsCount}</p>
+        </div>
+        <div>
+          {
+            likeId.length > 0 ?
+              <HeartFilledIcon width={25} height={25} color="red" cursor={"pointer"} onClick={unlikeAndMutatePostsData}/>
+              :
+              <HeartIcon width={25} height={25} cursor={"pointer"} onClick={likeAndMutatePostsData}/>
+          }
+          <p>{props.post.likesCount}</p>
+        </div>
         <Textarea placeholder="Leave a comment!" onChange={e => setComment(e.target.value)} onKeyUp={e => detectEnterKey(e) && commentAndMutatePostsData()}/>
         {
           props.post.comments?.map(comment => {

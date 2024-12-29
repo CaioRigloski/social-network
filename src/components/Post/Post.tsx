@@ -12,6 +12,7 @@ import { mutate } from "swr"
 import { deletePost } from "@/app/post/actions"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { ChatBubbleIcon, HeartFilledIcon, HeartIcon } from "@radix-ui/react-icons"
+import { AlertDialog, AlertDialogHeader, AlertDialogContent, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
 
 
 export function Post(props: { post: PostInterface }) {
@@ -81,7 +82,25 @@ export function Post(props: { post: PostInterface }) {
       </CardContent>
       <CardFooter className="flex flex-col">
         <div>
-          <ChatBubbleIcon width={25} height={25} cursor={"pointer"}/>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <ChatBubbleIcon width={25} height={25} cursor={"pointer"}/>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Add post</AlertDialogTitle>
+              </AlertDialogHeader>
+                <Textarea placeholder="Leave a comment!" onChange={e => setComment(e.target.value)} onKeyUp={e => detectEnterKey(e) && commentAndMutatePostsData()}/>
+                {
+                  props.post.comments?.map(comment => {
+                    if(comment.user.id === session.data?.user?.id) {
+                      return <Comment key={comment.id} comment={comment} isOwn/>
+                    }
+                    return <Comment key={comment.id} comment={comment}/>
+                  })
+                }
+            </AlertDialogContent>
+          </AlertDialog>
           <p>{props.post.commentsCount}</p>
         </div>
         <div>
@@ -93,15 +112,6 @@ export function Post(props: { post: PostInterface }) {
           }
           <p>{props.post.likesCount}</p>
         </div>
-        <Textarea placeholder="Leave a comment!" onChange={e => setComment(e.target.value)} onKeyUp={e => detectEnterKey(e) && commentAndMutatePostsData()}/>
-        {
-          props.post.comments?.map(comment => {
-            if(comment.user.id === session.data?.user?.id) {
-              return <Comment key={comment.id} comment={comment} isOwn/>
-            }
-            return <Comment key={comment.id} comment={comment}/>
-          })
-        }
       </CardFooter>
     </Card>
   )

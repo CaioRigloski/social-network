@@ -75,8 +75,8 @@ export function Post(props: { post: PostInterface }) {
         <CardTitle><a href={`/user/profile/${props.post.user.id}`}>{props.post.user?.username}</a></CardTitle>
         {props.post.user.id === session.data?.user?.id && <Button onClick={deletePostAndMutatePostsData}>Delete</Button>}
       </CardHeader>
-      <CardContent>
-        <img alt="post picture" width={0} height={0} src={`/images/${path.posts}/${props.post.picture}.${imageFormats.posts}`} className="w-7/12 h-auto ml-auto mr-auto"/>
+      <CardContent className="w-[30rem] h-[30rem] overflow-hidden ml-auto mr-auto ">
+        <img alt="post picture" width={0} height={0} src={`/images/${path.posts}/${props.post.picture}.${imageFormats.posts}`} className="w-full h-full object-scale-down"/>
       </CardContent>
       <CardFooter className="flex flex-col">
         {likeId.length > 0 ? <Button onClick={unlikeAndMutatePostsData}>Unlike</Button> : <Button onClick={likeAndMutatePostsData}>Send like</Button>}

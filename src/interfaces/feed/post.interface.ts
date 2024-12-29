@@ -8,6 +8,7 @@ export default interface PostInterface extends Omit<Post, "createdAt" | "updated
   id: string
   user: UserInterface
   comments: CommentInterface[]
+  commentsCount: number
   likes: LikeInterface[]
   likesCount: number
   picture: string

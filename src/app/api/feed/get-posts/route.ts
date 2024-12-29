@@ -44,6 +44,7 @@ export async function GET(req: Request) {
         },
         _count: {
           select: {
+            comments: true,
             likes: true
           }
         }
@@ -60,6 +61,7 @@ export async function GET(req: Request) {
         },
         picture: post.picture,
         comments: post.comments,
+        commentsCount: post._count.comments,
         likes: post.likes,
         likesCount: post._count.likes
       }

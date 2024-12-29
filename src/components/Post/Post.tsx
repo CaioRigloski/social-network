@@ -92,15 +92,20 @@ export function Post(props: { post: PostInterface }) {
               <AlertDialogHeader>
                 <AlertDialogTitle>Comments</AlertDialogTitle>
               </AlertDialogHeader>
-                <Textarea placeholder="Leave a comment!" onChange={e => setComment(e.target.value)} onKeyUp={e => detectEnterKey(e) && commentAndMutatePostsData()}/>
-                {
-                  props.post.comments?.map(comment => {
-                    if(comment.user.id === session.data?.user?.id) {
-                      return <Comment key={comment.id} comment={comment} isOwn/>
+                <div className="grid grid-cols-3 grid-rows-1 gap-2">
+                  <img alt="post picture" width={0} height={0} src={`/images/${path.posts}/${props.post.picture}.${imageFormats.posts}`} className="w-full h-full object-cover col-span-2"/>
+                  <div className="col-span-1">
+                    {
+                      props.post.comments?.map(comment => (
+                        comment.user.id === session.data?.user?.id ? 
+                          <Comment key={comment.id} comment={comment} isOwn/>
+                          :
+                          <Comment key={comment.id} comment={comment}/>
+                      ))
                     }
-                    return <Comment key={comment.id} comment={comment}/>
-                  })
-                }
+                  </div>
+                  <Textarea className="col-span-3" placeholder="Leave a comment!" onChange={e => setComment(e.target.value)} onKeyUp={e => detectEnterKey(e) && commentAndMutatePostsData()}/>
+                </div>              
             </AlertDialogContent>
           </AlertDialog>
           <p>{props.post.commentsCount}</p>

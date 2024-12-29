@@ -3,7 +3,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card
 import { detectEnterKey, imageFormats, path } from "@/lib/utils"
 import { Comment } from "@/components/Post/Comment/Comment"
 import { Textarea } from "../ui/textarea"
-import { KeyboardEvent, MouseEventHandler, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "../ui/button"
 import { createNewComment } from "@/app/post/comment/actions"
 import { createNewLike, unlike } from "@/app/post/like/actions"
@@ -43,7 +43,7 @@ export function Post(props: { post: PostInterface }) {
         data?.map(post => {
           if (post.id === props.post.id && newLike) post.likes.unshift(newLike)
         })
-      return data
+        return data
       })
     )
   }
@@ -64,7 +64,7 @@ export function Post(props: { post: PostInterface }) {
         mutate<PostInterface[]>("/api/feed/get-posts", data => data?.filter((post: PostInterface) => post.id !== props.post.id), false)
     )
   }
-  console.log(props.post.user)
+ 
   return (
     <Card>
       <CardHeader className="flex flex-row gap-2">
@@ -76,7 +76,7 @@ export function Post(props: { post: PostInterface }) {
         {props.post.user.id === session.data?.user?.id && <Button onClick={deletePostAndMutatePostsData}>Delete</Button>}
       </CardHeader>
       <CardContent>
-        <img alt="post picture" width={0} height={0} src={`/images/${path.posts}/${props.post.picture}.jpeg`} className="w-80 h-auto"/>
+        <img alt="post picture" width={0} height={0} src={`/images/${path.posts}/${props.post.picture}.${imageFormats.posts}`} className="w-80 h-auto"/>
       </CardContent>
       <CardFooter className="flex flex-col">
         {likeId.length > 0 ? <Button onClick={unlikeAndMutatePostsData}>Unlike</Button> : <Button onClick={likeAndMutatePostsData}>Send like</Button>}

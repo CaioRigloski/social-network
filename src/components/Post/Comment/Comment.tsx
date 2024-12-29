@@ -17,7 +17,7 @@ export function Comment(props: { comment: CommentInterface, isOwn?: boolean }) {
   const [ commentEditionIsOpen, setCommentEditionIsOpen ] = useState<boolean>(false)
 
   const id = props.comment.user.id
-  const profilePicture = props.comment.user.profilePicture || undefined
+  const profilePicture = props.comment.user.profilePicture
   const username = props.comment.user.username
 
   async function deleteCommentAndMutatePostsData() {

@@ -8,12 +8,11 @@ import { NewPostModal } from "@/components/Post/NewPostModal/NewPostModal"
 import { FriendSuggestions } from "@/components/feed/FriendSuggestions/FriendSuggestions"
 import { postsFetcher } from "@/lib/swr"
 import useSWR from "swr"
-import PostInterface from "@/interfaces/feed/post.interface"
 
 
 export default function Feed() {
   const postsData = useSWR("/api/feed/get-posts", postsFetcher)
-  console.log(postsData)
+  
   return (
     <main className="grid grid-rows-[auto_1fr] grid-cols-1 h-screen">
       <AlertDialog>
@@ -27,7 +26,7 @@ export default function Feed() {
           <NewPostModal/>
         </AlertDialogContent>
       </AlertDialog>
-      <div className="grid auto-rows-auto grid-cols-1">
+      <div className="grid auto-rows-auto grid-cols-1 justify-items-center">
         {
           postsData?.data?.map(post => <Post key={"post" + post?.id} post={post}/>)
         }

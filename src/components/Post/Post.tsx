@@ -77,10 +77,10 @@ export function Post(props: { post: PostInterface }) {
         <CardTitle><a href={`/user/profile/${props.post.user.id}`}>{props.post.user?.username}</a></CardTitle>
         {props.post.user.id === session.data?.user?.id && <Button onClick={deletePostAndMutatePostsData}>Delete</Button>}
       </CardHeader>
-      <CardContent className="w-[30rem] h-[30rem] overflow-hidden ml-auto mr-auto ">
-        <img alt="post picture" width={0} height={0} src={`/images/${path.posts}/${props.post.picture}.${imageFormats.posts}`} className="w-full h-full object-scale-down"/>
+      <CardContent className="p-1 w-[30rem] h-[30rem] overflow-hidden ml-auto mr-auto">
+        <img alt="post picture" width={0} height={0} src={`/images/${path.posts}/${props.post.picture}.${imageFormats.posts}`} className="w-full h-full object-cover"/>
       </CardContent>
-      <CardFooter className="flex flex-col">
+      <CardFooter className="p-1 pb-4 flex flex-row gap-2 justify-end w-[30rem] ml-auto mr-auto">
         <div>
           <AlertDialog>
             <AlertDialogTrigger asChild>

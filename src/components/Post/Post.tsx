@@ -13,6 +13,8 @@ import { deletePost } from "@/app/post/actions"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { ChatBubbleIcon, HeartFilledIcon, HeartIcon } from "@radix-ui/react-icons"
 import { AlertDialog, AlertDialogHeader, AlertDialogContent, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
+import { Separator } from "../ui/separator"
+import { Like } from "./Like/Like"
 
 
 export function Post(props: { post: PostInterface }) {
@@ -88,7 +90,7 @@ export function Post(props: { post: PostInterface }) {
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>Add post</AlertDialogTitle>
+                <AlertDialogTitle>Comments</AlertDialogTitle>
               </AlertDialogHeader>
                 <Textarea placeholder="Leave a comment!" onChange={e => setComment(e.target.value)} onKeyUp={e => detectEnterKey(e) && commentAndMutatePostsData()}/>
                 {
@@ -110,7 +112,19 @@ export function Post(props: { post: PostInterface }) {
               :
               <HeartIcon width={25} height={25} cursor={"pointer"} onClick={likeAndMutatePostsData}/>
           }
-          <p>{props.post.likesCount}</p>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <p>{props.post.likesCount}</p>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Likes</AlertDialogTitle>
+              </AlertDialogHeader>
+                {
+                  props.post.likes.map(like => <Like key={like.id} like={like} isOwn={like.user.id === session.data?.user?.id}/>)
+                }
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       </CardFooter>
     </Card>

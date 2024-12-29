@@ -26,7 +26,7 @@ export default function Feed() {
           <NewPostModal/>
         </AlertDialogContent>
       </AlertDialog>
-      <div className="grid auto-rows-auto grid-cols-1 justify-items-center">
+      <div className="grid auto-rows-auto grid-cols-1 justify-items-center gap-4">
         {
           postsData?.data?.map(post => <Post key={"post" + post?.id} post={post}/>)
         }

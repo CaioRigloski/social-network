@@ -98,10 +98,16 @@ export function Post(props: { post: PostInterface }) {
                   <div className="col-span-1">
                     {
                       props.post.comments?.map(comment => (
-                        comment.user.id === session.data?.user?.id ? 
-                          <Comment key={comment.id} comment={comment} isOwn/>
+                        comment.user.id === session.data?.user?.id ?
+                          <>
+                            <Comment key={comment.id} comment={comment} isOwn/>
+                            <Separator/>
+                          </>
                           :
-                          <Comment key={comment.id} comment={comment}/>
+                          <>
+                            <Comment key={comment.id} comment={comment}/>
+                            <Separator/>
+                          </>
                       ))
                     }
                   </div>

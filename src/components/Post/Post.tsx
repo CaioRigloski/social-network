@@ -4,7 +4,6 @@ import { detectEnterKey, imageFormats, path } from "@/lib/utils"
 import { Comment } from "@/components/Post/Comment/Comment"
 import { Textarea } from "../ui/textarea"
 import { useEffect, useState } from "react"
-import { Button } from "../ui/button"
 import { createNewComment } from "@/app/post/comment/actions"
 import { createNewLike, unlike } from "@/app/post/like/actions"
 import { useSession } from "next-auth/react"
@@ -15,6 +14,8 @@ import { ChatBubbleIcon, HeartFilledIcon, HeartIcon } from "@radix-ui/react-icon
 import { AlertDialog, AlertDialogHeader, AlertDialogContent, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
 import { Separator } from "../ui/separator"
 import { Like } from "./Like/Like"
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu"
+import { MoreVertical } from "lucide-react"
 
 
 export function Post(props: { post: PostInterface }) {
@@ -78,7 +79,23 @@ export function Post(props: { post: PostInterface }) {
           <AvatarFallback>{props.post.user.username.charAt(0).toUpperCase()}</AvatarFallback>
         </Avatar>
         <CardTitle><a href={`/user/profile/${props.post.user.id}`}>{props.post.user?.username}</a></CardTitle>
-        {props.post.user.id === session.data?.user?.id && <Button onClick={deletePostAndMutatePostsData}>Delete</Button>}
+        {
+          props.post.user.id === session.data?.user?.id &&
+            <div className="ml-auto">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button>
+                    <MoreVertical onClick={deletePostAndMutatePostsData}/>
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem>
+                    Delete
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+        }
       </CardHeader>
       <CardContent className="p-1 w-[30rem] h-[30rem] overflow-hidden ml-auto mr-auto">
         <img alt="post picture" width={0} height={0} src={`/images/${path.posts}/${props.post.picture}.${imageFormats.posts}`} className="w-full h-full object-cover cursor-pointer" onClick={() => setCommentModalIsOpen(true)}/>

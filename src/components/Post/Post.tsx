@@ -22,6 +22,7 @@ export function Post(props: { post: PostInterface }) {
 
   const [ likeId, setLikeId ] = useState<string>("")
   const [ comment, setComment ] = useState<string>("")
+  const [ commentModalIsOpen, setCommentModalIsOpen ] = useState<boolean>(false)
 
   useEffect(() => {
     const userLikeId = props.post?.likes?.find(like => like.user.id === session.data?.user?.id)
@@ -80,11 +81,11 @@ export function Post(props: { post: PostInterface }) {
         {props.post.user.id === session.data?.user?.id && <Button onClick={deletePostAndMutatePostsData}>Delete</Button>}
       </CardHeader>
       <CardContent className="p-1 w-[30rem] h-[30rem] overflow-hidden ml-auto mr-auto">
-        <img alt="post picture" width={0} height={0} src={`/images/${path.posts}/${props.post.picture}.${imageFormats.posts}`} className="w-full h-full object-cover"/>
+        <img alt="post picture" width={0} height={0} src={`/images/${path.posts}/${props.post.picture}.${imageFormats.posts}`} className="w-full h-full object-cover cursor-pointer" onClick={() => setCommentModalIsOpen(true)}/>
       </CardContent>
       <CardFooter className="p-1 pb-4 flex flex-row gap-2 justify-end w-[30rem] ml-auto mr-auto">
         <div>
-          <AlertDialog>
+          <AlertDialog open={commentModalIsOpen} onOpenChange={() => setCommentModalIsOpen(!commentModalIsOpen)}>
             <AlertDialogTrigger asChild>
               <ChatBubbleIcon width={25} height={25} cursor={"pointer"}/>
             </AlertDialogTrigger>

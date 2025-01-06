@@ -15,15 +15,6 @@ export const path = {
   public_profile_images: "./public/images/uploads/profile"
 }
 
-export async function checkiIfIsOwnProfile(id: string) {
-  const session = await auth()
-  if (id === session?.user?.id) {
-    return "/api/user/profile"
-  } else {
-    return `/api/user/profile/${id}`
-  }
-}
-
 export const imageFormats = {
   posts: "jpeg",
   profilePicture: "jpeg"

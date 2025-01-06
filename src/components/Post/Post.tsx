@@ -85,11 +85,11 @@ export function Post(props: { post: PostInterface }) {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button>
-                    <MoreVertical onClick={deletePostAndMutatePostsData}/>
+                    <MoreVertical/>
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onClick={deletePostAndMutatePostsData}>
                     Delete
                   </DropdownMenuItem>
                 </DropdownMenuContent>

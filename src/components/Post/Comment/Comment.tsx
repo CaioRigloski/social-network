@@ -9,6 +9,8 @@ import { Textarea } from "@/components/ui/textarea"
 import CommentInterface from "@/interfaces/feed/comment.interface"
 import PostInterface from "@/interfaces/feed/post.interface"
 import { checkiIfIsOwnProfile, detectEnterKey, path } from "@/lib/utils"
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu"
+import { MoreVertical } from "lucide-react"
 import { useEffect, useState } from "react"
 import { mutate } from "swr"
 
@@ -58,8 +60,26 @@ export function Comment(props: { comment: CommentInterface, isOwn?: boolean }) {
             <p className="text-sm font-semibold leading-6 text-gray-900"><a href={props.isOwn ? "/user/profile" : `user/profile/${id}`}>{username}</a></p>
             <p className="mt-1 truncate text-xs leading-5 text-gray-500">{props.comment.text}</p>
           </div>
-          {props.isOwn && <Button onClick={deleteCommentAndMutatePostsData}>Delete</Button>}
-          {props.isOwn && <Button onClick={() => setCommentEditionIsOpen(true)}>Edit</Button>}
+          {
+            props.isOwn &&
+            <div className="ml-auto">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button>
+                    <MoreVertical/>
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem onClick={deleteCommentAndMutatePostsData}>
+                    Delete
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setCommentEditionIsOpen(true)}>
+                    Edit
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          }
         </div>
       </li>
     </ul>

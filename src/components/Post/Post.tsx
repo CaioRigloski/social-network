@@ -106,7 +106,7 @@ export function Post(props: { post: PostInterface }) {
             <AlertDialogTrigger asChild>
               <ChatBubbleIcon width={25} height={25} cursor={"pointer"}/>
             </AlertDialogTrigger>
-            <AlertDialogContent>
+            <AlertDialogContent className="max-w-screen-lg">
               <AlertDialogHeader>
                 <AlertDialogTitle>Comments</AlertDialogTitle>
               </AlertDialogHeader>

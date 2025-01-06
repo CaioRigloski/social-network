@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss"
+import { PluginAPI } from "tailwindcss/types/config"
 
 const config = {
   darkMode: ["class"],
@@ -92,7 +93,21 @@ const config = {
   		}
   	}
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+		require("tailwindcss-animate"),
+		function ({ addComponents }: PluginAPI) {
+			addComponents({
+				'.comment-line-limit': {
+          display: '-webkit-box',
+          '-webkit-line-clamp': '3',
+          '-webkit-box-orient': 'vertical',
+          overflowY: 'hidden',
+          textOverflow: 'ellipsis',
+					wordWrap: 'break-word'
+        }
+			})
+		}
+	],
 } satisfies Config
 
 export default config

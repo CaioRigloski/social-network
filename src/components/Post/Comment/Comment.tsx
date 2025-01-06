@@ -72,8 +72,9 @@ export function Comment(props: { comment: CommentInterface, isOwn?: boolean }) {
         </Avatar>
         <div className="min-w-0 flex-auto">
           <p className="text-sm font-semibold leading-6 text-gray-900"><a href={props.isOwn ? "/user/profile" : `user/profile/${id}`}>{username}</a></p>
-          <p ref={textRef} className="mt-1 text-xs leading-5 text-gray-500 comment-line-limit">{props.comment.text}</p>
-          {isTruncated && <button className="mt-1 text-xs leading-5 text-sky-700">See more</button>}
+          <p ref={textRef} className={`${isExpanded && "block"} mt-1 text-xs leading-5 text-gray-500 comment-line-limit`}>{props.comment.text}</p>
+          {isTruncated && !isExpanded && <button className="mt-1 text-xs leading-5 text-sky-700" onClick={() => setIsExpanded(true)}>See more</button>}
+          {isExpanded && <button className="mt-1 text-xs leading-5 text-sky-700" onClick={() => setIsExpanded(false)}>view less</button>}
         </div>
         {
           props.isOwn &&

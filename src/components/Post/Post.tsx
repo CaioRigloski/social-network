@@ -114,18 +114,7 @@ export function Post(props: { post: PostInterface }) {
                   <img alt="post picture" width={0} height={0} src={`/images/${path.posts}/${props.post.picture}.${imageFormats.posts}`} className="w-full h-full object-cover col-span-2"/>
                   <div className="col-span-1">
                     {
-                      props.post.comments?.map(comment => (
-                        comment.user.id === session.data?.user?.id ?
-                          <>
-                            <Comment key={comment.id} comment={comment} isOwn/>
-                            <Separator/>
-                          </>
-                          :
-                          <>
-                            <Comment key={comment.id} comment={comment}/>
-                            <Separator/>
-                          </>
-                      ))
+                      props.post.comments?.map(comment => <Comment key={comment.id} comment={comment} isOwn={comment.user.id === session.data?.user?.id}/>)
                     }
                   </div>
                   <Textarea className="col-span-3" placeholder="Leave a comment!" onChange={e => setComment(e.target.value)} onKeyUp={e => detectEnterKey(e) && commentAndMutatePostsData()}/>

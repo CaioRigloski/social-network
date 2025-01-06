@@ -76,7 +76,7 @@ export function Post(props: { post: PostInterface }) {
       <CardHeader className="flex flex-row gap-2">
         <Avatar>
           <AvatarImage src={`/images/${path.profile}/${props.post.user.profilePicture}.${imageFormats.profilePicture}`} alt={`@${props.post.user.username}`} />
-          <AvatarFallback>{props.post.user.username.charAt(0).toUpperCase()}</AvatarFallback>
+          <AvatarFallback className="bg-white">{props.post.user.username.charAt(0).toUpperCase()}</AvatarFallback>
         </Avatar>
         <CardTitle><a href={`/user/profile/${props.post.user.id}`}>{props.post.user?.username}</a></CardTitle>
         {

@@ -4,14 +4,13 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import CommentInterface from "@/interfaces/feed/comment.interface"
 import PostInterface from "@/interfaces/feed/post.interface"
-import { checkiIfIsOwnProfile, detectEnterKey, path } from "@/lib/utils"
+import { detectEnterKey, path } from "@/lib/utils"
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu"
 import { MoreVertical } from "lucide-react"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { mutate } from "swr"
 
 export function Comment(props: { comment: CommentInterface, isOwn?: boolean }) {

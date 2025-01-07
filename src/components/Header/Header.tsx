@@ -97,20 +97,22 @@ export default function Header() {
             <NavigationMenuTrigger>
               <p>Friend requests</p>
               <NotificationCount count={friendRequests.data ? friendRequests.data.length : 0}></NotificationCount>
-              <NavigationMenuContent>
+            </NavigationMenuTrigger>
+            <NavigationMenuContent>
+              <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
                 {
                   friendRequests?.data?.map(user =>
-                    <div key={"request" + user.id}>
+                    <li key={"request" + user.id}>
                       <div className="text-sm">
                         {user.username}
                       </div>
                       <div onClick={() => {mutateFriendAndPostDatas(user.id)}}>Accept</div>
                       <Separator className="my-2" />
-                    </div>
+                    </li>
                   )
                 }
-              </NavigationMenuContent>
-            </NavigationMenuTrigger>
+              </ul>
+            </NavigationMenuContent>
           </NavigationMenuItem>
           <NavigationMenuItem>
             <Link href="/user/chats" legacyBehavior passHref>

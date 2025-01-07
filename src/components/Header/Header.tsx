@@ -17,16 +17,16 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { newFriendSchema } from "@/lib/zod"
-import { Separator } from "@radix-ui/react-separator"
 import { acceptFriendRequest } from "./actions"
 import { useSession } from "next-auth/react"
 import PostInterface from "@/interfaces/feed/post.interface"
 import { signOutAction } from "@/app/user/sign-out/actions"
 import UserInterface from "@/interfaces/feed/user.interface"
 import { usePathname } from "next/navigation"
-import { ExitIcon } from "@radix-ui/react-icons"
+import { CheckIcon, ExitIcon } from "@radix-ui/react-icons"
 import { imageFormats, path } from "@/lib/utils"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
+import { Separator } from "../ui/separator"
 
 export default function Header() {
   const session = useSession()
@@ -99,15 +99,21 @@ export default function Header() {
               <NotificationCount count={friendRequests.data ? friendRequests.data.length : 0}></NotificationCount>
             </NavigationMenuTrigger>
             <NavigationMenuContent>
-              <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
+              <ul className="gap-3 p-3 md:w-[400px] lg:w-[500px]">
                 {
                   friendRequests?.data?.map(user =>
-                    <li key={"request" + user.id}>
-                      <div className="text-sm">
-                        {user.username}
-                      </div>
-                      <div onClick={() => {mutateFriendAndPostDatas(user.id)}}>Accept</div>
-                      <Separator className="my-2" />
+                    <li key={"request" + user.id} className="grid grid-cols-[80%_auto] grid-rows-[auto_auto] gap-5 w-full h-full justify-center items-center p-3 pb-0 rounded-lg hover:bg-gray-200 cursor-pointer transition-colors">
+                      <Link href={`/user/profile/${user.id}`} className="flex place-items-center gap-2">
+                        <Avatar>
+                          <AvatarImage src={`/images/${path.profile}/${user.profilePicture}.${imageFormats.profilePicture}`} alt={`@${user.username}`} />
+                          <AvatarFallback>{user.username?.charAt(0).toUpperCase()}</AvatarFallback>
+                        </Avatar>
+                        <p>{user.username}</p>
+                      </Link>
+                      <button title="Accept request" onClick={() => mutateFriendAndPostDatas(user.id)} className="flex items-center justify-center bg-white hover:bg-white rounded-full">
+                        <CheckIcon className="w-5 h-5 hover:text-green-500"/>
+                      </button>
+                      <Separator className="col-span-2"/>
                     </li>
                   )
                 }

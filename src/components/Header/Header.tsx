@@ -88,14 +88,10 @@ export default function Header() {
       <NavigationMenu>
         <NavigationMenuList>
           <NavigationMenuItem>
-            <Link href="/feed" legacyBehavior passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>Feed</NavigationMenuLink>
-            </Link>
+            <NavigationMenuLink href="/feed" className={navigationMenuTriggerStyle()}>Feed</NavigationMenuLink>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <Link href="/user/friends" legacyBehavior passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>Friends list</NavigationMenuLink>
-            </Link>
+            <NavigationMenuLink href="/user/friends" className={navigationMenuTriggerStyle()}>Friends list</NavigationMenuLink>
           </NavigationMenuItem>
           <NavigationMenuItem>
             <NavigationMenuTrigger>

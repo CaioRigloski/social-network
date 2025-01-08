@@ -14,7 +14,7 @@ export default function Feed() {
   const postsData = useSWR("/api/feed/get-posts", postsFetcher)
   
   return (
-    <main className="grid grid-cols-3 h-screen place-items-center before:content-['']">
+    <main className="grid grid-cols-3 h-screen place-items-center before:content-[''] pt-[5rem]">
       <div className="grid auto-rows-auto grid-cols-1 justify-items-center gap-4 w-[35rem] pt-2">
         <AlertDialog>
           <AlertDialogTrigger asChild>

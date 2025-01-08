@@ -73,7 +73,7 @@ export function Post(props: { post: PostInterface }) {
   return (
     <Card className="bg-stone-100">
       <CardHeader className="flex flex-row gap-2">
-        <Avatar>
+        <Avatar className="static">
           <AvatarImage src={`/images/${path.profile}/${props.post.user.profilePicture}.${imageFormats.profilePicture}`} alt={`@${props.post.user.username}`} />
           <AvatarFallback className="bg-white">{props.post.user.username.charAt(0).toUpperCase()}</AvatarFallback>
         </Avatar>

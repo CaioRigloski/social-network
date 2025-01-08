@@ -96,7 +96,7 @@ export function Post(props: { post: PostInterface }) {
             </div>
         }
       </CardHeader>
-      <CardContent className="p-1 w-[35rem] h-[35rem] overflow-hidden ml-auto mr-auto">
+      <CardContent className="p-1 w-[35rem] h-[35rem] ml-auto mr-auto">
         <img alt="post picture" width={0} height={0} src={`/images/${path.posts}/${props.post.picture}.${imageFormats.posts}`} className="w-full h-full object-cover cursor-pointer" onClick={() => setCommentModalIsOpen(true)}/>
       </CardContent>
       <CardFooter className="p-1 pb-4 flex flex-row gap-2 justify-end w-[30rem] ml-auto mr-auto">
@@ -105,13 +105,13 @@ export function Post(props: { post: PostInterface }) {
             <AlertDialogTrigger asChild>
               <ChatBubbleIcon width={25} height={25} cursor={"pointer"}/>
             </AlertDialogTrigger>
-            <AlertDialogContent className="max-w-screen-lg">
+            <AlertDialogContent className="max-w-screen-lg max-h-[70vw]">
               <AlertDialogHeader>
                 <AlertDialogTitle>Comments</AlertDialogTitle>
               </AlertDialogHeader>
                 <div className="grid grid-cols-3 grid-rows-1 gap-2">
                   <img alt="post picture" width={0} height={0} src={`/images/${path.posts}/${props.post.picture}.${imageFormats.posts}`} className="w-full h-full object-cover col-span-2"/>
-                  <div className="col-span-1">
+                  <div className="col-span-1 overflow-y-scroll max-h-[70vh]">
                     {
                       props.post.comments?.map(comment => <Comment key={comment.id} comment={comment} isOwn={comment.user.id === session.data?.user?.id}/>)
                     }

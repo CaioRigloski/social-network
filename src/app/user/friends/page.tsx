@@ -16,10 +16,11 @@ import useSWR from "swr"
 import removeFriend from "./actions"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { imageFormats, path } from "@/lib/utils"
+import Link from "next/link"
 
 export default function Friends() {
   const friends = useSWR("/api/user/get-friends", friendsFetcher)
-  console.log(friends.data?.at(0)?.createdAt)
+ 
   if(friends.data?.length === 0) {
     return (
       <Alert>
@@ -61,13 +62,15 @@ export default function Friends() {
         {
           friends.data?.map(friend => (
             <TableRow key={"friend" + friend.id}>
-              <TableCell className="flex place-items-center gap-2">
-                <Avatar>
-                  <AvatarImage src={`/images/${path.profile}/${friend.profilePicture}.${imageFormats.profilePicture}`} alt={`@${friend.username}`} />
-                  <AvatarFallback>{friend.username.charAt(0).toUpperCase()}</AvatarFallback>
-                </Avatar>
-                <p>{friend.username}</p>
-              </TableCell>
+              <TableCell>
+                <Link href={`/user/profile/${friend.id}`} className="flex place-items-center gap-2 cursor-pointer w-fit">
+                  <Avatar>
+                    <AvatarImage src={`/images/${path.profile}/${friend.profilePicture}.${imageFormats.profilePicture}`} alt={`@${friend.username}`} />
+                    <AvatarFallback>{friend.username.charAt(0).toUpperCase()}</AvatarFallback>
+                  </Avatar>
+                  <p>{friend.username}</p>
+                </Link>
+                </TableCell>
               <TableCell>{friend.createdAt ? new Date(friend.createdAt).toLocaleDateString("en-US") : "No info"}</TableCell>
               <TableCell className="text-right" onClick={() => removeFriendAndMutateFriendsData(friend.id)}><Button>Remove</Button></TableCell>
             </TableRow>

@@ -50,7 +50,6 @@ export default function Friends() {
       <TableCaption>A list of your friends!</TableCaption>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[100px]">ID</TableHead>
           <TableHead>Name</TableHead>
           <TableHead>Since<br/>mm/dd/yyyy</TableHead>
           <TableHead className="text-right">Action</TableHead>
@@ -60,7 +59,6 @@ export default function Friends() {
         {
           friends.data?.map(friend => (
             <TableRow key={"friend" + friend.id}>
-              <TableCell className="font-medium">{friend.id}</TableCell>
               <TableCell>{friend.username}</TableCell>
               <TableCell>{friend.createdAt ? new Date(friend.createdAt).toLocaleDateString("en-US") : "No info"}</TableCell>
               <TableCell className="text-right" onClick={() => removeFriendAndMutateFriendsData(friend.id)}><Button>Remove</Button></TableCell>

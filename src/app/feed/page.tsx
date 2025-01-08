@@ -14,19 +14,19 @@ export default function Feed() {
   const postsData = useSWR("/api/feed/get-posts", postsFetcher)
   
   return (
-    <main className="grid grid-rows-[auto_1fr] grid-cols-1 h-screen">
-      <AlertDialog>
-        <AlertDialogTrigger asChild>
-          <Button variant="outline" className="w-fit place-self-end">Add post</Button>
-        </AlertDialogTrigger>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Add post</AlertDialogTitle>
-          </AlertDialogHeader>
-          <NewPostModal/>
-        </AlertDialogContent>
-      </AlertDialog>
-      <div className="grid auto-rows-auto grid-cols-1 justify-items-center gap-4">
+    <main className="grid grid-cols-3 h-screen place-items-center before:content-['']">
+      <div className="grid auto-rows-auto grid-cols-1 justify-items-center gap-4 w-[35rem] pt-2">
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button variant="outline" className="w-fit place-self-end">Add post</Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Add post</AlertDialogTitle>
+            </AlertDialogHeader>
+            <NewPostModal/>
+          </AlertDialogContent>
+        </AlertDialog>
         {
           postsData?.data?.map(post => <Post key={"post" + post?.id} post={post}/>)
         }

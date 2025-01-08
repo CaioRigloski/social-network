@@ -71,7 +71,7 @@ export function Post(props: { post: PostInterface }) {
   }
  
   return (
-    <Card className="bg-stone-100 w-2/4">
+    <Card className="bg-stone-100">
       <CardHeader className="flex flex-row gap-2">
         <Avatar>
           <AvatarImage src={`/images/${path.profile}/${props.post.user.profilePicture}.${imageFormats.profilePicture}`} alt={`@${props.post.user.username}`} />
@@ -96,7 +96,7 @@ export function Post(props: { post: PostInterface }) {
             </div>
         }
       </CardHeader>
-      <CardContent className="p-1 w-[30rem] h-[30rem] overflow-hidden ml-auto mr-auto">
+      <CardContent className="p-1 w-[35rem] h-[35rem] overflow-hidden ml-auto mr-auto">
         <img alt="post picture" width={0} height={0} src={`/images/${path.posts}/${props.post.picture}.${imageFormats.posts}`} className="w-full h-full object-cover cursor-pointer" onClick={() => setCommentModalIsOpen(true)}/>
       </CardContent>
       <CardFooter className="p-1 pb-4 flex flex-row gap-2 justify-end w-[30rem] ml-auto mr-auto">

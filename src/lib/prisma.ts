@@ -10,7 +10,8 @@ if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma
 export const userSelect = {
   id: true,
   username: true,
-  profilePicture: true
+  profilePicture: true,
+  createdAt: true
 }
 
 export const commentSelect = {

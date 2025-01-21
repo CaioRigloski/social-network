@@ -105,7 +105,7 @@ export function Post(props: { post: PostInterface }) {
             <AlertDialogTrigger asChild>
               <ChatBubbleIcon width={25} height={25} cursor={"pointer"}/>
             </AlertDialogTrigger>
-            <AlertDialogContent className="max-w-[80vw] max-h-[95vh] w-[80vw] h-[95vh]">
+            <AlertDialogContent className="max-w-[80vw] max-h-[95vh] w-[80vw] h-[95vh] grid grid-rows-[auto_1fr]">
               <AlertDialogHeader className="flex flex-row gap-2">
                 <Avatar className="static">
                   <AvatarImage src={`/images/${path.profile}/${props.post.user.profilePicture}.${imageFormats.profilePicture}`} alt={`@${props.post.user.username}`} />
@@ -114,7 +114,7 @@ export function Post(props: { post: PostInterface }) {
                 <h3><a href={`/user/profile/${props.post.user.id}`}>{props.post.user?.username}</a></h3>
               </AlertDialogHeader>
                 <div className="grid grid-cols-3 grid-rows-1 gap-2">
-                  <img alt="post picture" width={0} height={0} src={`/images/${path.posts}/${props.post.picture}.${imageFormats.posts}`} className="w-full h-full object-cover col-span-2"/>
+                  <img alt="post picture" width={0} height={0} src={`/images/${path.posts}/${props.post.picture}.${imageFormats.posts}`} className="w-full h-full object-contain col-span-2"/>
                   {
                     props.post.comments.length > 0 ?
                     <div className="col-span-1 overflow-y-scroll max-h-[70vh]">

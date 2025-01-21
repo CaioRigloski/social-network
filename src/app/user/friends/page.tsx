@@ -17,18 +17,22 @@ import removeFriend from "./actions"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { imageFormats, path } from "@/lib/utils"
 import Link from "next/link"
+import { FriendSuggestions } from "@/components/feed/FriendSuggestions/FriendSuggestions"
 
 export default function Friends() {
   const friends = useSWR("/api/user/get-friends", friendsFetcher)
  
   if(friends.data?.length === 0) {
     return (
-      <Alert>
-        <AlertTitle>:(</AlertTitle>
-        <AlertDescription>
-          You don't have friends, make some!
-        </AlertDescription>
-      </Alert>
+      <div className="grid justify-items-center">
+        <Alert>
+          <AlertTitle>:(</AlertTitle>
+          <AlertDescription>
+            You don't have friends, make some!
+          </AlertDescription>
+        </Alert>
+        <FriendSuggestions/>
+      </div>
     )
   }
 

@@ -106,8 +106,12 @@ export function Post(props: { post: PostInterface }) {
               <ChatBubbleIcon width={25} height={25} cursor={"pointer"}/>
             </AlertDialogTrigger>
             <AlertDialogContent className="max-w-[80vw] max-h-[95vh] w-[80vw] h-[95vh]">
-              <AlertDialogHeader>
-                <AlertDialogTitle>Comments</AlertDialogTitle>
+              <AlertDialogHeader className="flex flex-row gap-2">
+                <Avatar className="static">
+                  <AvatarImage src={`/images/${path.profile}/${props.post.user.profilePicture}.${imageFormats.profilePicture}`} alt={`@${props.post.user.username}`} />
+                  <AvatarFallback>{props.post.user.username.charAt(0).toUpperCase()}</AvatarFallback>
+                </Avatar>
+                <h3><a href={`/user/profile/${props.post.user.id}`}>{props.post.user?.username}</a></h3>
               </AlertDialogHeader>
                 <div className="grid grid-cols-3 grid-rows-1 gap-2">
                   <img alt="post picture" width={0} height={0} src={`/images/${path.posts}/${props.post.picture}.${imageFormats.posts}`} className="w-full h-full object-cover col-span-2"/>

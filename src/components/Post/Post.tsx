@@ -138,7 +138,7 @@ export function Post(props: { post: PostInterface }) {
                 <AlertDialogTitle>Likes</AlertDialogTitle>
               </AlertDialogHeader>
                 {
-                  props.post.likes.map(like => <Like key={like.id} like={like} isOwn={like.user.id === session.data?.user?.id}/>)
+                  props.post?.likes?.map(like => <Like key={like.id} like={like} isOwn={like.user.id === session.data?.user?.id}/>)
                 }
             </AlertDialogContent>
           </AlertDialog>

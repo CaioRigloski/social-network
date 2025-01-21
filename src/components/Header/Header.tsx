@@ -94,7 +94,7 @@ export default function Header() {
             <NavigationMenuLink href="/user/friends" className={navigationMenuTriggerStyle()}>Friends list</NavigationMenuLink>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <NavigationMenuTrigger>
+            <NavigationMenuTrigger disabled={friendRequests.data?.length === 0}>
               <p>Friend requests</p>
               <NotificationCount count={friendRequests.data ? friendRequests.data.length : 0}></NotificationCount>
             </NavigationMenuTrigger>

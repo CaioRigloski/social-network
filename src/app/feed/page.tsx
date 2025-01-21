@@ -15,7 +15,7 @@ export default function Feed() {
   
   return (
     <main className="grid grid-cols-3 h-screen place-items-center before:content-[''] pt-[5rem]">
-      <div className="grid auto-rows-auto grid-cols-1 justify-items-center gap-4 w-[35rem] pt-2">
+      <div className="grid auto-rows-auto grid-cols-1 justify-items-center gap-4 w-[35rem] pt-2 self-start">
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <Button variant="outline" className="w-fit place-self-end">Add post</Button>

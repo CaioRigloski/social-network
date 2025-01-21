@@ -28,6 +28,7 @@ export function FriendSuggestions() {
     <div className="p-4">
       <h4 className="mb-4 text-sm font-medium leading-none">Friend suggestions</h4>
       {
+        friendsSuggestions.data?.length !== 0 ?
         friendsSuggestions.data?.map((suggestion) => 
           <div key={"suggestion" + suggestion.id}>
             <div className="text-sm">
@@ -36,7 +37,10 @@ export function FriendSuggestions() {
             <Button type="button" onClick={() => mutateFriendsSuggestions(suggestion.id)}>ADD</Button>
             <Separator className="my-2" />
           </div>
-        )}
+        )
+        :
+        <p className="justify-self-center">No suggestions</p>
+      }
     </div>
   </ScrollArea>
   )

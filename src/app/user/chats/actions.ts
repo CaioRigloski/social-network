@@ -1,7 +1,7 @@
 'use server'
 
 import { auth } from '@/app/api/auth/[nextauth]/route'
-import { prisma } from '@/lib/prisma'
+import { messageSelect, prisma } from '@/lib/prisma'
 import { messageSchema, chatSchema } from '@/lib/zod'
 import { z } from 'zod'
 
@@ -55,9 +55,20 @@ export default async function createOrUpdateChat(values: z.infer<typeof messageS
             }
           }
         }
-      }
+      },
+      include: {
+        messages: {
+          orderBy: {
+            createdAt: 'desc',
+          },
+          take: 1,
+          select: {
+            ...messageSelect
+          }
+        },
+      },
     })
-    return chat.id
+    return chat
   } catch (err) {
     console.log(err)
   }
@@ -69,7 +80,7 @@ export async function getChats(values: z.infer<typeof chatSchema>) {
   try {
     const chats = await prisma.chat.findUnique({
       where: {
-        id: values.rommId
+        id: values.roomId
       },
       select: {
         messages: true

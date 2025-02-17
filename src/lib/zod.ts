@@ -63,7 +63,7 @@ export const newUsernameSchema = z.object({
 })
 
 export const chatSchema = z.object({
-  rommId: z.string().optional()
+  roomId: z.string().optional()
 })
 
 export const messageSchema = z.object({

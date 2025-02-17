@@ -1,9 +1,8 @@
-import ChatInterface from "@/interfaces/chat/chat.interface"
+import MessageInterface from "@/interfaces/chat/message.interface"
 import UserInterface from "@/interfaces/feed/user.interface"
 
 export interface ReceiveMessage {
-  message: string
+  message: MessageInterface
   sender: UserInterface
   receiverId: string
-  chat: ChatInterface
 }

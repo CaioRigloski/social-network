@@ -36,7 +36,7 @@ export async function GET() {
         }
       }
     })
-
+    
     return NextResponse.json( chats, { status: 200 })
   } catch (err) {
     throw new Error('Chats retrieving error')

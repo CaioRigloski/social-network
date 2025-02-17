@@ -14,7 +14,7 @@ import { detectEnterKey } from "@/lib/utils"
 import UserInterface from "@/interfaces/feed/user.interface"
 import { SocketEvent } from "@/types/socket/event.type"
 import { ReceiveMessage } from "@/interfaces/socket/data/receiveMessage.interface"
-
+import MessageInterface from "@/interfaces/chat/message.interface"
 
 export default function Chats() {
   const session = useSession()
@@ -22,41 +22,46 @@ export default function Chats() {
   const chats = useSWR("/api/user/get-chats", chatsFetcher)
   const friends = useSWR("/api/user/get-friends", friendsFetcher)
 
-  const [ activeChat, setActiveChat ] = useState<ChatInterface | null>()
+  const [ activeChatId, setActiveChatId ] = useState<string | undefined>()
   const [ newFriendChat, setNewFriendChat ] = useState<UserInterface | null>()
   const [ inputValue, setInputValue ] = useState("")
-  const [ message, setMessage ] = useState("")
 
   useEffect(() => {
-    // chat functions
     socket.on<SocketEvent>("receive_message", (msg: ReceiveMessage) => {
-      if(msg.receiverId === session.data?.user?.id) {
-
-        setMessage(msg.message)
-      }
+      chats.mutate(data => {
+        data?.map(chat => {
+          if(chat.id === msg.message.chatId) {
+            [...chat.messages, msg.message]
+          }
+        })
+        return data
+      })
     })
-
     return () => {
       socket.off("receive_message")
     }
   }, [])
+
   async function sendMessage() {
     let friendId: string | undefined = undefined
 
     if(newFriendChat) {
       friendId = newFriendChat.id
     } else {
-      friendId = activeChat?.friend.id === session.data?.user?.id ? activeChat?.user.id : activeChat?.friend.id 
+      chats.data?.map(chat => {
+        if(chat.id === activeChatId) {
+          friendId = chat.friend.id === session.data?.user?.id ? chat?.user.id : chat?.friend.id 
+        }
+      })
     }
 
     if (inputValue.trim() && friendId) {
-      const newRoomId = await createOrUpdateChat({ text: inputValue, friendId: friendId, chatSchema: { rommId: activeChat?.id } })
-      socket.emit<SocketEvent>("send_message", { message: inputValue, roomId: newRoomId })
+      const newChat = await createOrUpdateChat({ text: inputValue, friendId: friendId, chatSchema: { roomId: activeChatId } })
+      socket.emit<SocketEvent>("send_message", { message: inputValue, roomId: newChat?.id})
       setInputValue('')
     }
   }
-
-  if(!chats.data) return <p>No chat available</p>
+ 
   return (
     <main>
       <div>
@@ -79,9 +84,9 @@ export default function Chats() {
             <SidebarGroup>
               <SidebarGroupContent>
                 {
-                  chats.data.map((chat) => (
+                  chats.data?.map((chat) => (
                     <div
-                      onClick={() => setActiveChat(chat)}
+                      onClick={() => setActiveChatId(chat.id)}
                       key={chat.id}
                       className="flex flex-col items-start gap-2 whitespace-nowrap border-b p-4 text-sm leading-tight last:border-b-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                     >
@@ -109,28 +114,34 @@ export default function Chats() {
           </SidebarContent>
           </Sidebar>
           {
-            activeChat?.id &&
-            <>
-              <header>
-                {
-                  activeChat?.friend.id === session.data?.user?.id ?
-                  <p>{activeChat?.user.username}</p>
-                  :
-                  <p>{activeChat?.friend.username}</p>
-                }
-              </header>
-              <div className="flex flex-1 flex-col gap-4 p-4">
-                {
-                  activeChat?.messages.map(message =>
-                    message.user.id === session.data?.user?.id ?
-                    <p key={message.id} className="text-green-500">{message.text}</p>
-                    :
-                    <p key={message.id}>{message.text}</p>
-                  )
-                }
-                <Textarea onChange={e => setInputValue(e.target.value)} onKeyUp={e => detectEnterKey(e) && sendMessage()}/>
-              </div>
-            </>
+            activeChatId &&
+            chats.data?.map(chat => {
+              if(chat.id === activeChatId) {
+                return (
+                  <span key={chat.id}>
+                    <header>
+                      {
+                        chat?.friend.id === session.data?.user?.id ?
+                        <p>{chat?.user.username}</p>
+                        :
+                        <p>{chat?.friend.username}</p>
+                      }
+                    </header>
+                    <div className="flex flex-1 flex-col gap-4 p-4">
+                      {
+                        chat?.messages.map(message =>
+                          message.user.id === session.data?.user?.id ?
+                          <p key={message.id} className="text-green-500">{message.text}</p>
+                          :
+                          <p key={message.id}>{message.text}</p>
+                        )
+                      }
+                      <Textarea onChange={e => setInputValue(e.target.value)} onKeyUp={e => detectEnterKey(e) && sendMessage()}/>
+                    </div>
+                  </span>
+                )
+              }
+            })
           }
       </SidebarProvider>
     </main>

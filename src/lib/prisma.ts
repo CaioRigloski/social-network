@@ -47,7 +47,8 @@ export const postSelect = {
       },
       _count: {
         select: {
-          likes: true
+          likes: true,
+          comments: true
         }
       }
     }

@@ -30,6 +30,7 @@ export async function GET(req: NextRequest) {
           },
           picture: post.picture,
           comments: post.comments,
+          commentsCount: post._count.comments,
           likes: post.likes,
           likesCount: post._count.likes
         }

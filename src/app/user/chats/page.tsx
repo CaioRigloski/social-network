@@ -8,12 +8,15 @@ import { chatsFetcher, friendsFetcher } from "@/lib/swr"
 import { useSession } from "next-auth/react"
 import { useEffect, useState } from "react"
 import useSWR from "swr"
-import { detectEnterKey } from "@/lib/utils"
+import { detectEnterKey, imageFormats, path } from "@/lib/utils"
 import UserInterface from "@/interfaces/feed/user.interface"
 import { SocketEvent } from "@/types/socket/event.type"
 import { ReceiveMessage } from "@/interfaces/socket/data/receiveMessage.interface"
 import React from 'react'
 import { Separator } from "@/components/ui/separator"
+import { NavigationMenuLink } from "@/components/ui/navigation-menu"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import Link from "next/link"
 
 export default function Chats() {
   const session = useSession()
@@ -98,11 +101,11 @@ export default function Chats() {
                           {
                             chat?.friend.id === session.data?.user?.id ?
                             <a href={`/user/profile/${chat.user.id}`}>
-                              <span>username</span>
+                              <span>{chat.user.username}</span>
                             </a>
                             :
                             <a href={`/user/profile/${chat.friend.id}`}>
-                              <span>username</span>
+                              <span>{chat.friend.username}</span>
                             </a>
                           }
                           </span>
@@ -125,33 +128,51 @@ export default function Chats() {
         <SidebarInset>
           <SidebarTrigger className="-ml-1" />
           <Separator orientation="vertical" className="mr-2 h-4" />
-          <div className="flex flex-1 flex-col gap-4 p-4">  
+          <div className="flex flex-1 flex-col gap-4 p-4 w-[30rem] max-w-[30rem]">  
             {
               activeChatId &&
               chats.data?.map(chat => {
                 if(chat.id === activeChatId) {
                   return (
-                    <span key={chat.id}>
-                      <header>
+                    <div key={chat.id}>
+                      <header className="grid flex-1 text-left text-sm leading-tight truncate font-semibold bg-gray-500 p-3 text-white">
+                        <div className="text-sm leading-6 text-black">
                         {
                           chat?.friend.id === session.data?.user?.id ?
-                          <p>{chat?.user.username}</p>
+                          <Link href="/user/profile" className="flex items-center gap-x-2">
+                            <Avatar>
+                              <AvatarImage src={`/images/${path.profile}/${chat.user.profilePicture}.${imageFormats.profilePicture}`} alt={`@${chat.user.username}`} />
+                              <AvatarFallback>{chat.user.username.charAt(0).toUpperCase()}</AvatarFallback>
+                            </Avatar>
+                            <p className="font-semibold text-gray-900 text-white">
+                                {chat.user.username}
+                            </p>
+                          </Link>
                           :
-                          <p>{chat?.friend.username}</p>
+                          <Link href="/user/profile" className="flex items-center gap-x-2">
+                            <Avatar>
+                              <AvatarImage src={`/images/${path.profile}/${chat.friend.profilePicture}.${imageFormats.profilePicture}`} alt={`@${chat.friend.username}`} />
+                              <AvatarFallback>{chat.friend.username.charAt(0).toUpperCase()}</AvatarFallback>
+                            </Avatar>
+                            <p className="font-semibold text-gray-900 text-white">
+                                {chat.friend.username}
+                            </p>
+                          </Link>
                         }
+                        </div>
                       </header>
-                      <div className="flex flex-1 flex-col gap-4 p-4">
+                      <div className="flex flex-1 flex-col gap-4 p-4 border">
                         {
                           chat?.messages.map(message =>
                             message.user.id === session.data?.user?.id ?
-                            <p key={message.id} className="text-green-500">{message.text}</p>
+                            <p key={message.id} className="text-white p-3 bg-green-500 rounded-xl w-fit self-end">{message.text}</p>
                             :
-                            <p key={message.id}>{message.text}</p>
+                            <p key={message.id} className="text-white p-3 bg-cyan-500 rounded-xl w-fit">{message.text}</p>
                           )
                         }
                         <Textarea onChange={e => setInputValue(e.target.value)} onKeyUp={e => detectEnterKey(e) && sendMessage()}/>
                       </div>
-                    </span>
+                    </div>
                   )
                 }
               })

@@ -1,11 +1,9 @@
 'use client'
 
-import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarHeader, SidebarProvider } from "@/components/ui/sidebar"
-import { Button } from '@/components/ui/button'
+import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarHeader, SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { Textarea } from '@/components/ui/textarea'
 import { socket } from '@/socket'
 import createOrUpdateChat from "./actions"
-import ChatInterface from "@/interfaces/chat/chat.interface"
 import { chatsFetcher, friendsFetcher } from "@/lib/swr"
 import { useSession } from "next-auth/react"
 import { useEffect, useState } from "react"
@@ -14,8 +12,8 @@ import { detectEnterKey } from "@/lib/utils"
 import UserInterface from "@/interfaces/feed/user.interface"
 import { SocketEvent } from "@/types/socket/event.type"
 import { ReceiveMessage } from "@/interfaces/socket/data/receiveMessage.interface"
-import MessageInterface from "@/interfaces/chat/message.interface"
 import React from 'react'
+import { Separator } from "@/components/ui/separator"
 
 export default function Chats() {
   const session = useSession()
@@ -80,8 +78,10 @@ export default function Chats() {
           newFriendChat && <Textarea onChange={e => setInputValue(e.target.value)} onKeyUp={e => detectEnterKey(e) && sendMessage()}/>
         }
       </div>
-      <SidebarProvider>
-        <Sidebar collapsible="none" className="flex-1 md:flex">
+      <SidebarProvider className="relative" style={{
+        "--sidebar-width": "20rem",
+      } as React.CSSProperties}>
+        <Sidebar collapsible="offcanvas" className="flex-1 md:flex absolute">
           <SidebarHeader className="gap-3.5 border-b p-4">
             <div className="text-base font-medium text-foreground">
               Chats
@@ -121,37 +121,43 @@ export default function Chats() {
               </SidebarGroupContent>
             </SidebarGroup>
           </SidebarContent>
-          </Sidebar>
-          {
-            activeChatId &&
-            chats.data?.map(chat => {
-              if(chat.id === activeChatId) {
-                return (
-                  <span key={chat.id}>
-                    <header>
-                      {
-                        chat?.friend.id === session.data?.user?.id ?
-                        <p>{chat?.user.username}</p>
-                        :
-                        <p>{chat?.friend.username}</p>
-                      }
-                    </header>
-                    <div className="flex flex-1 flex-col gap-4 p-4">
-                      {
-                        chat?.messages.map(message =>
-                          message.user.id === session.data?.user?.id ?
-                          <p key={message.id} className="text-green-500">{message.text}</p>
+        </Sidebar>
+        <SidebarInset>
+          <SidebarTrigger className="-ml-1" />
+          <Separator orientation="vertical" className="mr-2 h-4" />
+          <div className="flex flex-1 flex-col gap-4 p-4">  
+            {
+              activeChatId &&
+              chats.data?.map(chat => {
+                if(chat.id === activeChatId) {
+                  return (
+                    <span key={chat.id}>
+                      <header>
+                        {
+                          chat?.friend.id === session.data?.user?.id ?
+                          <p>{chat?.user.username}</p>
                           :
-                          <p key={message.id}>{message.text}</p>
-                        )
-                      }
-                      <Textarea onChange={e => setInputValue(e.target.value)} onKeyUp={e => detectEnterKey(e) && sendMessage()}/>
-                    </div>
-                  </span>
-                )
-              }
-            })
-          }
+                          <p>{chat?.friend.username}</p>
+                        }
+                      </header>
+                      <div className="flex flex-1 flex-col gap-4 p-4">
+                        {
+                          chat?.messages.map(message =>
+                            message.user.id === session.data?.user?.id ?
+                            <p key={message.id} className="text-green-500">{message.text}</p>
+                            :
+                            <p key={message.id}>{message.text}</p>
+                          )
+                        }
+                        <Textarea onChange={e => setInputValue(e.target.value)} onKeyUp={e => detectEnterKey(e) && sendMessage()}/>
+                      </div>
+                    </span>
+                  )
+                }
+              })
+            }
+          </div>
+        </SidebarInset>
       </SidebarProvider>
     </main>
   )

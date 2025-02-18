@@ -15,6 +15,7 @@ import UserInterface from "@/interfaces/feed/user.interface"
 import { SocketEvent } from "@/types/socket/event.type"
 import { ReceiveMessage } from "@/interfaces/socket/data/receiveMessage.interface"
 import MessageInterface from "@/interfaces/chat/message.interface"
+import React from 'react'
 
 export default function Chats() {
   const session = useSession()
@@ -40,7 +41,7 @@ export default function Chats() {
     return () => {
       socket.off("receive_message")
     }
-  }, [])
+  }, [chats])
 
   async function sendMessage() {
     let friendId: string | undefined = undefined
@@ -68,9 +69,11 @@ export default function Chats() {
         <h1>Friends</h1>
         {
           friends.data?.map(friend => (
-            <p key={friend.id} onClick={() => setNewFriendChat(friend)}>
-              {friend.username}
-            </p>
+            <div key={friend.id}>
+              <p onClick={() => setNewFriendChat(friend)}>
+                {friend.username}
+              </p>
+            </div>
           ))
         }
         {
@@ -78,37 +81,43 @@ export default function Chats() {
         }
       </div>
       <SidebarProvider>
-        <Sidebar collapsible="none">
-          <SidebarHeader>Chats</SidebarHeader>
+        <Sidebar collapsible="none" className="flex-1 md:flex">
+          <SidebarHeader className="gap-3.5 border-b p-4">
+            <div className="text-base font-medium text-foreground">
+              Chats
+            </div>
+          </SidebarHeader>
           <SidebarContent>
             <SidebarGroup>
               <SidebarGroupContent>
-                {
-                  chats.data?.map((chat) => (
-                    <div
-                      onClick={() => setActiveChatId(chat.id)}
-                      key={chat.id}
-                      className="flex flex-col items-start gap-2 whitespace-nowrap border-b p-4 text-sm leading-tight last:border-b-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
-                    >
-                      <div className="flex w-full items-center gap-2">
-                        {
-                          chat.friend.id === session.data?.user?.id ?
-                          <a href={`/user/profile/${chat.user.id}`}>
-                            <span>{chat.user.username}</span>
-                          </a>
-                          :
-                          <a href={`/user/profile/${chat.friend.id}`}>
-                            <span>{chat.friend.username}</span>
-                          </a>
-                        }
-                        <time className="ml-auto text-xs" dateTime={chat.messages.at(-1)?.createdAt.toString()}/>
+                  {
+                    chats.data?.map((chat) => (
+                      <div key={chat.id} onClick={() => setActiveChatId(chat.id)} className="flex flex-col items-start gap-2 whitespace-nowrap border-b p-4 text-sm leading-tight last:border-b-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground w-[20rem] cursor-pointer">
+                        <div className="flex w-full items-center gap-2">
+                          <span>
+                          {
+                            chat?.friend.id === session.data?.user?.id ?
+                            <a href={`/user/profile/${chat.user.id}`}>
+                              <span>username</span>
+                            </a>
+                            :
+                            <a href={`/user/profile/${chat.friend.id}`}>
+                              <span>username</span>
+                            </a>
+                          }
+                          </span>
+                          <span className="ml-auto text-xs">
+                            <time className="ml-auto text-xs" dateTime={chat.messages.at(-1)?.createdAt.toString()}>
+                              {chat.messages.at(-1)?.createdAt.toLocaleString()}
+                            </time>
+                          </span>
+                        </div>
+                        <span className="line-clamp-2 w-[260px] whitespace-break-spaces text-xs">
+                          {chat.messages.at(-1)?.text}
+                        </span>
                       </div>
-                      <span className="line-clamp-2 whitespace-break-spaces text-xs">
-                        {chat.messages.at(-1)?.text}
-                      </span>
-                    </div>
-                  ))
-                }
+                    ))
+                  }
               </SidebarGroupContent>
             </SidebarGroup>
           </SidebarContent>

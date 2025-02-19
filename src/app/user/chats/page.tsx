@@ -26,8 +26,8 @@ export default function Chats() {
 
   const [ activeChatId, setActiveChatId ] = useState<string | undefined>()
   const [ newFriendChat, setNewFriendChat ] = useState<UserInterface | null>()
-  const [ inputValue, setInputValue ] = useState("")
-
+  const [ inputValue, setInputValue ] = useState<string>("")
+  
   useEffect(() => {
     socket.on<SocketEvent>("receive_message", (msg: ReceiveMessage) => {
       chats.mutate(data => {
@@ -57,10 +57,10 @@ export default function Chats() {
       })
     }
 
-    if (inputValue.trim() && friendId) {
+    if(inputValue.trim() && friendId) {
       const newChat = await createOrUpdateChat({ text: inputValue, friendId: friendId, chatSchema: { roomId: activeChatId } })
       socket.emit<SocketEvent>("send_message", { message: inputValue, roomId: newChat?.id})
-      setInputValue('')
+      setInputValue("")
     }
   }
  
@@ -78,7 +78,7 @@ export default function Chats() {
           ))
         }
         {
-          newFriendChat && <Textarea onChange={e => setInputValue(e.target.value)} onKeyUp={e => detectEnterKey(e) && sendMessage()}/>
+          newFriendChat && <Textarea value={inputValue} onChange={e => setInputValue(e.target.value)} onKeyUp={e => detectEnterKey(e) && sendMessage()}/>
         }
       </div>
       <SidebarProvider className="relative" style={{
@@ -161,17 +161,27 @@ export default function Chats() {
                         }
                         </div>
                       </header>
-                      <div className="flex flex-1 flex-col gap-4 p-4 border">
+                      <div className="flex flex-1 flex-col gap-2 p-4 border min-h-[25rem] max-h-[25rem] overflow-y-auto">
                         {
                           chat?.messages.map(message =>
                             message.user.id === session.data?.user?.id ?
-                            <p key={message.id} className="text-white p-3 bg-green-500 rounded-xl w-fit self-end">{message.text}</p>
+                            <span key={message.id} className="w-fit self-end h-fit flex flex-col">
+                              <p className="text-white p-2 bg-green-500 rounded-xl w-fit">{message.text}</p>
+                              <time className="ml-auto text-[0.50rem]" dateTime={message.createdAt.toString()}>
+                                { new Date(message.createdAt).toLocaleTimeString() }
+                              </time>
+                            </span>
                             :
-                            <p key={message.id} className="text-white p-3 bg-cyan-500 rounded-xl w-fit">{message.text}</p>
+                            <span key={message.id} className="w-fit flex flex-col">
+                              <p key={message.id} className="text-white p-3 bg-cyan-500 rounded-xl w-fit">{message.text}</p>
+                              <time className="ml-auto text-[0.50rem] self-start ml-0" dateTime={message.createdAt.toString()}>
+                                { new Date(message.createdAt).toLocaleTimeString() }
+                              </time>
+                            </span>
                           )
                         }
-                        <Textarea onChange={e => setInputValue(e.target.value)} onKeyUp={e => detectEnterKey(e) && sendMessage()}/>
                       </div>
+                        <Textarea value={inputValue} onChange={e => setInputValue(e.target.value)} onKeyUp={e => detectEnterKey(e) && sendMessage()} className="resize-none" placeholder="Type here..."/>
                     </div>
                   )
                 }

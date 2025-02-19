@@ -71,13 +71,13 @@ export function Post(props: { post: PostInterface }) {
   }
  
   return (
-    <Card className="bg-stone-100">
-      <CardHeader className="flex flex-row gap-2">
+    <Card className="shadow-md">
+      <CardHeader className="flex flex-row gap-2 p-4">
         <Avatar className="static">
           <AvatarImage src={`/images/${path.profile}/${props.post.user.profilePicture}.${imageFormats.profilePicture}`} alt={`@${props.post.user.username}`} />
-          <AvatarFallback className="bg-white">{props.post.user.username.charAt(0).toUpperCase()}</AvatarFallback>
+          <AvatarFallback>{props.post.user.username.charAt(0).toUpperCase()}</AvatarFallback>
         </Avatar>
-        <CardTitle><a href={`/user/profile/${props.post.user.id}`}>{props.post.user?.username}</a></CardTitle>
+        <CardTitle className="text-zinc-600 dark:text-sky-400/75"><a href={`/user/profile/${props.post.user.id}`}>{props.post.user?.username}</a></CardTitle>
         {
           props.post.user.id === session.data?.user?.id &&
             <div className="ml-auto">
@@ -114,7 +114,7 @@ export function Post(props: { post: PostInterface }) {
                 <h3><a href={`/user/profile/${props.post.user.id}`}>{props.post.user?.username}</a></h3>
               </AlertDialogHeader>
                 <div className="grid grid-cols-3 grid-rows-1 gap-2">
-                  <img alt="post picture" width={0} height={0} src={`/images/${path.posts}/${props.post.picture}.${imageFormats.posts}`} className="w-full h-full object-contain col-span-2"/>
+                  <img alt="post picture" width={0} height={0} src={`/images/${path.posts}/${props.post.picture}.${imageFormats.posts}`} className="w-full h-full max-w-[60rem] max-h-[40rem] object-contain col-span-2"/>
                   {
                     props.post.comments.length > 0 ?
                     <div className="col-span-1 overflow-y-scroll max-h-[70vh]">

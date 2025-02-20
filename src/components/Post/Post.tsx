@@ -99,12 +99,14 @@ export function Post(props: { post: PostInterface }) {
       <CardContent className="p-1 w-[35rem] h-[35rem] ml-auto mr-auto">
         <img alt="post picture" width={0} height={0} src={`/images/${path.posts}/${props.post.picture}.${imageFormats.posts}`} className="w-full h-full object-cover cursor-pointer" onClick={() => setCommentModalIsOpen(true)}/>
       </CardContent>
-      <CardFooter className="p-1 pb-4 flex flex-row gap-2 justify-end w-[30rem] ml-auto mr-auto">
-        <div>
+      <CardFooter className="p-1 pb-4 flex flex-row gap-2 justify-end w-[32rem] ml-auto mr-auto">
+        <div className="flex flex-col items-center gap-1">
           <AlertDialog open={commentModalIsOpen} onOpenChange={() => setCommentModalIsOpen(!commentModalIsOpen)}>
             <AlertDialogTrigger asChild>
               <ChatBubbleIcon width={25} height={25} cursor={"pointer"}/>
             </AlertDialogTrigger>
+            <p className="cursor-default">{props.post.commentsCount}</p>
+
             <AlertDialogContent className="max-w-[80vw] max-h-[95vh] w-[80vw] h-[95vh] grid grid-rows-[auto_1fr]">
               <AlertDialogHeader className="flex flex-row gap-2">
                 <Avatar className="static">
@@ -131,9 +133,8 @@ export function Post(props: { post: PostInterface }) {
                 </div>              
             </AlertDialogContent>
           </AlertDialog>
-          <p>{props.post.commentsCount}</p>
         </div>
-        <div>
+        <div className="flex flex-col items-center gap-1">
           {
             likeId.length > 0 ?
               <HeartFilledIcon width={25} height={25} color="red" cursor={"pointer"} onClick={unlikeAndMutatePostsData}/>
@@ -142,14 +143,17 @@ export function Post(props: { post: PostInterface }) {
           }
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <p>{props.post.likesCount}</p>
+              <p className="cursor-pointer">{props.post.likesCount}</p>
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
                 <AlertDialogTitle>Likes</AlertDialogTitle>
               </AlertDialogHeader>
                 {
+                  props.post.likesCount > 0 ?
                   props.post?.likes?.map(like => <Like key={like.id} like={like} isOwn={like.user.id === session.data?.user?.id}/>)
+                  :
+                  <p>No likes yet.</p>
                 }
             </AlertDialogContent>
           </AlertDialog>

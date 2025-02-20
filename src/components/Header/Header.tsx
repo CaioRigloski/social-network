@@ -24,8 +24,6 @@ import { signOutAction } from "@/app/user/sign-out/actions"
 import UserInterface from "@/interfaces/feed/user.interface"
 import { usePathname } from "next/navigation"
 import { CheckIcon, ExitIcon } from "@radix-ui/react-icons"
-import { imageFormats, path } from "@/lib/utils"
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { Separator } from "../ui/separator"
 import { AvatarComponent } from "../Avatar/Avatar"
 

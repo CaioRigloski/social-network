@@ -9,12 +9,12 @@ import { createNewLike, unlike } from "@/app/post/like/actions"
 import { useSession } from "next-auth/react"
 import { mutate } from "swr"
 import { deletePost } from "@/app/post/actions"
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { ChatBubbleIcon, HeartFilledIcon, HeartIcon } from "@radix-ui/react-icons"
 import { AlertDialog, AlertDialogHeader, AlertDialogContent, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
 import { Like } from "./Like/Like"
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu"
 import { MoreVertical } from "lucide-react"
+import { AvatarComponent } from "../Avatar/Avatar"
 
 
 export function Post(props: { post: PostInterface }) {
@@ -73,10 +73,7 @@ export function Post(props: { post: PostInterface }) {
   return (
     <Card className="shadow-md">
       <CardHeader className="flex flex-row gap-2 p-4">
-        <Avatar className="static">
-          <AvatarImage src={`/images/${path.profile}/${props.post.user.profilePicture}.${imageFormats.profilePicture}`} alt={`@${props.post.user.username}`} />
-          <AvatarFallback>{props.post.user.username.charAt(0).toUpperCase()}</AvatarFallback>
-        </Avatar>
+        <AvatarComponent user={props.post.user}/>
         <CardTitle className="text-zinc-600 dark:text-sky-400/75"><a href={`/user/profile/${props.post.user.id}`}>{props.post.user?.username}</a></CardTitle>
         {
           props.post.user.id === session.data?.user?.id &&
@@ -109,10 +106,7 @@ export function Post(props: { post: PostInterface }) {
 
             <AlertDialogContent className="max-w-[80vw] max-h-[95vh] w-[80vw] h-[95vh] grid grid-rows-[auto_1fr]">
               <AlertDialogHeader className="flex flex-row gap-2">
-                <Avatar className="static">
-                  <AvatarImage src={`/images/${path.profile}/${props.post.user.profilePicture}.${imageFormats.profilePicture}`} alt={`@${props.post.user.username}`} />
-                  <AvatarFallback>{props.post.user.username.charAt(0).toUpperCase()}</AvatarFallback>
-                </Avatar>
+                <AvatarComponent user={props.post.user}/>
                 <h3><a href={`/user/profile/${props.post.user.id}`}>{props.post.user?.username}</a></h3>
               </AlertDialogHeader>
                 <div className="grid grid-cols-3 grid-rows-1 gap-2">

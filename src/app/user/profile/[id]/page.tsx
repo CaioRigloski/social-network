@@ -3,10 +3,10 @@
 import useSWR from "swr"
 import { postsOfUserFetcher, userFetcher } from "@/lib/swr"
 import { path} from "@/lib/utils"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { ThirdUserProfileParamsInterface } from "@/interfaces/params/user/third-profile.interface"
 import { useParams } from "next/navigation"
+import { AvatarComponent } from "@/components/Avatar/Avatar"
 
 
 export default function Profile() {
@@ -22,10 +22,7 @@ export default function Profile() {
       <section>
         <Dialog>
           <DialogTrigger asChild>
-            <Avatar>
-              <AvatarImage src={`/images/${path.profile}/${profilePicture}.jpeg`} alt={`@${username}`} />
-              <AvatarFallback>{username?.charAt(0)}</AvatarFallback>
-            </Avatar>
+            {user.data  && <AvatarComponent user={user.data}/>}
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>

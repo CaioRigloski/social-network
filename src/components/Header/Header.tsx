@@ -68,12 +68,14 @@ export default function Header() {
     <header className="flex flex-row-reverse place-content-around after:content-[''] after:flex-1 *:flex-1 items-end bg-cyan-950 p-4 w-auto min-w-screen sticky top-0 z-50">
       <div className="relative flex gap-x-4 justify-center">
         <div className="text-sm leading-6">
-          <Link href="/user/profile" className="flex items-center gap-x-2">
+          <div  className="flex items-center gap-x-2">
             {session.data?.user && <AvatarComponent user={session.data.user}/>}
-            <p className="font-semibold text-gray-900 text-white">
-                {session.status === "authenticated" && session.data.user?.username}
-            </p>
-          </Link>
+            <Link href="/user/profile">
+              <p className="font-semibold text-gray-900 text-white">
+                  {session.status === "authenticated" && session.data.user?.username}
+              </p>
+            </Link>
+          </div>
         </div>
         <form className="flex justify-end w-fit text-white" action={clearCacheAndSignout}>
           <button type="submit" title="Sign out">

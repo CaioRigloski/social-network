@@ -1,9 +1,4 @@
 import { deleteComment, editComment } from "@/app/post/comment/actions"
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/ui/avatar"
 import { Textarea } from "@/components/ui/textarea"
 import CommentInterface from "@/interfaces/feed/comment.interface"
 import PostInterface from "@/interfaces/feed/post.interface"
@@ -13,6 +8,7 @@ import { MoreVertical } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { mutate } from "swr"
 import { Separator } from "@/components/ui/separator"
+import { AvatarComponent } from "@/components/Avatar/Avatar"
 
 export function Comment(props: { comment: CommentInterface, isOwn?: boolean }) {
   const [ editedComment, setEditedComment ] = useState<string>("")
@@ -22,7 +18,6 @@ export function Comment(props: { comment: CommentInterface, isOwn?: boolean }) {
   const textRef = useRef<HTMLParagraphElement>(null)
 
   const id = props.comment.user.id
-  const profilePicture = props.comment.user.profilePicture
   const username = props.comment.user.username
 
   function checkIfTruncated() {
@@ -66,10 +61,7 @@ export function Comment(props: { comment: CommentInterface, isOwn?: boolean }) {
     <div>
 
       <div className="flex min-w-0 gap-x-4 p-4">
-        <Avatar>
-          <AvatarImage src={`/images/${path.profile}/${profilePicture}.jpeg`} alt={`@${username}`} />
-          <AvatarFallback>{username.charAt(0)}</AvatarFallback>
-        </Avatar>
+        <AvatarComponent user={props.comment.user}/>
         <div className="min-w-0 flex-auto">
           <p className="text-sm font-semibold leading-6 text-gray-900"><a href={props.isOwn ? "/user/profile" : `user/profile/${id}`}>{username}</a></p>
           <p ref={textRef} className={`${isExpanded && "block"} mt-1 text-xs leading-5 text-gray-500 comment-line-limit`}>{props.comment.text}</p>

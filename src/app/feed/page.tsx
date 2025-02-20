@@ -8,13 +8,15 @@ import { NewPostModal } from "@/components/Post/NewPostModal/NewPostModal"
 import { FriendSuggestions } from "@/components/feed/FriendSuggestions/FriendSuggestions"
 import { postsFetcher } from "@/lib/swr"
 import useSWR from "swr"
+import { FriendsAvatars } from "@/components/FriendsAvatars/FriendsAvatars"
 
 
 export default function Feed() {
   const postsData = useSWR("/api/feed/get-posts", postsFetcher)
   
   return (
-    <main className="grid grid-cols-[1fr_max-content_1fr] h-screen place-items-center before:content-[''] pt-[5rem]">
+    <main className="grid grid-cols-[1fr_max-content_1fr] h-screen place-items-center pt-[5rem]">
+      <FriendsAvatars/>
       <div className="grid auto-rows-auto grid-cols-1 justify-items-center gap-4 w-[35rem] pt-2 self-start">
         <AlertDialog>
           <AlertDialogTrigger asChild>

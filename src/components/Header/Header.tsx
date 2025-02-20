@@ -27,6 +27,7 @@ import { CheckIcon, ExitIcon } from "@radix-ui/react-icons"
 import { imageFormats, path } from "@/lib/utils"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { Separator } from "../ui/separator"
+import { AvatarComponent } from "../Avatar/Avatar"
 
 export default function Header() {
   const session = useSession()
@@ -70,10 +71,7 @@ export default function Header() {
       <div className="relative flex gap-x-4 justify-center">
         <div className="text-sm leading-6">
           <Link href="/user/profile" className="flex items-center gap-x-2">
-            <Avatar>
-              <AvatarImage src={`/images/${path.profile}/${session.data?.user?.profilePicture}.${imageFormats.profilePicture}`} alt={`@${session.data?.user?.username}`} />
-              <AvatarFallback>{session.data?.user?.username?.charAt(0).toUpperCase()}</AvatarFallback>
-            </Avatar>
+            {session.data?.user && <AvatarComponent user={session.data.user}/>}
             <p className="font-semibold text-gray-900 text-white">
                 {session.status === "authenticated" && session.data.user?.username}
             </p>
@@ -104,10 +102,7 @@ export default function Header() {
                   friendRequests?.data?.map(user =>
                     <li key={"request" + user.id} className="grid grid-cols-[80%_auto] grid-rows-[auto_auto] gap-5 w-full h-full justify-center items-center p-3 pb-0 rounded-lg hover:bg-gray-200 cursor-pointer transition-colors">
                       <Link href={`/user/profile/${user.id}`} className="flex place-items-center gap-2">
-                        <Avatar>
-                          <AvatarImage src={`/images/${path.profile}/${user.profilePicture}.${imageFormats.profilePicture}`} alt={`@${user.username}`} />
-                          <AvatarFallback>{user.username?.charAt(0).toUpperCase()}</AvatarFallback>
-                        </Avatar>
+                        <AvatarComponent user={user}/>
                         <p>{user.username}</p>
                       </Link>
                       <button title="Accept request" onClick={() => mutateFriendAndPostDatas(user.id)} className="flex items-center justify-center bg-white hover:bg-white rounded-full">

@@ -65,7 +65,7 @@ export default function Header() {
   }
 
   return (
-    <header className="flex flex-row-reverse place-content-around after:content-[''] after:flex-1 *:flex-1 items-end bg-cyan-950 p-4 w-auto min-w-screen sticky top-0">
+    <header className="flex flex-row-reverse place-content-around after:content-[''] after:flex-1 *:flex-1 items-end bg-cyan-950 p-4 w-auto min-w-screen sticky top-0 z-50">
       <div className="relative flex gap-x-4 justify-center">
         <div className="text-sm leading-6">
           <Link href="/user/profile" className="flex items-center gap-x-2">

@@ -14,10 +14,9 @@ import {
 import { friendsFetcher } from "@/lib/swr"
 import useSWR from "swr"
 import removeFriend from "./actions"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { imageFormats, path } from "@/lib/utils"
 import Link from "next/link"
 import { FriendSuggestions } from "@/components/feed/FriendSuggestions/FriendSuggestions"
+import { AvatarComponent } from "@/components/Avatar/Avatar"
 
 export default function Friends() {
   const friends = useSWR("/api/user/get-friends", friendsFetcher)
@@ -68,10 +67,7 @@ export default function Friends() {
             <TableRow key={"friend" + friend.id}>
               <TableCell>
                 <Link href={`/user/profile/${friend.id}`} className="flex place-items-center gap-2 cursor-pointer w-fit">
-                  <Avatar>
-                    <AvatarImage src={`/images/${path.profile}/${friend.profilePicture}.${imageFormats.profilePicture}`} alt={`@${friend.username}`} />
-                    <AvatarFallback>{friend.username.charAt(0).toUpperCase()}</AvatarFallback>
-                  </Avatar>
+                  <AvatarComponent user={friend}/>
                   <p>{friend.username}</p>
                 </Link>
                 </TableCell>

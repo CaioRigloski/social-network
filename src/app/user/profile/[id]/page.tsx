@@ -13,8 +13,7 @@ export default function Profile() {
   const params: ThirdUserProfileParamsInterface = useParams()
   const user = useSWR(`/api/user/get-user-info?id=${params.id}`, userFetcher)
   const posts = useSWR(`/api/user/get-posts?id=${params.id}`, postsOfUserFetcher)
-
-  const profilePicture = user.data?.profilePicture || null
+  
   const username = user.data?.username
 
   return (

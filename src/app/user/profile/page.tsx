@@ -4,8 +4,7 @@ import useSWR from "swr"
 import { useSession } from "next-auth/react"
 import { postsOfUserFetcher } from "@/lib/swr"
 import { detectEnterKey, imageFormats, path, toDataUrl } from "@/lib/utils"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -16,6 +15,7 @@ import { Input } from "@/components/ui/input"
 import { useState } from "react"
 import Image from "next/image"
 import { changeProfilePicture, changeUsername } from "./actions"
+import { AvatarComponent } from "@/components/Avatar/Avatar"
 
 
 export default function Profile() {
@@ -27,8 +27,6 @@ export default function Profile() {
   const [ usernameEditIsOpen, setusernameEditIsOpen] = useState<boolean>(false)
 
   const posts = useSWR(`/api/user/get-posts?id=${data?.user?.id}`, postsOfUserFetcher)
-
-  const profilePicture = data?.user?.profilePicture || null
 
   const newProfilePictureForm = useForm<z.infer<typeof newProfilePictureSchema>>({
     resolver: zodResolver(newProfilePictureSchema),
@@ -69,10 +67,7 @@ export default function Profile() {
       <section>
         <Dialog>
           <DialogTrigger asChild>
-            <Avatar>
-              <AvatarImage src={`/images/${path.profile}/${profilePicture}.${imageFormats.profilePicture}`} alt={`@${username}`} />
-              <AvatarFallback>{username?.charAt(0).toUpperCase()}</AvatarFallback>
-            </Avatar>
+            {data?.user && <AvatarComponent user={data.user}/>}
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>

@@ -13,7 +13,7 @@ export function FriendsAvatars() {
         <div className="flex gap-2 flex-wrap">
           {
             friends.data?.map(friend =>
-              <AvatarComponent user={friend}/>
+              <AvatarComponent key={friend.id} user={friend}/>
             )
           }
         </div>

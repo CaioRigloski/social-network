@@ -8,15 +8,14 @@ import { chatsFetcher, friendsFetcher } from "@/lib/swr"
 import { useSession } from "next-auth/react"
 import { useEffect, useState } from "react"
 import useSWR from "swr"
-import { detectEnterKey, imageFormats, path } from "@/lib/utils"
+import { detectEnterKey } from "@/lib/utils"
 import UserInterface from "@/interfaces/feed/user.interface"
 import { SocketEvent } from "@/types/socket/event.type"
 import { ReceiveMessage } from "@/interfaces/socket/data/receiveMessage.interface"
 import React from 'react'
 import { Separator } from "@/components/ui/separator"
-import { NavigationMenuLink } from "@/components/ui/navigation-menu"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import Link from "next/link"
+import { AvatarComponent } from "@/components/Avatar/Avatar"
 
 export default function Chats() {
   const session = useSession()
@@ -140,20 +139,14 @@ export default function Chats() {
                         {
                           chat?.friend.id === session.data?.user?.id ?
                           <Link href="/user/profile" className="flex items-center gap-x-2">
-                            <Avatar>
-                              <AvatarImage src={`/images/${path.profile}/${chat.user.profilePicture}.${imageFormats.profilePicture}`} alt={`@${chat.user.username}`} />
-                              <AvatarFallback>{chat.user.username.charAt(0).toUpperCase()}</AvatarFallback>
-                            </Avatar>
+                            <AvatarComponent user={chat.user}/>
                             <p className="font-semibold text-gray-900 text-white">
                                 {chat.user.username}
                             </p>
                           </Link>
                           :
                           <Link href="/user/profile" className="flex items-center gap-x-2">
-                            <Avatar>
-                              <AvatarImage src={`/images/${path.profile}/${chat.friend.profilePicture}.${imageFormats.profilePicture}`} alt={`@${chat.friend.username}`} />
-                              <AvatarFallback>{chat.friend.username.charAt(0).toUpperCase()}</AvatarFallback>
-                            </Avatar>
+                            <AvatarComponent user={chat.friend}/>
                             <p className="font-semibold text-gray-900 text-white">
                                 {chat.friend.username}
                             </p>

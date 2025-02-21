@@ -104,6 +104,13 @@ const config = {
           overflowY: 'hidden',
           textOverflow: 'ellipsis',
 					wordWrap: 'break-word'
+        },
+				'.hide-scrollbar': {
+					msOverflowStyle: 'none',
+					scrollbarWidth: 'none',
+        },
+        '.hide-scrollbar::-webkit-scrollbar': {
+          display: 'none',
         }
 			})
 		}

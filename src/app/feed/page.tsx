@@ -16,7 +16,10 @@ export default function Feed() {
   
   return (
     <main className="grid grid-cols-[1fr_max-content_1fr] h-screen place-items-center pt-[5rem]">
-      <FriendsAvatars/>
+      <div className="self-start">
+        <FriendsAvatars/>
+        <FriendSuggestions/>
+      </div>
       <div className="grid auto-rows-auto grid-cols-1 justify-items-center gap-4 w-[35rem] pt-2 self-start">
         <AlertDialog>
           <AlertDialogTrigger asChild>
@@ -51,7 +54,6 @@ export default function Feed() {
           </Alert>
         }
       </div>
-      <FriendSuggestions/>
     </main>
   )
 }

@@ -24,7 +24,7 @@ export function FriendSuggestions() {
   }
 
   return (
-  <ScrollArea className="h-72 w-56 rounded-md border self-start mt-[4rem] shadow-md !sticky top-40" style={{position: "static"}}>
+  <ScrollArea className="h-72 w-56 rounded-md border self-start mt-[4rem] shadow-md" style={{position: "static"}}>
     <div className="p-4">
       <h4 className="mb-4 text-sm font-medium leading-none">Friend suggestions</h4>
       {

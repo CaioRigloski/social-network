@@ -13,7 +13,6 @@ import { useRef } from "react"
 
 
 export default function Feed() {
-  const postsRef = useRef<HTMLDivElement>(null)
   const postsData = useSWR("/api/feed/get-posts", postsFetcher)
 
   return (
@@ -22,7 +21,7 @@ export default function Feed() {
         <FriendsAvatars/>
         <FriendSuggestions/>
       </div>
-      <div ref={postsRef} className="grid auto-rows-auto grid-cols-1 justify-items-center gap-4 w-[35rem] pt-2 self-start">
+      <div className="grid auto-rows-auto grid-cols-1 justify-items-center gap-4 w-[35rem] pt-2 self-start">
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <Button variant="outline" className="w-fit place-self-end">Add post</Button>

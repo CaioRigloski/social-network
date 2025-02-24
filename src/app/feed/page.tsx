@@ -22,10 +22,10 @@ export default function Feed() {
         <FriendsAvatars/>
         <FriendSuggestions/>
       </div>
-      <div ref={postsRef} className="grid auto-rows-auto grid-cols-1 justify-items-center gap-4 w-[37rem] pt-2 self-start">
+      <div ref={postsRef} className="grid auto-rows-auto grid-cols-1 justify-items-center gap-4 w-[35rem] pt-2 self-start">
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <Button variant="outline" className="w-fit place-self-end mr-[1rem]">Add post</Button>
+            <Button variant="outline" className="w-fit place-self-end">Add post</Button>
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>

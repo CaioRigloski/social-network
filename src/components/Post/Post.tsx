@@ -74,7 +74,7 @@ export function Post(props: { post: PostInterface }) {
     <Card className="shadow-md">
       <CardHeader className="flex flex-row gap-2 p-4">
         <AvatarComponent user={props.post.user}/>
-        <CardTitle className="text-zinc-600 dark:text-sky-400/75"><a href={`/user/profile/${props.post.user.id}`}>{props.post.user?.username}</a></CardTitle>
+        <CardTitle className="text-zinc-600 dark:text-sky-400/75"><a href={ session.data?.user?.id === props.post.user.id ? "/user/profile" : `/user/profile/${props.post.user.id}`}>{props.post.user?.username}</a></CardTitle>
         {
           props.post.user.id === session.data?.user?.id &&
             <div className="ml-auto">

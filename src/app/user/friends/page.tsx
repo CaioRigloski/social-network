@@ -66,10 +66,12 @@ export default function Friends() {
           friends.data?.map(friend => (
             <TableRow key={"friend" + friend.id}>
               <TableCell>
-                <Link href={`/user/profile/${friend.id}`} className="flex place-items-center gap-2 cursor-pointer w-fit">
+                <div className="flex place-items-center gap-2 cursor-pointer w-fit">
                   <AvatarComponent user={friend}/>
-                  <p>{friend.username}</p>
-                </Link>
+                  <Link href={`/user/profile/${friend.id}`}>
+                    <p>{friend.username}</p>
+                  </Link>
+                </div>
                 </TableCell>
               <TableCell>{friend.createdAt ? new Date(friend.createdAt).toLocaleDateString("en-US") : "No info"}</TableCell>
               <TableCell className="text-right" onClick={() => removeFriendAndMutateFriendsData(friend.id)}><Button>Remove</Button></TableCell>

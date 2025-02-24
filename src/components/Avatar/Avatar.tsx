@@ -9,7 +9,7 @@ export function AvatarComponent(props: { user: UserInterface | User }) {
   const session = useSession()
 
   return (
-    <Link href={props.user.id === session.data?.user?.id ? "/user/profile" : `/user/profile/${props.user.id}`}>
+    <Link href={props.user.id === session.data?.user?.id ? "/user/profile" : `/user/profile/${props.user.id}`} title={props.user.username}>
       <Avatar className="static">
         <AvatarImage src={`/images/${path.profile}/${props.user.profilePicture}.${imageFormats.profilePicture}`} alt={`@${props.user.username}`} />
         <AvatarFallback>{props.user.username?.charAt(0).toUpperCase()}</AvatarFallback>

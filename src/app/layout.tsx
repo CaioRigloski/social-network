@@ -4,7 +4,6 @@ import "./globals.css"
 import Header from "@/components/Header/Header"
 import { auth } from "./api/auth/[nextauth]/route"
 import { SessionProvider } from 'next-auth/react'
-import { HeaderHeightProvider } from "@/contexts/HeaderHeightContext"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -24,10 +23,8 @@ export default async function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <SessionProvider session={session}>
-          <HeaderHeightProvider>
-            {session?.user && <Header/>}
-            {children}
-          </HeaderHeightProvider>
+          {session?.user && <Header/>}
+          {children}
         </SessionProvider>
       </body>
     </html>

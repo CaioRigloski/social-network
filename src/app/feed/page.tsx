@@ -9,8 +9,7 @@ import { FriendSuggestions } from "@/components/feed/FriendSuggestions/FriendSug
 import { postsFetcher } from "@/lib/swr"
 import useSWR from "swr"
 import { FriendsAvatars } from "@/components/FriendsAvatars/FriendsAvatars"
-import { useEffect, useRef, useState } from "react"
-import { useHeaderHeight } from "@/contexts/HeaderHeightContext"
+import { useRef } from "react"
 
 
 export default function Feed() {

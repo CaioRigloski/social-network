@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from "@/components/ui/button"
-import { AlertDialog, AlertDialogHeader, AlertDialogContent, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
+import { AlertDialog, AlertDialogHeader, AlertDialogContent, AlertDialogTitle, AlertDialogTrigger, AlertDialogDescription } from "@/components/ui/alert-dialog"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Post } from "@/components/Post/Post"
 import { NewPostModal } from "@/components/Post/NewPostModal/NewPostModal"
@@ -30,6 +30,9 @@ export default function Feed() {
               <AlertDialogTitle>Add post</AlertDialogTitle>
             </AlertDialogHeader>
             <NewPostModal/>
+            <AlertDialogDescription>
+              Add a new post to your feed.
+            </AlertDialogDescription>
           </AlertDialogContent>
         </AlertDialog>
           {

@@ -35,9 +35,12 @@ export default function Feed() {
             </AlertDialogDescription>
           </AlertDialogContent>
         </AlertDialog>
-          {
-            postsData?.data?.map(post => <Post key={"post" + post?.id} post={post}/>)
-          }  
+        {
+          postsData?.data?.map(post => <Post key={"post" + post?.id} post={post}/>)
+        }
+        {
+          postsData.data && postsData.data?.length > 0 && <p className="p-5 text-gray-300">No more posts.</p>
+        }
         {
           postsData.data?.length === 0 && !postsData.error &&
           <Alert>

@@ -9,7 +9,6 @@ import { FriendSuggestions } from "@/components/feed/FriendSuggestions/FriendSug
 import { postsFetcher } from "@/lib/swr"
 import useSWR from "swr"
 import { FriendsAvatars } from "@/components/FriendsAvatars/FriendsAvatars"
-import { useRef } from "react"
 
 
 export default function Feed() {

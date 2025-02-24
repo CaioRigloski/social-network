@@ -155,6 +155,9 @@ export function Post(props: { post: PostInterface }) {
                   :
                   <p>No likes yet.</p>
                 }
+                <AlertDialogDescription>
+                  See who liked it!
+                </AlertDialogDescription>
             </AlertDialogContent>
           </AlertDialog>
         </div>

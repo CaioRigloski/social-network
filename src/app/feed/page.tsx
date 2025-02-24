@@ -10,50 +10,23 @@ import { postsFetcher } from "@/lib/swr"
 import useSWR from "swr"
 import { FriendsAvatars } from "@/components/FriendsAvatars/FriendsAvatars"
 import { useEffect, useRef, useState } from "react"
+import { useHeaderHeight } from "@/contexts/HeaderHeightContext"
 
 
 export default function Feed() {
   const postsRef = useRef<HTMLDivElement>(null)
-  const [scrollPosition, setScrollPosition] = useState<number>(0)
   const postsData = useSWR("/api/feed/get-posts", postsFetcher)
 
-  useEffect(() => {
-    const handleWheel = (event: WheelEvent) => {
-      const scrollDirection = event.deltaY;
-
-      if (postsRef.current) {
-        if (scrollDirection > 0) {
-          setScrollPosition(prev => prev + 30)
-        } else if (scrollDirection < 0) {
-          setScrollPosition(prev => prev - 30)
-        }
-      }
-    };
-
-    window.addEventListener('wheel', handleWheel);
-
-    return () => {
-      window.removeEventListener('wheel', handleWheel);
-    };
-  }, []);
-
-  useEffect(() => {
-    console.log(scrollPosition)
-    if (postsRef.current) {
-      postsRef.current.scrollTop = scrollPosition
-    }
-  }, [scrollPosition])
-  
   return (
-    <main className="grid grid-cols-[1fr_max-content_1fr] h-screen place-items-center pt-[5rem]">
-      <div className="self-start">
+    <main className="grid grid-cols-[1fr_max-content_1fr] place-items-center pt-[5rem] h-fit">
+      <div className="self-start sticky top-[5rem]">
         <FriendsAvatars/>
         <FriendSuggestions/>
       </div>
-      <div ref={postsRef} className="grid auto-rows-auto grid-cols-1 justify-items-center gap-4 w-[37rem] h-screen overflow-y-scroll pt-2 self-start hide-scrollbar">
+      <div ref={postsRef} className="grid auto-rows-auto grid-cols-1 justify-items-center gap-4 w-[37rem] pt-2 self-start">
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <Button variant="outline" className="w-fit place-self-end">Add post</Button>
+            <Button variant="outline" className="w-fit place-self-end mr-[1rem]">Add post</Button>
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>

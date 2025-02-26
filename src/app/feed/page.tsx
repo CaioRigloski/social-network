@@ -9,13 +9,15 @@ import { FriendSuggestions } from "@/components/feed/FriendSuggestions/FriendSug
 import { postsFetcher } from "@/lib/swr"
 import useSWR from "swr"
 import { FriendsAvatars } from "@/components/FriendsAvatars/FriendsAvatars"
+import { ChatList } from "@/components/Chat/ChatList/ChatList"
+import { Chat } from "@/components/Chat/Chat"
 
 
 export default function Feed() {
   const postsData = useSWR("/api/feed/get-posts", postsFetcher)
 
   return (
-    <main className="grid grid-cols-[1fr_max-content_1fr] place-items-center h-fit">
+    <main style={{height: "calc(100vh - 72px)"}} className="grid grid-cols-[1fr_max-content_1fr] place-items-center relative">
       <div className="self-start sticky top-[5rem] pt-[5rem] flex flex-col gap-[5rem]">
         <FriendsAvatars/>
         <FriendSuggestions/>
@@ -60,6 +62,10 @@ export default function Feed() {
           </Alert>
         }
       </div>
+      <div className="self-start sticky top-[5rem] pt-[5rem] flex flex-col gap-[5rem]">
+        <ChatList/>
+      </div>
+      <Chat/>
     </main>
   )
 }

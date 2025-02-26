@@ -23,6 +23,7 @@ export function Chat() {
     socket.on<SocketEvent>("receive_message", (msg: ReceiveMessage) => {
       if(chat) {
         addChat({ ...chat, messages: [...chat.messages, msg.message] })
+
         mutate<ChatInterface[]>("/api/user/get-chats", data => {
           data?.map(chat => {
             if(chat.id === msg.message.chatId) {
@@ -59,19 +60,19 @@ export function Chat() {
               <div className="text-sm leading-6 text-black">
               {
                 chat?.friend.id === session.data?.user?.id ?
-                <Link href="/user/profile" className="flex items-center gap-x-2">
+                <div className="flex items-center gap-x-2">
                   <AvatarComponent user={chat.user}/>
-                  <p className="font-semibold text-gray-900 text-white">
-                      {chat.user.username}
-                  </p>
-                </Link>
+                  <Link href="/user/profile" className=" font-semibold text-gray-900 text-white">
+                    {chat.user.username}
+                  </Link>
+                </div>
                 :
-                <Link href="/user/profile" className="flex items-center gap-x-2">
+                <div  className="flex items-center gap-x-2">
                   <AvatarComponent user={chat.friend}/>
-                  <p className="font-semibold text-gray-900 text-white">
-                      {chat.friend.username}
-                  </p>
-                </Link>
+                  <Link href="/user/profile" className="font-semibold text-gray-900 text-white">
+                    {chat.friend.username}
+                  </Link>
+                </div>
               }
               </div>
             </header>

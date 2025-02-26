@@ -4,6 +4,7 @@ import "./globals.css"
 import Header from "@/components/Header/Header"
 import { auth } from "./api/auth/[nextauth]/route"
 import { SessionProvider } from 'next-auth/react'
+import { ChatProvider } from "@/contexts/ChatContext/ChatContext"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -23,8 +24,10 @@ export default async function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <SessionProvider session={session}>
-          {session?.user && <Header/>}
-          {children}
+          <ChatProvider>
+            {session?.user && <Header/>}
+            {children}
+          </ChatProvider>
         </SessionProvider>
       </body>
     </html>

@@ -23,6 +23,6 @@
       "@utils/*": ["./utils/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/middleware.js", "src/interfaces/NotificationCount.interfacets", "server.js", "src/socket.ts", "src/contexts/HeaderHeightContext.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/middleware.js", "src/interfaces/NotificationCount.interfacets", "server.js", "src/socket.ts", "src/contexts/HeaderHeightContext.js", "src/components/Map/Map.js", "src/components/Map/Map.jsx", "src/components/Chat/Chat.Listtsx", "src/types/contexts/chatContext.type", "src/contexts/ChatContext/ChatContext.ts"],
   "exclude": ["node_modules"]
 }

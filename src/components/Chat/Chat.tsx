@@ -14,7 +14,7 @@ import ChatInterface from "@/interfaces/chat/chat.interface"
 import { mutate } from "swr"
 import { Separator } from "../ui/separator"
 import { ScrollArea } from "../ui/scroll-area"
-
+import { Cross1Icon } from "@radix-ui/react-icons"
 
 export function Chat() {
   const session = useSession()
@@ -58,7 +58,7 @@ export function Chat() {
       {
         chat &&
           <div key={chat.id}>
-            <header className="grid flex-1 text-left text-sm leading-tight truncate font-semibold bg-gray-500 p-3 text-white rounded-t-xl">
+            <header className="grid grid-cols-2 text-left text-sm leading-tight truncate font-semibold bg-gray-500 p-3 text-white rounded-t-xl">
               <div className="text-sm leading-6 text-black">
               {
                 chat?.friend.id === session.data?.user?.id ?
@@ -77,6 +77,9 @@ export function Chat() {
                 </div>
               }
               </div>
+              <button type="button" className="justify-self-end self-start" onClick={() => addChat(undefined)}>
+                <Cross1Icon/>
+              </button>
             </header>
             <ScrollArea className="flex flex-1 flex-col gap-2 p-4 min-h-[25rem] max-h-[25rem]">
               {

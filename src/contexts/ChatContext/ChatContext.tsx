@@ -11,7 +11,7 @@ const ChatContext = createContext<ChatContextInterface | undefined>(undefined)
 export const ChatProvider: React.FC<ChatContextProvider> = ({ children }) => {
   const [chat, setChat] = useState<ChatInterface | undefined>(undefined)
 
-  const addChat = (chat: ChatInterface) => {
+  const addChat = (chat: ChatInterface | undefined) => {
     setChat(chat)
   }
 

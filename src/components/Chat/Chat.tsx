@@ -21,18 +21,14 @@ export function Chat() {
 
   useEffect(() => {
     socket.on<SocketEvent>("receive_message", (msg: ReceiveMessage) => {
-      if(chat) {
-        addChat({ ...chat, messages: [...chat.messages, msg.message] })
-
-        mutate<ChatInterface[]>("/api/user/get-chats", data => {
-          data?.map(chat => {
-            if(chat.id === msg.message.chatId) {
-              chat.messages = [...chat.messages, msg.message]
-            }
-          })
-          return data
+      mutate<ChatInterface[]>("/api/user/get-chats", data => {
+        data?.map(chat => {
+          if(chat.id === msg.message.chatId) {
+            chat.messages = [...chat.messages, msg.message]
+          }
         })
-      }
+        return data
+      })
     })
     return () => {
       socket.off("receive_message")
@@ -48,6 +44,10 @@ export function Chat() {
       const newChat = await createOrUpdateChat({ text: inputValue, friendId: friendId, chatSchema: { roomId: chat?.id } })
       socket.emit<SocketEvent>("send_message", { message: inputValue, roomId: newChat?.id})
       setInputValue("")
+
+      if(chat && newChat) {
+        addChat({ ...chat, messages: [...chat.messages, newChat?.messages[0]] })
+      }
     }
   }
 

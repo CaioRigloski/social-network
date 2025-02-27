@@ -55,14 +55,14 @@ export function ChatList() {
     }
 
     if(inputValue.trim() && friendId) {
-      const newChat = await createOrUpdateChat({ text: inputValue, friendId: friendId, chatSchema: { roomId: activeChatId } })
+      const newChat = await createOrUpdateChat({ text: inputValue, friendId: friendId, chat: { roomId: activeChatId } })
       socket.emit<SocketEvent>("send_message", { message: inputValue, roomId: newChat?.id})
       setInputValue("")
     }
   }
 
   return (
-    <ScrollArea className="shadow-md">
+    <ScrollArea className="h-[20rem]">
       {
         chats.data?.map((chat) => (
           <div key={chat.id} onClick={() => addChat(chat)} className="flex flex-col items-start gap-2 whitespace-nowrap border-b p-4 text-sm leading-tight last:border-b-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground w-[20rem] cursor-pointer">

@@ -9,8 +9,8 @@ import { FriendSuggestions } from "@/components/feed/FriendSuggestions/FriendSug
 import { postsFetcher } from "@/lib/swr"
 import useSWR from "swr"
 import { FriendsAvatars } from "@/components/FriendsAvatars/FriendsAvatars"
-import { ChatList } from "@/components/Chat/ChatList/ChatList"
 import { Chat } from "@/components/Chat/Chat"
+import { ChatAccordion } from "@/components/Chat/ChatAccordion/ChatAccordion"
 
 
 export default function Feed() {
@@ -62,8 +62,8 @@ export default function Feed() {
           </Alert>
         }
       </div>
-      <div className="self-start sticky top-[5rem] pt-[5rem] flex flex-col gap-[5rem]">
-        <ChatList/>
+      <div className="self-start sticky top-[5rem] pt-[5rem]">
+        <ChatAccordion/>
       </div>
       <Chat/>
     </main>

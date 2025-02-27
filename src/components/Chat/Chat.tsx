@@ -12,6 +12,8 @@ import { socket } from "@/socket"
 import { ReceiveMessage } from "@/interfaces/socket/data/receiveMessage.interface"
 import ChatInterface from "@/interfaces/chat/chat.interface"
 import { mutate } from "swr"
+import { Separator } from "../ui/separator"
+import { ScrollArea } from "../ui/scroll-area"
 
 
 export function Chat() {
@@ -52,11 +54,11 @@ export function Chat() {
   }
 
   return (
-    <div className="flex flex-1 flex-col gap-4 pb-2 w-[25rem] max-w-[25rem] fixed bottom-0 right-5 z-50 bg-white">  
+    <div className="flex flex-1 flex-col gap-4 pb-2 w-[25rem] max-w-[25rem] fixed bottom-0 right-[10rem] z-50 bg-white shadow-lg rounded-t-xl">  
       {
         chat &&
-          <div key={chat.id} className="shadow-md">
-            <header className="grid flex-1 text-left text-sm leading-tight truncate font-semibold bg-gray-500 p-3 text-white">
+          <div key={chat.id}>
+            <header className="grid flex-1 text-left text-sm leading-tight truncate font-semibold bg-gray-500 p-3 text-white rounded-t-xl">
               <div className="text-sm leading-6 text-black">
               {
                 chat?.friend.id === session.data?.user?.id ?
@@ -76,11 +78,11 @@ export function Chat() {
               }
               </div>
             </header>
-            <div className="flex flex-1 flex-col gap-2 p-4 border min-h-[25rem] max-h-[25rem] overflow-y-auto">
+            <ScrollArea className="flex flex-1 flex-col gap-2 p-4 min-h-[25rem] max-h-[25rem]">
               {
                 chat?.messages.map(message =>
                   message.user.id === session.data?.user?.id ?
-                  <span key={message.id} className="w-fit self-end h-fit flex flex-col">
+                  <span key={message.id} className="w-fit justify-self-end h-fit flex flex-col">
                     <p className="text-white p-2 bg-green-500 rounded-xl w-fit">{message.text}</p>
                     <time className="ml-auto text-[0.50rem]" dateTime={message.createdAt.toString()}>
                       { new Date(message.createdAt).toLocaleTimeString() }
@@ -95,8 +97,9 @@ export function Chat() {
                   </span>
                 )
               }
-            </div>
-              <Textarea value={inputValue} onChange={e => setInputValue(e.target.value)} onKeyUp={e => detectEnterKey(e) && sendMessage()} className="resize-none focus:!ring-transparent border border-2 gray-100" placeholder="Type here..."/>
+            </ScrollArea>
+            <Separator className="w-[95%] justify-self-center mb-2"/>
+            <Textarea value={inputValue} onChange={e => setInputValue(e.target.value)} onKeyUp={e => detectEnterKey(e) && sendMessage()} className="resize-none focus:!ring-transparent border border-2 gray-100 w-[90%] justify-self-center scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-100" placeholder="Type here..."/>
           </div>
       }
     </div>

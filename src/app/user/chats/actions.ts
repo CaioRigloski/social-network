@@ -33,30 +33,36 @@ export default async function createOrUpdateChat(values: z.infer<typeof messageS
             id: values.friendId
           }
         },
-        messages: {
-          create: {
-            text: values.text,
-            user: {
-              connect: {
-                id: session?.user?.id
+        ...(values.text ? {
+          messages: {
+            create: {
+              text: values.text,
+              user: {
+                connect: {
+                  id: session?.user?.id
+                }
               }
             }
           }
-        }
+        } : {})
       },
       update: {
-        messages: {
-          create: {
-            text: values.text,
-            user: {
-              connect: {
-                id: session?.user?.id
+        ...(values.text ? {
+          messages: {
+            create: {
+              text: values.text,
+              user: {
+                connect: {
+                  id: session?.user?.id
+                }
               }
             }
           }
-        }
+        } : {})
       },
       include: {
+        user: true,
+        friend: true,
         messages: {
           orderBy: {
             createdAt: 'desc',

@@ -32,9 +32,12 @@ export async function GET() {
           select: userSelect
         },
         messages: {
-          select: messageSelect
+          select: messageSelect,
+          orderBy: {
+            createdAt: "asc"
+          },
         }
-      }
+      },
     })
     
     return NextResponse.json( chats, { status: 200 })

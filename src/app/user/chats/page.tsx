@@ -57,7 +57,7 @@ export default function Chats() {
     }
 
     if(inputValue.trim() && friendId) {
-      const newChat = await createOrUpdateChat({ text: inputValue, friendId: friendId, chatSchema: { roomId: activeChatId } })
+      const newChat = await createOrUpdateChat({ text: inputValue, friendId: friendId, chat: { roomId: activeChatId } })
       socket.emit<SocketEvent>("send_message", { message: inputValue, roomId: newChat?.id})
       setInputValue("")
     }

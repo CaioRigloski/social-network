@@ -74,17 +74,13 @@ export function ChatList() {
                   {
                     chat?.friend.id === session.data?.user?.id ?
                     <>
-                      <AvatarComponent user={chat.user}/>
-                      <Link href={`/user/profile/${chat.user.id}`}>
-                        <span>{chat.user.username}</span>
-                      </Link>
+                      <AvatarComponent user={chat.user} disabled/>
+                      <span>{chat.user.username}</span>
                     </>
                     :
                     <>
-                      <AvatarComponent user={chat.user}/>
-                      <Link href={`/user/profile/${chat.friend.id}`}>
-                        <span>{chat.friend.username}</span>
-                      </Link>
+                      <AvatarComponent user={chat.user} disabled/>
+                      <span>{chat.friend.username}</span>
                     </>
                   }
                 </div>

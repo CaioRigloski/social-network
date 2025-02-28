@@ -17,12 +17,12 @@ export default function Feed() {
   const postsData = useSWR("/api/feed/get-posts", postsFetcher)
 
   return (
-    <main style={{height: "calc(100vh - 72px)"}} className="grid grid-cols-[1fr_max-content_1fr] place-items-center relative">
-      <div className="self-start sticky top-[5rem] pt-[5rem] flex flex-col gap-[5rem]">
+    <main className="grid grid-cols-[1fr_max-content_1fr] place-items-center relative max-h-fit pt-[5rem]">
+      <div className="self-start sticky top-[10rem] flex flex-col gap-[5rem]">
         <FriendsAvatars/>
         <FriendSuggestions/>
       </div>
-      <div className="grid auto-rows-auto grid-cols-1 justify-items-center gap-4 w-[35rem] pt-[5rem] self-start">
+      <div className="grid auto-rows-auto grid-cols-1 justify-items-center gap-4 w-[35rem] self-start">
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <Button variant="outline" className="w-fit place-self-end">Add post</Button>
@@ -62,7 +62,7 @@ export default function Feed() {
           </Alert>
         }
       </div>
-      <div className="self-start sticky top-[5rem] pt-[5rem]">
+      <div className="self-start sticky top-[10rem]">
         <ChatAccordion/>
       </div>
       <Chat/>

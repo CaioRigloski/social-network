@@ -115,11 +115,6 @@ export default function Header() {
               </ul>
             </NavigationMenuContent>
           </NavigationMenuItem>
-          <NavigationMenuItem>
-            <Link href="/user/chats" legacyBehavior passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>Chat</NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
     </header>

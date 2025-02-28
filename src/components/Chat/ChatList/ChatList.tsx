@@ -85,8 +85,8 @@ export function ChatList() {
                   }
                 </div>
                 <span className="ml-auto text-xs">
-                  <time className="ml-auto text-xs" dateTime={chat.messages.at(-1)?.createdAt.toString()}>
-                    {chat.messages.at(-1)?.createdAt.toLocaleString()}
+                  <time className="ml-auto text-[0.50rem]" dateTime={chat.messages.at(-1)?.createdAt.toString()}>
+                    { new Date(chat.messages.at(-1)!.createdAt).toLocaleTimeString() }
                   </time>
                 </span>
               </div>

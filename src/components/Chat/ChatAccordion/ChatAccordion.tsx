@@ -18,9 +18,9 @@ export function ChatAccordion() {
   }
 
   return (
-    <Accordion type="single" collapsible className="w-[20rem]">
+    <Accordion type="single" collapsible className="w-[20rem] shadow-md">
       <AccordionItem value="item-1">
-        <AccordionTrigger>Lets talk to someone?</AccordionTrigger>
+        <AccordionTrigger className="p-4">Lets talk to someone?</AccordionTrigger>
         <AccordionContent className="">
           <ScrollArea className="h-[20rem]">
             {
@@ -35,7 +35,7 @@ export function ChatAccordion() {
         </AccordionContent>
       </AccordionItem>
       <AccordionItem value="item-2">
-        <AccordionTrigger>Chats</AccordionTrigger>
+        <AccordionTrigger className="p-4">Chats</AccordionTrigger>
         <AccordionContent>
           <ChatList/>
         </AccordionContent>

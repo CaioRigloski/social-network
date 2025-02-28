@@ -12,6 +12,8 @@ import { ReceiveMessage } from "@/interfaces/socket/data/receiveMessage.interfac
 import React from 'react'
 import { ScrollArea } from '../../ui/scroll-area'
 import { useChat } from '@/contexts/ChatContext/ChatContext'
+import Link from 'next/link'
+import { AvatarComponent } from '@/components/Avatar/Avatar'
 
 
 export function ChatList() {
@@ -68,18 +70,24 @@ export function ChatList() {
           chat.messages.length > 0 &&
             <div key={chat.id} onClick={() => addChat(chat)} className="flex flex-col items-start gap-2 whitespace-nowrap border-b p-4 text-sm leading-tight last:border-b-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground w-[20rem] cursor-pointer">
               <div className="flex w-full items-center gap-2">
-                <span>
-                {
-                  chat?.friend.id === session.data?.user?.id ?
-                  <a href={`/user/profile/${chat.user.id}`}>
-                    <span>{chat.user.username}</span>
-                  </a>
-                  :
-                  <a href={`/user/profile/${chat.friend.id}`}>
-                    <span>{chat.friend.username}</span>
-                  </a>
-                }
-                </span>
+                <div className='flex flex-row items-center gap-2'>
+                  {
+                    chat?.friend.id === session.data?.user?.id ?
+                    <>
+                      <AvatarComponent user={chat.user}/>
+                      <Link href={`/user/profile/${chat.user.id}`}>
+                        <span>{chat.user.username}</span>
+                      </Link>
+                    </>
+                    :
+                    <>
+                      <AvatarComponent user={chat.user}/>
+                      <Link href={`/user/profile/${chat.friend.id}`}>
+                        <span>{chat.friend.username}</span>
+                      </Link>
+                    </>
+                  }
+                </div>
                 <span className="ml-auto text-xs">
                   <time className="ml-auto text-xs" dateTime={chat.messages.at(-1)?.createdAt.toString()}>
                     {chat.messages.at(-1)?.createdAt.toLocaleString()}

@@ -1,12 +1,10 @@
 'use client'
 
 import { socket } from '@/socket'
-import createOrUpdateChat from '@/components/Chat/actions'
-import { chatsFetcher, friendsFetcher } from "@/lib/swr"
+import { chatsFetcher } from "@/lib/swr"
 import { useSession } from "next-auth/react"
 import { useEffect, useState } from "react"
 import useSWR from "swr"
-import UserInterface from "@/interfaces/feed/user.interface"
 import { SocketEvent } from "@/types/socket/event.type"
 import { ReceiveMessage } from "@/interfaces/socket/data/receiveMessage.interface"
 import React from 'react'
@@ -21,10 +19,6 @@ export function ChatList() {
   const chats = useSWR("/api/user/get-chats", chatsFetcher)
   const {chat, addChat} = useChat()
 
-  const [ activeChatId, setActiveChatId ] = useState<string | undefined>()
-  const [ newFriendChat, setNewFriendChat ] = useState<UserInterface | null>()
-  const [ inputValue, setInputValue ] = useState<string>("")
-  
   useEffect(() => {
     socket.on<SocketEvent>("receive_message", (msg: ReceiveMessage) => {
       chats.mutate(data => {
@@ -40,26 +34,6 @@ export function ChatList() {
       socket.off("receive_message")
     }
   }, [chats])
-
-  async function sendMessage() {
-    let friendId: string | undefined = undefined
-
-    if(newFriendChat) {
-      friendId = newFriendChat.id
-    } else {
-      chats.data?.map(chat => {
-        if(chat.id === activeChatId) {
-          friendId = chat.friend.id === session.data?.user?.id ? chat?.user.id : chat?.friend.id 
-        }
-      })
-    }
-
-    if(inputValue.trim() && friendId) {
-      const newChat = await createOrUpdateChat({ text: inputValue, friendId: friendId, chat: { roomId: activeChatId } })
-      socket.emit<SocketEvent>("send_message", { message: inputValue, roomId: newChat?.id})
-      setInputValue("")
-    }
-  }
 
   const formatDate = (date: Date) => {
     const today = new Date();

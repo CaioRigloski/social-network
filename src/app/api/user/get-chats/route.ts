@@ -22,7 +22,6 @@ export async function GET() {
         friendId: true,
         userId: true,
         createdAt: true,
-        updatedAt: true
       },
       include: {
         user: {

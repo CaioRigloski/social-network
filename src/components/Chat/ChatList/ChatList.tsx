@@ -12,7 +12,6 @@ import { ReceiveMessage } from "@/interfaces/socket/data/receiveMessage.interfac
 import React from 'react'
 import { ScrollArea } from '../../ui/scroll-area'
 import { useChat } from '@/contexts/ChatContext/ChatContext'
-import Link from 'next/link'
 import { AvatarComponent } from '@/components/Avatar/Avatar'
 
 

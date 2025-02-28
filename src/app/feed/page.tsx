@@ -11,6 +11,8 @@ import useSWR from "swr"
 import { FriendsAvatars } from "@/components/FriendsAvatars/FriendsAvatars"
 import { Chat } from "@/components/Chat/Chat"
 import { ChatAccordion } from "@/components/Chat/ChatAccordion/ChatAccordion"
+import { Textarea } from "@/components/ui/textarea"
+import { ImageIcon } from "@radix-ui/react-icons"
 
 
 export default function Feed() {
@@ -23,20 +25,25 @@ export default function Feed() {
         <FriendSuggestions/>
       </div>
       <div className="grid auto-rows-auto grid-cols-1 justify-items-center gap-4 w-[35rem] self-start">
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
-            <Button variant="outline" className="w-fit place-self-end">Add post</Button>
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Add post</AlertDialogTitle>
-            </AlertDialogHeader>
-            <NewPostModal/>
-            <AlertDialogDescription>
-              Add a new post to your feed.
-            </AlertDialogDescription>
-          </AlertDialogContent>
-        </AlertDialog>
+        <div className="flex flex-col w-full items-end">
+          <Textarea placeholder="What's on your mind?" className="resize-none"/>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="ghost" className="w-fit place-self-end p-2" title="Add image">
+                <ImageIcon width={25} height={25}/>
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Add image</AlertDialogTitle>
+              </AlertDialogHeader>
+              <NewPostModal/>
+              <AlertDialogDescription>
+                Show a incredible picture!
+              </AlertDialogDescription>
+            </AlertDialogContent>
+          </AlertDialog>
+        </div>
         {
           postsData?.data?.map(post => <Post key={"post" + post?.id} post={post}/>)
         }

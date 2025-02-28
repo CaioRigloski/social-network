@@ -47,6 +47,7 @@ export default async function createOrUpdateChat(values: z.infer<typeof messageS
         } : {})
       },
       update: {
+        updatedAt: new Date(),
         ...(values.text ? {
           messages: {
             create: {
@@ -74,6 +75,7 @@ export default async function createOrUpdateChat(values: z.infer<typeof messageS
         },
       },
     })
+    
     return chat
   } catch (err) {
     console.log(err)

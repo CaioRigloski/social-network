@@ -9,6 +9,7 @@ import { useEffect, useRef, useState } from "react"
 import { mutate } from "swr"
 import { Separator } from "@/components/ui/separator"
 import { AvatarComponent } from "@/components/Avatar/Avatar"
+import Link from "next/link"
 
 export function Comment(props: { comment: CommentInterface, isOwn?: boolean }) {
   const [ editedComment, setEditedComment ] = useState<string>("")
@@ -63,7 +64,9 @@ export function Comment(props: { comment: CommentInterface, isOwn?: boolean }) {
       <div className="flex min-w-0 gap-x-4 p-4">
         <AvatarComponent user={props.comment.user}/>
         <div className="min-w-0 flex-auto">
-          <p className="text-sm font-semibold leading-6 text-gray-900"><a href={props.isOwn ? "/user/profile" : `user/profile/${id}`}>{username}</a></p>
+          <p className="text-sm font-semibold leading-6 text-gray-900">
+            <Link href={props.isOwn ? "/user/profile" : `user/profile/${id}`}>{username}</Link>
+            </p>
           <p ref={textRef} className={`${isExpanded && "block"} mt-1 text-xs leading-5 text-gray-500 comment-line-limit`}>{props.comment.text}</p>
           {isTruncated && !isExpanded && <button className="mt-1 text-xs leading-5 text-sky-700" onClick={() => setIsExpanded(true)}>See more</button>}
           {isExpanded && <button className="mt-1 text-xs leading-5 text-sky-700" onClick={() => setIsExpanded(false)}>view less</button>}

@@ -15,6 +15,7 @@ import { Like } from "./Like/Like"
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu"
 import { MoreVertical } from "lucide-react"
 import { AvatarComponent } from "../Avatar/Avatar"
+import Link from "next/link"
 
 
 export function Post(props: { post: PostInterface }) {
@@ -74,7 +75,11 @@ export function Post(props: { post: PostInterface }) {
     <Card className="shadow-md">
       <CardHeader className="flex flex-row gap-2 p-4">
         <AvatarComponent user={props.post.user}/>
-        <CardTitle className="text-zinc-600 dark:text-sky-400/75"><a href={ session.data?.user?.id === props.post.user.id ? "/user/profile" : `/user/profile/${props.post.user.id}`}>{props.post.user?.username}</a></CardTitle>
+        <CardTitle className="text-zinc-600 dark:text-sky-400/75">
+        <Link href={ session.data?.user?.id === props.post.user.id ? "/user/profile" : `/user/profile/${props.post.user.id}`}>
+          {props.post.user?.username}
+        </Link>
+        </CardTitle>
         {
           props.post.user.id === session.data?.user?.id &&
             <div className="ml-auto">

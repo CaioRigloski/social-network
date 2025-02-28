@@ -49,13 +49,13 @@ export default function Header() {
 
       mutate<PostInterface[]>("/api/feed/get-posts", data => {
         if (data) return [...data, ...newFriendPosts]
-      }, { populateCache: true })
+      }, false)
     }
 
     if(pathName === "/user/friends") {
       mutate<UserInterface[]>("/api/user/get-friends", data => {
         if (data && res.user) return [...data, res.user]
-      }, { populateCache: true })
+      })
     }
   }
 

@@ -31,8 +31,7 @@ export function NewPostModal() {
     
     mutate<PostInterface[]>("/api/feed/get-posts", data => {
       if (data && newPostData) return [...data, newPostData]
-    },
-    { populateCache: true })
+    }, false)
   }
 
   return (

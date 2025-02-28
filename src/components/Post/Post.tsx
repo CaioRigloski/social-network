@@ -38,7 +38,7 @@ export function Post(props: { post: PostInterface }) {
       mutate<PostInterface[]>("/api/feed/get-posts", data => {
         data?.map(post => post.likes.filter(like => like.id !== likeId))
         return data
-      })
+      }, false)
     )
   }
 
@@ -49,7 +49,7 @@ export function Post(props: { post: PostInterface }) {
           if (post.id === props.post.id && newLike) post.likes.unshift(newLike)
         })
         return data
-      })
+      }, false)
     )
   }
 
@@ -60,7 +60,7 @@ export function Post(props: { post: PostInterface }) {
           if (post.id === props.post.id && newComment) post.comments.unshift(newComment)
         })
       return data
-      })
+      }, false),
     )
   }
 

@@ -63,6 +63,25 @@ export function ChatList() {
     }
   }
 
+  const formatDate = (date: Date) => {
+    const today = new Date();
+    const isToday = new Date(date).toDateString() === today.toDateString();
+    
+    if (isToday) {
+      return `Today ${new Date(date).toLocaleTimeString(navigator.language, {
+        hour: "2-digit",
+        minute: "2-digit"
+      }).replace(",", "")}`;
+    } else {
+      return new Date(date).toLocaleTimeString(navigator.language, {
+        day: "2-digit",
+        month: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit"
+      }).replace(",", "");
+    }
+  }
+
   return (
     <ScrollArea className="h-[20rem]">
       {
@@ -86,12 +105,7 @@ export function ChatList() {
                 </div>
                 <span className="ml-auto text-xs">
                   <time className="ml-auto text-[0.50rem]" dateTime={chat.messages.at(-1)?.createdAt.toString()}>
-                    { new Date(chat.messages.at(-1)!.createdAt).toLocaleTimeString(navigator.language, {
-                      day: "2-digit",
-                      month: "2-digit",
-                      hour: "2-digit",
-                      minute: "2-digit"
-                    }).replace(",", "") }
+                    { formatDate(chat.messages.at(-1)!.createdAt)} 
                   </time>
                 </span>
               </div>

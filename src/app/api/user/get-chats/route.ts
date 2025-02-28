@@ -37,6 +37,9 @@ export async function GET() {
           },
         }
       },
+      orderBy: {
+        updatedAt: "desc"
+      }
     })
     
     return NextResponse.json( chats, { status: 200 })

@@ -20,7 +20,6 @@ export function ChatList() {
 
   const chats = useSWR("/api/user/get-chats", chatsFetcher)
   const {chat, addChat} = useChat()
-  const friends = useSWR("/api/user/get-friends", friendsFetcher)
 
   const [ activeChatId, setActiveChatId ] = useState<string | undefined>()
   const [ newFriendChat, setNewFriendChat ] = useState<UserInterface | null>()

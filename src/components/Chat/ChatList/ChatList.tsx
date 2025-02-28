@@ -1,7 +1,7 @@
 'use client'
 
 import { socket } from '@/socket'
-import createOrUpdateChat from '@/app/user/chats/actions'
+import createOrUpdateChat from '@/components/Chat/actions'
 import { chatsFetcher, friendsFetcher } from "@/lib/swr"
 import { useSession } from "next-auth/react"
 import { useEffect, useState } from "react"

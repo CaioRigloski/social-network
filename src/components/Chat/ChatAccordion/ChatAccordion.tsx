@@ -4,7 +4,7 @@ import useSWR from "swr"
 import { AvatarComponent } from "@/components/Avatar/Avatar"
 import { ChatList } from "../ChatList/ChatList"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import createOrUpdateChat from "@/app/user/chats/actions"
+import createOrUpdateChat from "@/components/Chat/actions"
 import UserInterface from "@/interfaces/feed/user.interface"
 import { useChat } from "@/contexts/ChatContext/ChatContext"
 

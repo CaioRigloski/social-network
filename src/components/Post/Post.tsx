@@ -112,7 +112,9 @@ export function Post(props: { post: PostInterface }) {
             <AlertDialogContent className="max-w-[80vw] max-h-[95vh] w-[80vw] h-[95vh] grid grid-rows-[auto_1fr]">
               <AlertDialogHeader className="flex flex-row gap-2">
                 <AvatarComponent user={props.post.user}/>
-                <h3><a href={`/user/profile/${props.post.user.id}`}>{props.post.user?.username}</a></h3>
+                <h3>
+                  <Link href={`/user/profile/${props.post.user.id}`}>{props.post.user?.username}</Link>
+                </h3>
               </AlertDialogHeader>
               <AlertDialogTitle className="hidden">
                 Post details.

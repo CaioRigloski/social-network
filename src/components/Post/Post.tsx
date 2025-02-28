@@ -122,7 +122,7 @@ export function Post(props: { post: PostInterface }) {
               <div className="grid grid-cols-3 grid-rows-1 gap-2">
                 <img alt="post picture" width={0} height={0} src={`/images/${path.posts}/${props.post.picture}.${imageFormats.posts}`} className="w-full h-full max-w-[60rem] max-h-[40rem] object-contain col-span-2"/>
                 {
-                  props.post.comments.length > 0 ?
+                  props.post.comments && props.post.comments.length > 0 ?
                   <div className="col-span-1 overflow-y-scroll max-h-[70vh]">
                     {
                       props.post.comments?.map(comment => <Comment key={comment.id} comment={comment} isOwn={comment.user.id === session.data?.user?.id}/>)

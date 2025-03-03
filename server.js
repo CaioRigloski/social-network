@@ -19,7 +19,7 @@ app.prepare().then(async () => {
 
     // chat functions
     socket.on("send_message", data => {
-      socket.emit('receive_message', data)
+      io.emit('receive_message', data)
     })
   })
 

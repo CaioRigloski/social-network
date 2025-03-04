@@ -12,7 +12,8 @@ import { socket } from "@/socket"
 import { ReceiveMessage } from "@/interfaces/socket/data/receiveMessage.interface"
 import { Separator } from "../ui/separator"
 import { ScrollArea } from "../ui/scroll-area"
-import { Cross1Icon } from "@radix-ui/react-icons"
+import { Cross1Icon, PaperPlaneIcon } from "@radix-ui/react-icons"
+import { Button } from "../ui/button"
 
 export function Chat() {
   const session = useSession()
@@ -109,7 +110,12 @@ export function Chat() {
               <span ref={messagesEndRef} />
             </ScrollArea>
             <Separator className="w-[95%] justify-self-center mb-2"/>
-            <Textarea value={inputValue} onChange={e => setInputValue(e.target.value)} onKeyUp={e => detectEnterKey(e) && sendMessage()} className="resize-none focus:!ring-transparent border border-2 gray-100 w-[90%] justify-self-center scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-100" placeholder="Type here..."/>
+            <div className="flex flex-row gap-2 p-2 items-center justify-center">
+              <Textarea value={inputValue} onChange={e => setInputValue(e.target.value)} onKeyUp={e => detectEnterKey(e) && sendMessage()} className="resize-none focus:!ring-transparent border border-2 gray-100 w-[90%] justify-self-center scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-100" placeholder="Type here..."/>
+              <Button variant="ghost" onClick={() => sendMessage()} className="p-2">
+                <PaperPlaneIcon width={20} height={20}/>
+              </Button>
+            </div>
           </div>
       }
     </div>

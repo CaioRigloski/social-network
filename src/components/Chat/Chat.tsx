@@ -4,14 +4,12 @@ import { AvatarComponent } from "../Avatar/Avatar"
 import { Textarea } from "../ui/textarea"
 import { useSession } from "next-auth/react"
 import { useChat } from "@/contexts/ChatContext/ChatContext"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { detectEnterKey } from "@/lib/utils"
 import createOrUpdateChat from "@/components/Chat/actions"
 import { SocketEvent } from "@/types/socket/event.type"
 import { socket } from "@/socket"
 import { ReceiveMessage } from "@/interfaces/socket/data/receiveMessage.interface"
-import ChatInterface from "@/interfaces/chat/chat.interface"
-import { mutate } from "swr"
 import { Separator } from "../ui/separator"
 import { ScrollArea } from "../ui/scroll-area"
 import { Cross1Icon } from "@radix-ui/react-icons"
@@ -20,24 +18,6 @@ export function Chat() {
   const session = useSession()
   const [ inputValue, setInputValue ] = useState<string>("")
   const { chat, addChat } = useChat()
-
-  useEffect(() => {
-    console.log(chat)
-    socket.on<SocketEvent>("receive_message", (msg: ReceiveMessage) => {
-      mutate<ChatInterface[]>("/api/user/get-chats", (data) => {
-        return data?.map((chat) => {
-          if (chat.id === msg.message.chatId) {
-            return { ...chat, messages: [...chat.messages, msg.message] }
-          }
-          return chat
-        })
-      })
-    })
-
-    return () => {
-      socket.off("receive_message")
-    }
-  }, [chat?.updatedAt])
 
   async function sendMessage() {
     let friendId: string | undefined = undefined

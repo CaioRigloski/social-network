@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "node server.js",
+    "dev": "set NODE_OPTIONS=--loader ts-node/esm&&node server.ts",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -44,7 +44,7 @@
   },
   "devDependencies": {
     "@types/leaflet": "^1.9.16",
-    "@types/node": "^20.14.15",
+    "@types/node": "^20.17.23",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^8",
@@ -53,6 +53,6 @@
     "prisma": "^5.18.0",
     "tailwindcss": "^3.4.1",
     "ts-node": "^10.9.2",
-    "typescript": "^5.5.4"
+    "typescript": "^5.8.2"
   }
 }

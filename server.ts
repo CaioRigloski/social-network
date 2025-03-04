@@ -2,6 +2,7 @@ import { createServer } from "node:http"
 import next from "next"
 import { Server, Socket } from "socket.io"
 import { SocketEvent } from "./src/types/socket/event.type"
+import { ReceiveMessage } from "@/interfaces/socket/data/receiveMessage.interface"
 
 const dev = process.env.NODE_ENV !== "production"
 const hostname = "localhost"
@@ -17,7 +18,7 @@ app.prepare().then(async () => {
   io.on("connection", (socket: Socket) => {
     console.log("Client connected")
 
-    socket.on("send_message", (data: unknown) => {
+    socket.on<SocketEvent>("send_message", (data: ReceiveMessage) => {
       io.emit('receive_message', data)
     })
 

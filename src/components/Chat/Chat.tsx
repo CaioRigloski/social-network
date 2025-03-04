@@ -4,7 +4,7 @@ import { AvatarComponent } from "../Avatar/Avatar"
 import { Textarea } from "../ui/textarea"
 import { useSession } from "next-auth/react"
 import { useChat } from "@/contexts/ChatContext/ChatContext"
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { detectEnterKey } from "@/lib/utils"
 import createOrUpdateChat from "@/components/Chat/actions"
 import { SocketEvent } from "@/types/socket/event.type"
@@ -18,6 +18,15 @@ export function Chat() {
   const session = useSession()
   const [ inputValue, setInputValue ] = useState<string>("")
   const { chat, addChat } = useChat()
+  const messagesEndRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    scrollToBottom()
+  }, [chat?.messages])
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+  }
 
   async function sendMessage() {
     let friendId: string | undefined = undefined
@@ -97,6 +106,7 @@ export function Chat() {
                   </span>
                 )
               }
+              <span ref={messagesEndRef} />
             </ScrollArea>
             <Separator className="w-[95%] justify-self-center mb-2"/>
             <Textarea value={inputValue} onChange={e => setInputValue(e.target.value)} onKeyUp={e => detectEnterKey(e) && sendMessage()} className="resize-none focus:!ring-transparent border border-2 gray-100 w-[90%] justify-self-center scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-100" placeholder="Type here..."/>

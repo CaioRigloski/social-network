@@ -21,13 +21,18 @@ export function ChatList() {
 
   useEffect(() => {
     socket.on<SocketEvent>("receive_message", (msg: ReceiveMessage) => {
-      chats.mutate(data => {
-        data?.map(chat => {
-          if(chat.id === msg.message.chatId) {
-            [...chat.messages, msg.message]
+      chats.mutate((data) => {
+        return data?.map((chat) => {
+          if (chat.id === msg.message.chatId) {
+            const updatedChat = { 
+              ...chat, 
+              messages: [...chat.messages, msg.message] 
+            }
+            addChat(updatedChat)
+            return updatedChat
           }
+          return chat
         })
-        return data
       })
     })
     return () => {
@@ -36,21 +41,21 @@ export function ChatList() {
   }, [chats])
 
   const formatDate = (date: Date) => {
-    const today = new Date();
-    const isToday = new Date(date).toDateString() === today.toDateString();
+    const today = new Date()
+    const isToday = new Date(date).toDateString() === today.toDateString()
     
     if (isToday) {
       return `Today ${new Date(date).toLocaleTimeString(navigator.language, {
         hour: "2-digit",
         minute: "2-digit"
-      }).replace(",", "")}`;
+      }).replace(",", "")}`
     } else {
       return new Date(date).toLocaleTimeString(navigator.language, {
         day: "2-digit",
         month: "2-digit",
         hour: "2-digit",
         minute: "2-digit"
-      }).replace(",", "");
+      }).replace(",", "")
     }
   }
 

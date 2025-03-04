@@ -22,20 +22,22 @@ export function Chat() {
   const { chat, addChat } = useChat()
 
   useEffect(() => {
+    console.log(chat)
     socket.on<SocketEvent>("receive_message", (msg: ReceiveMessage) => {
-      mutate<ChatInterface[]>("/api/user/get-chats", data => {
-        data?.map(chat => {
-          if(chat.id === msg.message.chatId) {
-            chat.messages = [...chat.messages, msg.message]
+      mutate<ChatInterface[]>("/api/user/get-chats", (data) => {
+        return data?.map((chat) => {
+          if (chat.id === msg.message.chatId) {
+            return { ...chat, messages: [...chat.messages, msg.message] }
           }
+          return chat
         })
-        return data
       })
     })
+
     return () => {
       socket.off("receive_message")
     }
-  }, [chat])
+  }, [chat?.updatedAt])
 
   async function sendMessage() {
     let friendId: string | undefined = undefined
@@ -44,6 +46,21 @@ export function Chat() {
 
     if(inputValue.trim() && friendId) {
       const newChat = await createOrUpdateChat({ text: inputValue, friendId: friendId, chat: { roomId: chat?.id } })
+
+      if (newChat?.messages[0]) {
+
+        const newMessage: ReceiveMessage = {
+          message: newChat.messages[0],
+          receiverId: friendId
+        }
+
+        socket.emit<SocketEvent>("send_message", newMessage)
+        setInputValue("")
+
+        if(chat && newChat) {
+          addChat({ ...chat, messages: [...chat.messages, newChat.messages[0]] })
+        }
+      }
       socket.emit<SocketEvent>("send_message", { message: inputValue, roomId: newChat?.id})
       setInputValue("")
 

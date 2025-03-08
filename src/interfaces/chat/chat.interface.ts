@@ -7,5 +7,5 @@ export default interface ChatInterface extends Omit<Chat | "CreatedAt", "Updated
   user: UserInterface
   friend: UserInterface
   messages: MessageInterface[],
-  updatedAt: string
+  updatedAt: Date
 }

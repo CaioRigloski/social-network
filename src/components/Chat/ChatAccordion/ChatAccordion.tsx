@@ -14,7 +14,14 @@ export function ChatAccordion() {
 
   async function createChat(friend: UserInterface) {
     const newChat = await createOrUpdateChat({ friendId: friend.id })
-    addChat(newChat)
+    if (newChat?.id) {
+      addChat({
+        ...newChat,
+        updatedAt: newChat.updatedAt.toISOString()
+      })
+    } else {
+      console.error("Chat ID is undefined");
+    }
   }
 
   return (

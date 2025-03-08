@@ -71,3 +71,7 @@ export const messageSchema = z.object({
   friendId: z.string(),
   chat: chatSchema.optional()
 })
+
+export const deleteMessageSchema = z.object({
+  messageId: z.string()
+})

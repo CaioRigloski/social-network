@@ -6,7 +6,7 @@ import { useSession } from "next-auth/react"
 import { useChat } from "@/contexts/ChatContext/ChatContext"
 import { useEffect, useRef, useState } from "react"
 import { detectEnterKey } from "@/lib/utils"
-import createOrUpdateChat from "@/components/Chat/actions"
+import createOrUpdateChat, { deleteMessage } from "@/components/Chat/actions"
 import { SocketEvent } from "@/types/socket/event.type"
 import { socket } from "@/socket"
 import { ReceiveMessage } from "@/interfaces/socket/data/receiveMessage.interface"
@@ -14,6 +14,10 @@ import { Separator } from "../ui/separator"
 import { ScrollArea } from "../ui/scroll-area"
 import { Cross1Icon, PaperPlaneIcon } from "@radix-ui/react-icons"
 import { Button } from "../ui/button"
+import { MoreVertical } from "lucide-react"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu"
+import { mutate } from "swr"
+import ChatInterface from "@/interfaces/chat/chat.interface"
 
 export function Chat() {
   const session = useSession()
@@ -60,6 +64,21 @@ export function Chat() {
     }
   }
 
+  async function deleteMessageAndMutateChatData(messageId: string) {
+    await deleteMessage({ messageId }).then((dataChat) => {
+      mutate<ChatInterface[]>("/api/feed/get-chats", data => data?.map(chat => {
+        if (chat.id === dataChat?.id) {
+          chat.messages.filter(message => message.id !== messageId)
+        }
+        return chat
+      }), false)
+      
+      if (chat && chat.id) {
+        addChat({ ...chat, messages: chat.messages.filter(message => message.id !== messageId) })
+      }
+    })
+  }
+
   return (
     <div className="flex flex-1 flex-col gap-4 pb-2 w-[25rem] max-w-[25rem] fixed bottom-0 right-[10rem] z-50 bg-white shadow-lg rounded-t-xl">  
       {
@@ -92,11 +111,26 @@ export function Chat() {
               {
                 chat?.messages.map(message =>
                   message.user.id === session.data?.user?.id ?
-                  <span key={message.id} className="w-fit justify-self-end h-fit flex flex-col">
-                    <p className="text-white p-2 bg-green-500 rounded-xl w-fit">{message.text}</p>
-                    <time className="ml-auto text-[0.50rem]" dateTime={message.createdAt.toString()}>
-                      { new Date(message.createdAt).toLocaleTimeString() }
-                    </time>
+                  <span key={message.id} className="flex w-full justify-end items-start">
+                    <div className="w-fit h-fit flex flex-col items-end">
+                      <p className="text-white p-2 bg-green-500 rounded-xl w-fit">{message.text}</p>
+                      <time className="ml-auto text-[0.50rem]" dateTime={message.createdAt.toString()}>
+                        { new Date(message.createdAt).toLocaleTimeString() }
+                      </time>
+                    </div>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" className="p-0 m-0 h-fit w-fit" title="Options">
+                          <MoreVertical className="text-gray-300 w-5 p-0 hover:text-black"/>
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent>
+                        <DropdownMenuItem onClick={() => deleteMessageAndMutateChatData(message.id)}>
+                          Delete
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+
                   </span>
                   :
                   <span key={message.id} className="w-fit flex flex-col">

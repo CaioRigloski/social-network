@@ -66,10 +66,15 @@ export const chatSchema = z.object({
   roomId: z.string().optional()
 })
 
-export const messageSchema = z.object({
+export const newMessageSchema = z.object({
   text: z.string().optional(),
   friendId: z.string(),
   chat: chatSchema.optional()
+})
+
+export const editMessageSchema = z.object({
+  messageId: z.string(),
+  text: z.string()
 })
 
 export const deleteMessageSchema = z.object({

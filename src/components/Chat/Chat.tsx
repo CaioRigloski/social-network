@@ -136,22 +136,24 @@ export function Chat() {
           <div key={chat.id}>
             <header className="grid grid-cols-2 text-left text-sm leading-tight truncate font-semibold bg-gray-800 p-3 text-white rounded-t-xl">
               <div className="text-sm leading-6 text-black">
-              {
-                chat?.friend.id === session.data?.user?.id ?
                 <div className="flex items-center gap-x-2">
-                  <AvatarComponent user={chat.user}/>
-                  <Link href="/user/profile" className=" font-semibold text-gray-900 text-white">
-                    {chat.user.username}
-                  </Link>
+                {
+                  chat?.friend.id === session.data?.user?.id ?
+                    <>
+                      <AvatarComponent user={chat.user}/>
+                      <Link href={`/user/profile/${chat.user.id}`} className="font-semibold text-gray-900 text-white">
+                        {chat.user.username}
+                      </Link>
+                    </>
+                  :
+                  <>
+                    <AvatarComponent user={chat.friend}/>
+                    <Link href={`/user/profile/${chat.friend.id}`} className="font-semibold text-gray-900 text-white">
+                      {chat.friend.username}
+                    </Link>
+                  </>
+                }
                 </div>
-                :
-                <div  className="flex items-center gap-x-2">
-                  <AvatarComponent user={chat.friend}/>
-                  <Link href="/user/profile" className="font-semibold text-gray-900 text-white">
-                    {chat.friend.username}
-                  </Link>
-                </div>
-              }
               </div>
               <button type="button" className="justify-self-end self-start" onClick={() => addChat(undefined)}>
                 <Cross1Icon/>

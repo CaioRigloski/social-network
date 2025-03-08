@@ -163,7 +163,7 @@ export function Chat() {
                   message.user.id === session.data?.user?.id ?
                   <span key={message.id} className="flex w-full justify-end items-start">
                     <div className="w-fit h-fit flex flex-col items-end">
-                      <p className="text-white p-2 bg-green-500 rounded-xl w-fit">{message.text}</p>
+                      <p className="text-white p-2 bg-green-500 rounded-xl w-fit whitespace-pre-wrap">{message.text}</p>
                       <time className="ml-auto text-[0.50rem]" dateTime={message.createdAt.toString()}>
                         { new Date(message.createdAt).toLocaleTimeString() }
                       </time>
@@ -186,7 +186,7 @@ export function Chat() {
                   </span>
                   :
                   <span key={message.id} className="w-fit flex flex-col">
-                    <p key={message.id} className="text-white p-3 bg-cyan-500 rounded-xl w-fit">{message.text}</p>
+                    <p key={message.id} className="text-white p-2 bg-cyan-500 rounded-xl w-fit whitespace-pre-wrap">{message.text}</p>
                     <time className="ml-auto text-[0.50rem] self-start ml-0" dateTime={message.createdAt.toString()}>
                       { new Date(message.createdAt).toLocaleTimeString() }
                     </time>

@@ -9,13 +9,16 @@ import { FriendSuggestions } from "@/components/feed/FriendSuggestions/FriendSug
 import { postsFetcher } from "@/lib/swr"
 import useSWR from "swr"
 import { FriendsAvatars } from "@/components/FriendsAvatars/FriendsAvatars"
-import { Chat } from "@/components/Chat/Chat"
 import { ChatAccordion } from "@/components/Chat/ChatAccordion/ChatAccordion"
 import { Textarea } from "@/components/ui/textarea"
 import { ImageIcon } from "@radix-ui/react-icons"
+import dynamic from "next/dynamic"
+import { useChat } from "@/contexts/ChatContext/ChatContext"
 
+const Chat = dynamic(() => import('@/components/Chat/Chat').then(mod => mod.Chat), { ssr: false })
 
 export default function Feed() {
+  const { chat } = useChat()
   const postsData = useSWR("/api/feed/get-posts", postsFetcher)
 
   return (
@@ -72,7 +75,7 @@ export default function Feed() {
       <div className="self-start sticky top-[10rem]">
         <ChatAccordion/>
       </div>
-      <Chat/>
+      { chat && <Chat/> }
     </main>
   )
 }

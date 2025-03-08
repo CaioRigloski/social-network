@@ -68,7 +68,6 @@ export default async function createOrUpdateChat(values: z.infer<typeof newMessa
           orderBy: {
             createdAt: 'desc',
           },
-          take: 1,
           select: {
             ...messageSelect
           }

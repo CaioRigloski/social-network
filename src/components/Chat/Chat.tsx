@@ -30,12 +30,20 @@ export function Chat() {
   const [ editedMessage, setEditedMessage ] = useState<string>("")
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
+  // instant scroll to bottom on first render
+  useEffect(() => {
+    scrollToBottom(true)
+  }, [])
+
+  // scroll to bottom on new message with smooth behavior
   useEffect(() => {
     scrollToBottom()
   }, [chat?.messages])
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+  function scrollToBottom(instant = false) {
+    messagesEndRef.current?.scrollIntoView({ 
+      behavior: instant ? "auto" : "smooth" 
+    })
   }
 
   async function sendMessage() {

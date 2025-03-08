@@ -81,25 +81,6 @@ export default async function createOrUpdateChat(values: z.infer<typeof newMessa
   }
 }
 
-export async function getChats(values: z.infer<typeof chatSchema>) {
-  const session = await auth()
-
-  try {
-    const chats = await prisma.chat.findUnique({
-      where: {
-        id: values.roomId
-      },
-      select: {
-        messages: true
-      }
-    })
-    
-    return chats
-  } catch (err) {
-    console.log(err)
-  }
-}
-
 export async function deleteMessage(values: z.infer<typeof deleteMessageSchema>) {
   const session = await auth()
 

@@ -145,19 +145,19 @@ export function Chat() {
                         {chat.user.username}
                       </Link>
                     </>
-                  :
-                  <>
-                    <AvatarComponent user={chat.friend}/>
-                    <Link href={`/user/profile/${chat.friend.id}`} className="font-semibold text-gray-900 text-white">
-                      {chat.friend.username}
-                    </Link>
-                  </>
+                    :
+                    <>
+                      <AvatarComponent user={chat.friend}/>
+                      <Link href={`/user/profile/${chat.friend.id}`} className="font-semibold text-gray-900 text-white">
+                        {chat.friend.username}
+                      </Link>
+                    </>
                 }
                 </div>
               </div>
-              <button type="button" className="justify-self-end self-start" onClick={() => addChat(undefined)}>
+              <Button variant="ghost" className="justify-self-end self-start p-1 w-fit h-fit" onClick={() => addChat(undefined)}>
                 <Cross1Icon/>
-              </button>
+              </Button>
             </header>
             <ScrollArea className="flex flex-1 flex-col gap-2 p-4 min-h-[25rem] max-h-[25rem]">
               {

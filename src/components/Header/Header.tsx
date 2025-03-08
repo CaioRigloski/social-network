@@ -77,7 +77,7 @@ export default function Header() {
             </Link>
           </div>
         </div>
-        <form className="flex justify-end w-fit text-white" action={clearCacheAndSignout}>
+        <form className="flex justify-end w-fit" action={clearCacheAndSignout}>
           <button type="submit" title="Sign out">
             <ExitIcon/>
           </button>

@@ -19,7 +19,7 @@ import { mutate } from "swr"
 import ChatInterface from "@/interfaces/chat/chat.interface"
 import { Dialog,  DialogContent, DialogTrigger, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from "../ui/dialog"
 import MessageInterface from "@/interfaces/chat/message.interface"
-import { set } from "zod"
+
 
 export function Chat() {
   const session = useSession()
@@ -30,19 +30,14 @@ export function Chat() {
   const [ editedMessage, setEditedMessage ] = useState<string>("")
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
-  // instant scroll to bottom on first render
-  useEffect(() => {
-    scrollToBottom(true)
-  }, [])
-
   // scroll to bottom on new message with smooth behavior
   useEffect(() => {
     scrollToBottom()
   }, [chat?.messages])
 
-  function scrollToBottom(instant = false) {
+  function scrollToBottom() {
     messagesEndRef.current?.scrollIntoView({ 
-      behavior: instant ? "auto" : "smooth" 
+      behavior: "smooth"
     })
   }
 

@@ -72,7 +72,7 @@ export function Chat() {
         }
         return chat
       }), false)
-      
+
       if (chat && chat.id) {
         addChat({ ...chat, messages: chat.messages.filter(message => message.id !== messageId) })
       }
@@ -118,7 +118,7 @@ export function Chat() {
                         { new Date(message.createdAt).toLocaleTimeString() }
                       </time>
                     </div>
-                    <DropdownMenu>
+                    <DropdownMenu modal={false}>
                       <DropdownMenuTrigger asChild>
                         <Button variant="ghost" className="p-0 m-0 h-fit w-fit" title="Options">
                           <MoreVertical className="text-gray-300 w-5 p-0 hover:text-black"/>

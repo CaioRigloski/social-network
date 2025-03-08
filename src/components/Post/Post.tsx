@@ -83,7 +83,7 @@ export function Post(props: { post: PostInterface }) {
         {
           props.post.user.id === session.data?.user?.id &&
             <div className="ml-auto">
-              <DropdownMenu>
+              <DropdownMenu modal={false}>
                 <DropdownMenuTrigger asChild>
                   <button>
                     <MoreVertical/>

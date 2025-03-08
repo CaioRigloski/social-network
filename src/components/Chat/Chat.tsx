@@ -155,7 +155,7 @@ export function Chat() {
                 }
                 </div>
               </div>
-              <Button variant="ghost" className="justify-self-end self-start p-1 w-fit h-fit" onClick={() => addChat(undefined)}>
+              <Button variant="ghost" className="justify-self-end self-start p-1 w-fit h-fit duration-400 ease-in" onClick={() => addChat(undefined)}>
                 <Cross1Icon/>
               </Button>
             </header>
@@ -172,8 +172,8 @@ export function Chat() {
                     </div>
                     <DropdownMenu modal={false}>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="p-0 m-0 h-fit w-fit" title="Options">
-                          <MoreVertical className="text-gray-300 w-5 p-0 hover:text-black"/>
+                        <Button variant="ghost" className="p-0 m-0 h-fit w-fit duration-400 ease-in" title="Options">
+                          <MoreVertical className="text-gray-300 w-5 p-0 duration-300 ease-in hover:text-black"/>
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent>

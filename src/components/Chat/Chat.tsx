@@ -1,4 +1,3 @@
-
 import Link from "next/link"
 import { AvatarComponent } from "../Avatar/Avatar"
 import { Textarea } from "../ui/textarea"
@@ -6,7 +5,7 @@ import { useSession } from "next-auth/react"
 import { useChat } from "@/contexts/ChatContext/ChatContext"
 import { useEffect, useRef, useState } from "react"
 import { detectEnterKey } from "@/lib/utils"
-import createOrUpdateChat, { deleteMessage } from "@/components/Chat/actions"
+import createOrUpdateChat, { deleteMessage, editMessage } from "@/components/Chat/actions"
 import { SocketEvent } from "@/types/socket/event.type"
 import { socket } from "@/socket"
 import { ReceiveMessage } from "@/interfaces/socket/data/receiveMessage.interface"
@@ -18,11 +17,17 @@ import { MoreVertical } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu"
 import { mutate } from "swr"
 import ChatInterface from "@/interfaces/chat/chat.interface"
+import { Dialog,  DialogContent, DialogTrigger, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from "../ui/dialog"
+import MessageInterface from "@/interfaces/chat/message.interface"
+import { set } from "zod"
 
 export function Chat() {
   const session = useSession()
-  const [ inputValue, setInputValue ] = useState<string>("")
   const { chat, addChat } = useChat()
+  const [ inputValue, setInputValue ] = useState<string>("")
+  const [ isMessageEditOpen, setIsMessageEditOpen ] = useState<boolean>(false)
+  const [ messageToEdit, setMessageToEdit ] = useState<MessageInterface | undefined>(undefined)
+  const [ editedMessage, setEditedMessage ] = useState<string>("")
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -79,6 +84,43 @@ export function Chat() {
     })
   }
 
+  function openMessageEdit(message: MessageInterface) {
+    setIsMessageEditOpen(true)
+    setMessageToEdit(message)
+  }
+
+  function saveMessageEdit() {
+    if(messageToEdit?.id && editedMessage.length > 0 && editedMessage !== messageToEdit.text) {
+      editMessage({ messageId: messageToEdit?.id, text: editedMessage }).then((messageData) => {
+        mutate<ChatInterface[]>("/api/feed/get-chats", data => data?.map(chat => {
+          if (chat.id === messageData?.chatId) {
+            chat.messages.map(message => {
+              if (message.id === messageData?.id) {
+                message.text = messageData?.text
+                message.updatedAt = messageData?.updatedAt
+              }
+              return message
+            })
+          }
+          return chat
+        }), false)
+
+        if(chat && chat.id) {
+          addChat({ ...chat, messages: chat.messages.map(message => {
+            if (message.id === messageData?.id) {
+              message.text = messageData?.text
+              message.updatedAt = messageData?.updatedAt
+            }
+            return message
+          })})
+        }
+        console.log(messageData)
+      })
+    }
+    setIsMessageEditOpen(false)
+    setMessageToEdit(undefined)
+  }
+
   return (
     <div className="flex flex-1 flex-col gap-4 pb-2 w-[25rem] max-w-[25rem] fixed bottom-0 right-[10rem] z-50 bg-white shadow-lg rounded-t-xl">  
       {
@@ -125,12 +167,14 @@ export function Chat() {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent>
-                        <DropdownMenuItem onClick={() => deleteMessageAndMutateChatData(message.id)}>
+                        <DropdownMenuItem className="cursor-pointer" onClick={() => openMessageEdit(message)}>
+                          Edit
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => deleteMessageAndMutateChatData(message.id)} className="cursor-pointer">
                           Delete
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
-
                   </span>
                   :
                   <span key={message.id} className="w-fit flex flex-col">
@@ -145,13 +189,31 @@ export function Chat() {
             </ScrollArea>
             <Separator className="w-[95%] justify-self-center mb-2"/>
             <div className="flex flex-row gap-2 p-2 items-center justify-center">
-              <Textarea value={inputValue} onChange={e => setInputValue(e.target.value)} onKeyUp={e => detectEnterKey(e) && sendMessage()} className="resize-none focus:!ring-transparent border border-2 gray-100 w-[90%] justify-self-center scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-100" placeholder="Type here..."/>
+              <Textarea value={inputValue} onChange={e => setInputValue(e.target.value)} onKeyDown={e => detectEnterKey(e) && sendMessage()} className="resize-none focus:!ring-transparent border border-2 gray-100 w-[90%] justify-self-center scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-100" placeholder="Type here..."/>
               <Button variant="ghost" onClick={() => sendMessage()} className="p-2">
                 <PaperPlaneIcon width={20} height={20}/>
               </Button>
             </div>
           </div>
       }
+      <Dialog open={isMessageEditOpen} onOpenChange={setIsMessageEditOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              Message edit
+            </DialogTitle>
+            <DialogDescription>
+              Edit your message to perfection.
+            </DialogDescription>
+          </DialogHeader>
+          <Textarea defaultValue={messageToEdit?.text} onChange={e => setEditedMessage(e.target.value)}/>
+          <DialogFooter>
+            <Button onClick={(() => saveMessageEdit())}>
+              Save
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

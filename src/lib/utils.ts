@@ -34,6 +34,7 @@ export function base64toBytes(picture: string) {
 // Check if the ENTER key is pressed.
 export function detectEnterKey(event: KeyboardEvent<HTMLTextAreaElement | HTMLInputElement>) {
   if (event.key === "Enter" && !event.shiftKey) {
+    event.preventDefault()
     return true
   }
 }

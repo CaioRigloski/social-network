@@ -2,10 +2,10 @@
 
 import { auth } from '@/app/api/auth/[nextauth]/route'
 import { messageSelect, prisma } from '@/lib/prisma'
-import { messageSchema, chatSchema, deleteMessageSchema } from '@/lib/zod'
+import { newMessageSchema, chatSchema, deleteMessageSchema, editMessageSchema } from '@/lib/zod'
 import { z } from 'zod'
 
-export default async function createOrUpdateChat(values: z.infer<typeof messageSchema>) {
+export default async function createOrUpdateChat(values: z.infer<typeof newMessageSchema>) {
   const session = await auth()
 
   if (!session?.user?.id || !values.friendId) {
@@ -108,6 +108,25 @@ export async function deleteMessage(values: z.infer<typeof deleteMessageSchema>)
     const message = await prisma.message.delete({
       where: {
         id: values.messageId
+      }
+    })
+    
+    return message
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+export async function editMessage(values: z.infer<typeof editMessageSchema>) {
+  const session = await auth()
+
+  try {
+    const message = await prisma.message.update({
+      where: {
+        id: values.messageId
+      },
+      data: {
+        text: values.text
       }
     })
     

@@ -71,6 +71,7 @@ export const newChatSchema = z.object({
 })
 
 export const updateChatSchema = z.object({
+  chat: chatSchema,
   friendId: z.string(),
   text: z.string()
 })

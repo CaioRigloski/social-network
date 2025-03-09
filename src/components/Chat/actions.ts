@@ -2,10 +2,10 @@
 
 import { auth } from '@/app/api/auth/[nextauth]/route'
 import { messageSelect, prisma } from '@/lib/prisma'
-import { newMessageSchema, chatSchema, deleteMessageSchema, editMessageSchema } from '@/lib/zod'
+import { deleteMessageSchema, editMessageSchema, newChatSchema, updateChatSchema } from '@/lib/zod'
 import { z } from 'zod'
 
-export default async function createOrUpdateChat(values: z.infer<typeof newMessageSchema>) {
+export default async function updateChat(values: z.infer<typeof updateChatSchema>) {
   const session = await auth()
 
   if (!session?.user?.id || !values.friendId) {
@@ -14,52 +14,69 @@ export default async function createOrUpdateChat(values: z.infer<typeof newMessa
   
   try {
     const [sortedUserId, sortedFriendId] = [session?.user?.id, values.friendId].sort()
-
-    const chat = await prisma.chat.upsert({
+    
+    const chat = await prisma.chat.update({
       where: {
         userId_friendId: {
           userId: sortedUserId,
           friendId: sortedFriendId
         }
       },
-      create: {
+      data: {
+        updatedAt: new Date(),
+        messages: {
+          create: {
+            text: values.text,
+            user: {
+              connect: {
+                id: session?.user?.id
+              }
+            }
+          }
+        }
+      },
+      include: {
+        user: true,
+        friend: true,
+        messages: {
+          orderBy: {
+            createdAt: 'desc',
+          },
+          select: {
+            ...messageSelect
+          }
+        },
+      },
+    })
+    
+    return chat
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+export async function createChat(values: z.infer<typeof newChatSchema>) {
+  const session = await auth()
+
+  if (!session?.user?.id || !values.friendId) {
+    throw new Error('Friend ID is missing');
+  }
+  
+  try {
+    const [sortedUserId, sortedFriendId] = [session?.user?.id, values.friendId].sort()
+
+    const chat = await prisma.chat.create({
+      data: {
         user: {
           connect: {
-            id: session?.user?.id
+            id: sortedUserId
           }
         },
         friend: {
           connect: {
-            id: values.friendId
+            id: sortedFriendId
           }
-        },
-        ...(values.text ? {
-          messages: {
-            create: {
-              text: values.text,
-              user: {
-                connect: {
-                  id: session?.user?.id
-                }
-              }
-            }
-          }
-        } : {})
-      },
-      update: {
-        updatedAt: new Date(),
-        ...(values.text ? {
-          messages: {
-            create: {
-              text: values.text,
-              user: {
-                connect: {
-                  id: session?.user?.id
-                }
-              }
-            }
-          }
-        } : {})
+        }
       },
       include: {
         user: true,

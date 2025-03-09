@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react"
 import { useChat } from "@/contexts/ChatContext/ChatContext"
 import { useEffect, useRef, useState } from "react"
 import { detectEnterKey } from "@/lib/utils"
-import createOrUpdateChat, { deleteMessage, editMessage } from "@/components/Chat/actions"
+import { deleteMessage, editMessage } from "@/components/Chat/actions"
 import { SocketEvent } from "@/types/socket/event.type"
 import { socket } from "@/socket"
 import { ReceiveMessage } from "@/interfaces/socket/data/receiveMessage.interface"
@@ -19,6 +19,7 @@ import { mutate } from "swr"
 import ChatInterface from "@/interfaces/chat/chat.interface"
 import { Dialog,  DialogContent, DialogTrigger, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from "../ui/dialog"
 import MessageInterface from "@/interfaces/chat/message.interface"
+import updateChat from "@/components/Chat/actions"
 
 
 export function Chat() {
@@ -47,7 +48,7 @@ export function Chat() {
     friendId = chat?.friend.id === session.data?.user?.id ? chat?.user.id : chat?.friend.id
 
     if(inputValue.trim() && friendId) {
-      const newChat = await createOrUpdateChat({ text: inputValue, friendId: friendId, chat: { roomId: chat?.id } })
+      const newChat = await updateChat({ text: inputValue, friendId: friendId, chat: { roomId: chat?.id } })
 
       if (newChat?.messages[0]) {
 

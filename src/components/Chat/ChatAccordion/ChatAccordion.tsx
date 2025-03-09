@@ -4,16 +4,16 @@ import useSWR from "swr"
 import { AvatarComponent } from "@/components/Avatar/Avatar"
 import { ChatList } from "../ChatList/ChatList"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import createOrUpdateChat from "@/components/Chat/actions"
 import UserInterface from "@/interfaces/feed/user.interface"
 import { useChat } from "@/contexts/ChatContext/ChatContext"
+import { createChat } from "../actions"
 
 export function ChatAccordion() {
   const { chat, addChat } = useChat()
   const friends = useSWR("/api/user/get-friends", friendsFetcher)
 
-  async function createChat(friend: UserInterface) {
-    const newChat = await createOrUpdateChat({ friendId: friend.id })
+  async function newChat(friend: UserInterface) {
+    const newChat = await createChat({ friendId: friend.id })
     addChat(newChat)
   }
 
@@ -25,7 +25,7 @@ export function ChatAccordion() {
           <ScrollArea className="h-[20rem]">
             {
               friends.data?.map(friend => (
-                  <button key={friend.id} onClick={() => createChat(friend)} className="flex items-center p-2 justify-start gap-3 justify-self-start hover:bg-sidebar-accent hover:text-sidebar-accent-foreground w-full">
+                  <button key={friend.id} onClick={() => newChat(friend)} className="flex items-center p-2 justify-start gap-3 justify-self-start hover:bg-sidebar-accent hover:text-sidebar-accent-foreground w-full">
                     <AvatarComponent user={friend}/>
                     <p>{friend.username}</p>
                   </button>

@@ -11,7 +11,7 @@ import { checkCredentials } from "./actions";
 import { useSession } from "next-auth/react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useSearchParams } from "next/navigation";
-import { SignInParamsInterface } from "@/interfaces/params/user/sign-in.interface";
+import { SignInParamsInterface } from "@/interfaces/params/user/signIn.interface";
 
 export default function SignIn() {
   const searchParams = useSearchParams() as SignInParamsInterface

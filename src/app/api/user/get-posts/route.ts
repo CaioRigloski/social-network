@@ -2,7 +2,7 @@ import { postSelect, prisma } from "@/lib/prisma"
 import PostInterface from "@/interfaces/feed/post.interface"
 import { NextRequest, NextResponse } from "next/server"
 import { auth } from "../../auth/[nextauth]/route"
-import { ThirdUserProfileParamsInterface } from "@/interfaces/params/user/third-profile.interface"
+import { ThirdUserProfileParamsInterface } from "@/interfaces/params/user/thirdProfile.interface"
 
 export async function GET(req: NextRequest) {
   const session = await auth()

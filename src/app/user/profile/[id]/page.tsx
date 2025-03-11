@@ -4,7 +4,7 @@ import useSWR from "swr"
 import { postsOfUserFetcher, userFetcher } from "@/lib/swr"
 import { path} from "@/lib/utils"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { ThirdUserProfileParamsInterface } from "@/interfaces/params/user/third-profile.interface"
+import { ThirdUserProfileParamsInterface } from "@/interfaces/params/user/thirdProfile.interface"
 import { useParams } from "next/navigation"
 import { AvatarComponent } from "@/components/Avatar/Avatar"
 

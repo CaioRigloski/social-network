@@ -16,3 +16,5 @@ export const postsOfUserFetcher = (url: string): Promise<PostInterface[]> => fet
 export const friendsSuggestionsFetcher = (url: string): Promise<UserInterface[]> => fetch(url).then(r => r.json())
 
 export const chatsFetcher = (url: string): Promise<ChatInterface[]> => fetch(url).then(r => r.json())
+
+export const chatFetcher = ([url, id]: [url: string, id: string]): Promise<ChatInterface> => fetch(`${url}?id=${id}`).then(r => r.json())

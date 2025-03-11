@@ -9,7 +9,7 @@ export const friendsFetcher = (url: string): Promise<UserInterface[]> => fetch(u
 
 export const friendsRequestsFetcher = (url: string): Promise<UserInterface[]> => fetch(url).then(r => r.json())
 
-export const postsFetcher = ([url, friendsIds]: [url: string, friendsIds: string[]]): Promise<PostInterface[]> => fetch(`${url}${friendsIds.length > 0 ? `?friendIds=${friendsIds.join(",")}`: ''}`).then(r => r.json())
+export const postsFetcher = ([url, friendsIds]: [url: string, friendsIds?: string[]]): Promise<PostInterface[]> => fetch(`${url}${friendsIds && friendsIds.length > 0 ? `?friendsIds=${friendsIds.join(",")}`: ''}`).then(r => r.json())
 
 export const postsOfUserFetcher = (url: string): Promise<PostInterface[]> => fetch(url).then(r => r.json())
 

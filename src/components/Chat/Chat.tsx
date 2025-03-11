@@ -15,21 +15,25 @@ import { Cross1Icon, PaperPlaneIcon } from "@radix-ui/react-icons"
 import { Button } from "../ui/button"
 import { MoreVertical } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu"
-import { mutate } from "swr"
+import useSWR, { mutate } from "swr"
 import ChatInterface from "@/interfaces/chat/chat.interface"
 import { Dialog,  DialogContent, DialogTrigger, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from "../ui/dialog"
 import MessageInterface from "@/interfaces/chat/message.interface"
 import updateChat from "@/components/Chat/actions"
+import { chatsFetcher } from "@/lib/swr"
 
 
 export function Chat() {
   const session = useSession()
-  const { chat, addChat } = useChat()
+  const { chatId, addChat } = useChat()
   const [ inputValue, setInputValue ] = useState<string>("")
   const [ isMessageEditOpen, setIsMessageEditOpen ] = useState<boolean>(false)
   const [ messageToEdit, setMessageToEdit ] = useState<MessageInterface | undefined>(undefined)
   const [ editedMessage, setEditedMessage ] = useState<string>("")
   const messagesEndRef = useRef<HTMLDivElement>(null)
+
+  const chats = useSWR("/api/user/get-chats", chatsFetcher)
+  const chat = chats.data?.find(chat => chat.id === chatId)
 
   // scroll to bottom on new message with smooth behavior
   useEffect(() => {
@@ -59,17 +63,9 @@ export function Chat() {
 
         socket.emit<SocketEvent>("send_message", newMessage)
         setInputValue("")
-
-        if(chat && newChat) {
-          addChat({ ...chat, messages: [...chat.messages, newChat.messages[0]] })
-        }
       }
       socket.emit<SocketEvent>("send_message", { message: inputValue, roomId: newChat?.id})
       setInputValue("")
-
-      if(chat && newChat) {
-        addChat({ ...chat, messages: [...chat.messages, newChat?.messages[0]] })
-      }
     }
   }
 
@@ -81,10 +77,6 @@ export function Chat() {
         }
         return chat
       }), false)
-
-      if (chat && chat.id) {
-        addChat({ ...chat, messages: chat.messages.filter(message => message.id !== messageId) })
-      }
     })
   }
 
@@ -108,17 +100,6 @@ export function Chat() {
           }
           return chat
         }), false)
-
-        if(chat && chat.id) {
-          addChat({ ...chat, messages: chat.messages.map(message => {
-            if (message.id === messageData?.id) {
-              message.text = messageData?.text
-              message.updatedAt = messageData?.updatedAt
-            }
-            return message
-          })})
-        }
-        console.log(messageData)
       })
     }
     setIsMessageEditOpen(false)

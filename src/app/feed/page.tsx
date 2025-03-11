@@ -18,7 +18,7 @@ import { useChat } from "@/contexts/ChatContext/ChatContext"
 const Chat = dynamic(() => import('@/components/Chat/Chat').then(mod => mod.Chat), { ssr: false })
 
 export default function Feed() {
-  const { chat } = useChat()
+  const { chatId } = useChat()
   const friends = useSWR("/api/user/get-friends", friendsFetcher)
   const friendsIds = friends.data?.map(friend => friend.id)
   const postsData = useSWR(["/api/feed/get-posts", friendsIds], postsFetcher)
@@ -77,7 +77,7 @@ export default function Feed() {
       <div className="self-start sticky top-[10rem]">
         <ChatAccordion/>
       </div>
-      { chat && <Chat/> }
+      { chatId && <Chat/> }
     </main>
   )
 }

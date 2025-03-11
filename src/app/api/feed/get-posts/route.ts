@@ -3,17 +3,17 @@ import UserInterface from "@/interfaces/feed/user.interface"
 import { commentSelect, likeSelect, prisma, userSelect } from "@/lib/prisma"
 import { NextResponse } from "next/server"
 import { auth } from "../../auth/[nextauth]/route"
+import { GetPostsParamsInterface } from "@/interfaces/params/feed/getPosts.interface"
 
-export const dynamic = "force-dynamic"
 
 export async function GET(req: Request) {
   const session = await auth()
 
   try {
-    const friendsResult = await fetch(process.env.url + "/api/user/get-friends", { cache: "no-store", headers: req.headers })
-    const friendsArray: UserInterface[] = await friendsResult.json()
-    const friendsIds = friendsArray.map(friend => friend.id)
-    
+    const url = new URL(req.url)
+    const searchParams = url.searchParams as GetPostsParamsInterface
+    const friendsIds = searchParams.get('friendsIds')?.split(',') || []
+
     if(session?.user?.id) {
       friendsIds.push(session.user.id)
     }

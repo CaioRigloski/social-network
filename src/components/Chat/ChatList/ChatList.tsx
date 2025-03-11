@@ -11,12 +11,14 @@ import React from 'react'
 import { ScrollArea } from '../../ui/scroll-area'
 import { useChat } from '@/contexts/ChatContext/ChatContext'
 import { AvatarComponent } from '@/components/Avatar/Avatar'
+import { API_ROUTES } from '@/lib/apiRoutes'
 
 
 export function ChatList() {
   const session = useSession()
 
-  const chats = useSWR("/api/user/get-chats", chatsFetcher)
+  const chats = useSWR(API_ROUTES.user.chat.getChats, chatsFetcher)
+
   const { addChat } = useChat()
 
   useEffect(() => {

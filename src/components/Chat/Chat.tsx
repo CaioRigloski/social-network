@@ -17,10 +17,11 @@ import { MoreVertical } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu"
 import useSWR, { mutate } from "swr"
 import ChatInterface from "@/interfaces/chat/chat.interface"
-import { Dialog,  DialogContent, DialogTrigger, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from "../ui/dialog"
+import { Dialog,  DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from "../ui/dialog"
 import MessageInterface from "@/interfaces/chat/message.interface"
 import updateChat from "@/components/Chat/actions"
-import { chatsFetcher } from "@/lib/swr"
+import { chatFetcher } from "@/lib/swr"
+import { API_ROUTES } from "@/lib/apiRoutes"
 
 
 export function Chat() {
@@ -32,8 +33,9 @@ export function Chat() {
   const [ editedMessage, setEditedMessage ] = useState<string>("")
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
-  const chats = useSWR("/api/user/get-chats", chatsFetcher)
-  const chat = chats.data?.find(chat => chat.id === chatId)
+  if(!chatId) return null
+
+  const chat = useSWR([API_ROUTES.user.chat.getChat, chatId], chatFetcher).data
 
   // scroll to bottom on new message with smooth behavior
   useEffect(() => {

@@ -9,12 +9,12 @@ import { useChat } from "@/contexts/ChatContext/ChatContext"
 import { createChat } from "../actions"
 
 export function ChatAccordion() {
-  const { chat, addChat } = useChat()
+  const { addChat } = useChat()
   const friends = useSWR("/api/user/get-friends", friendsFetcher)
 
   async function newChat(friend: UserInterface) {
     const newChat = await createChat({ friendId: friend.id })
-    addChat(newChat)
+    addChat(newChat?.id)
   }
 
   return (

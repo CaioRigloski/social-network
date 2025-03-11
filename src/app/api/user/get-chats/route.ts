@@ -1,7 +1,7 @@
-import { messageSelect, prisma, userSelect } from "@/lib/prisma";
-import { auth } from "../../auth/[nextauth]/route";
-import { NextResponse } from "next/server";
-import ChatInterface from "@/interfaces/chat/chat.interface";
+import { messageSelect, prisma, userSelect } from "@/lib/prisma"
+import { auth } from "../../auth/[nextauth]/route"
+import { NextResponse } from "next/server"
+
 
 export async function GET() {
   const session = await auth()

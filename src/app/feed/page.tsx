@@ -6,7 +6,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Post } from "@/components/Post/Post"
 import { NewPostModal } from "@/components/Post/NewPostModal/NewPostModal"
 import { FriendSuggestions } from "@/components/feed/FriendSuggestions/FriendSuggestions"
-import { postsFetcher } from "@/lib/swr"
+import { friendsFetcher, postsFetcher } from "@/lib/swr"
 import useSWR from "swr"
 import { FriendsAvatars } from "@/components/FriendsAvatars/FriendsAvatars"
 import { ChatAccordion } from "@/components/Chat/ChatAccordion/ChatAccordion"
@@ -19,7 +19,9 @@ const Chat = dynamic(() => import('@/components/Chat/Chat').then(mod => mod.Chat
 
 export default function Feed() {
   const { chat } = useChat()
-  const postsData = useSWR("/api/feed/get-posts", postsFetcher)
+  const friends = useSWR("/api/user/get-friends", friendsFetcher)
+  const friendsIds = friends.data?.map(friend => friend.id)
+  const postsData = useSWR(["/api/feed/get-posts", friendsIds], postsFetcher)
 
   return (
     <main className="grid grid-cols-[1fr_max-content_1fr] place-items-center relative max-h-fit pt-[5rem]">

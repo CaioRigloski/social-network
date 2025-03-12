@@ -11,13 +11,14 @@ import { z } from "zod"
 import { useRef, useState } from "react"
 import { toDataUrl } from "@/lib/utils"
 import { mutate } from "swr"
-import PostInterface from "@/interfaces/feed/post.interface"
+import PostInterface from "@/interfaces/post/post.interface"
 import { Textarea } from "@/components/ui/textarea"
 import { ImageIcon } from "@radix-ui/react-icons"
 import { Button } from "@/components/ui/button"
+import NewPostFormInterface from "@/interfaces/post/newPostForm/newPostForm.interface"
 
 
-export function NewPostForm(props: {onImageSelected: (hasImage: boolean) => void, element: (isOnHover: boolean) => void}) {
+export function NewPostForm(props: NewPostFormInterface) {
   const [ inputImage, setInputImage ] = useState<File | undefined>(undefined)
   const fileInputRef = useRef<HTMLInputElement>(null)
 

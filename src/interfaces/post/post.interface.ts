@@ -1,6 +1,6 @@
 import { Post } from "@prisma/client"
 import UserInterface from "../feed/user.interface"
-import CommentInterface from "../feed/comment.interface"
+import CommentInterface from "./comment/comment.interface"
 import LikeInterface from "../feed/like.interface"
 
 

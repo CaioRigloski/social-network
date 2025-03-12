@@ -1,6 +1,6 @@
 import { deleteComment, editComment } from "@/app/post/comment/actions"
 import { Textarea } from "@/components/ui/textarea"
-import CommentInterface from "@/interfaces/feed/comment.interface"
+import CommentInterface from "@/interfaces/post/comment/comment.interface"
 import PostInterface from "@/interfaces/post/post.interface"
 import { detectEnterKey } from "@/lib/utils"
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu"

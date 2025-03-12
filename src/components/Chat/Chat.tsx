@@ -57,26 +57,16 @@ export function Chat() {
       const newChat = await updateChat({ text: inputValue, friendId: friendId, chat: { roomId: chat?.id } }).then((chatData) => {
         mutate<ChatInterface>([API_ROUTES.user.chat.getChat, chat?.id], data => {
           if(!data) return data
-          
+
           return {
             ...data,
-            messages: [...data.messages, chatData?.messages.at(-1) as MessageInterface]
+            messages: [...data.messages, chatData?.messages.at(0) as MessageInterface]
           }
         }, false)
         return chat
       })
 
-      if (newChat?.messages[0]) {
-
-        const newMessage: ReceiveMessage = {
-          message: newChat.messages[0],
-          receiverId: friendId
-        }
-
-        socket.emit<SocketEvent>("send_message", newMessage)
-        setInputValue("")
-      }
-      socket.emit<SocketEvent>("send_message", { message: inputValue, roomId: newChat?.id})
+      socket.emit<SocketEvent>("send_message", { message: newChat?.messages.at(0), roomId: newChat?.id})
       setInputValue("")
     }
   }
@@ -177,7 +167,7 @@ export function Chat() {
                   </span>
                   :
                   <span key={message.id} className="w-fit flex flex-col">
-                    <p key={message.id} className="text-white p-2 bg-cyan-500 rounded-xl w-fit whitespace-pre-wrap">{message.text}</p>
+                    <p className="text-white p-2 bg-cyan-500 rounded-xl w-fit whitespace-pre-wrap">{message.text}</p>
                     <time className="ml-auto text-[0.50rem] self-start ml-0" dateTime={message.createdAt.toString()}>
                       { new Date(message.createdAt).toLocaleTimeString() }
                     </time>

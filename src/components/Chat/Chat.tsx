@@ -37,14 +37,14 @@ export function Chat() {
 
   const chat = useSWR([API_ROUTES.user.chat.getChat, chatId], chatFetcher).data
 
-  // scroll to bottom on new message with smooth behavior
+  // scroll to bottom on new message with instant behavior
   useEffect(() => {
     scrollToBottom()
   }, [chat?.messages])
 
   function scrollToBottom() {
     messagesEndRef.current?.scrollIntoView({ 
-      behavior: "smooth"
+      behavior: "instant"
     })
   }
 

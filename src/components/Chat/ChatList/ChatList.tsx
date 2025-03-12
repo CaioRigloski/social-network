@@ -12,6 +12,9 @@ import { ScrollArea } from '../../ui/scroll-area'
 import { useChat } from '@/contexts/ChatContext/ChatContext'
 import { AvatarComponent } from '@/components/Avatar/Avatar'
 import { API_ROUTES } from '@/lib/apiRoutes'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { Button } from '@/components/ui/button'
+import { MoreVertical } from 'lucide-react'
 
 
 export function ChatList() {
@@ -20,6 +23,8 @@ export function ChatList() {
   const chats = useSWR(API_ROUTES.user.chat.getChats, chatsFetcher)
 
   const { addChat } = useChat()
+
+  const [ optionsIsOnHover, setOptionsIsOnHover ] = useState<boolean>(false)
 
   useEffect(() => {
     socket.on<SocketEvent>("receive_message", (msg: ReceiveMessage) => {
@@ -65,7 +70,7 @@ export function ChatList() {
       {
         chats.data?.map((chat) => (
           chat.messages.length > 0 &&
-            <div key={chat.id} onClick={() => addChat(chat.id)} className="flex flex-col items-start gap-2 whitespace-nowrap border-b p-4 text-sm leading-tight last:border-b-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground w-[20rem] cursor-pointer">
+            <div key={chat.id} onClick={() => { !optionsIsOnHover && addChat(chat.id) }} className="flex flex-col items-start gap-2 whitespace-nowrap border-b p-4 text-sm leading-tight last:border-b-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground w-[20rem] cursor-pointer">
               <div className="flex w-full items-center gap-2">
                 <div className='flex flex-row items-center gap-2'>
                   {
@@ -86,6 +91,18 @@ export function ChatList() {
                     { formatDate(chat.messages.at(-1)!.createdAt)} 
                   </time>
                 </span>
+                  <DropdownMenu modal={false}>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" className="p-0 m-0 h-fit w-fit duration-400 ease-in" title="Options" onMouseEnter={() => setOptionsIsOnHover(true)} onMouseLeave={() => setOptionsIsOnHover(false)}>
+                        <MoreVertical className="text-gray-300 w-5 p-0 duration-300 ease-in hover:text-black"/>
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuItem className="cursor-pointer">
+                        Delete
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
               </div>
               <span className="line-clamp-2 w-[260px] whitespace-break-spaces text-xs">
                 {chat.messages.at(-1)?.text}

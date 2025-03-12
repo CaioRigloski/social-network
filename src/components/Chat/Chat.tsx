@@ -100,7 +100,7 @@ export function Chat() {
   function saveMessageEdit() {
     if(messageToEdit?.id && editedMessage.length > 0 && editedMessage !== messageToEdit.text) {
       editMessage({ messageId: messageToEdit?.id, text: editedMessage }).then((messageData) => {
-        mutate<ChatInterface[]>("/api/feed/get-chats", data => data?.map(chat => {
+        mutate<ChatInterface[]>(API_ROUTES.user.chat.getChats, data => data?.map(chat => {
           if (chat.id === messageData?.chatId) {
             chat.messages.map(message => {
               if (message.id === messageData?.id) {

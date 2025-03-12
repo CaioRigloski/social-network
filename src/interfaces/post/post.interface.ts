@@ -1,7 +1,7 @@
 import { Post } from "@prisma/client"
 import UserInterface from "../feed/user.interface"
 import CommentInterface from "./comment/comment.interface"
-import LikeInterface from "../feed/like.interface"
+import LikeInterface from "./like/like.interface"
 
 
 export default interface PostInterface extends Omit<Post, "createdAt" | "updatedAt" | "userId"> {

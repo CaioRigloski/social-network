@@ -18,7 +18,7 @@ import { AvatarComponent } from "../Avatar/Avatar"
 import Link from "next/link"
 
 
-export function Post(props: { post: PostInterface }) {
+export function Post(props: { post: PostInterface, className?: string }) {
   const session = useSession()
 
   const [ likeId, setLikeId ] = useState<string>("")
@@ -72,7 +72,7 @@ export function Post(props: { post: PostInterface }) {
   }
  
   return (
-    <Card className="shadow-md">
+    <Card className={`${props.className} shadow-md`}>
       <CardHeader className="flex flex-row gap-2 p-4">
         <AvatarComponent user={props.post.user}/>
         <CardTitle className="text-zinc-600 dark:text-sky-400/75">

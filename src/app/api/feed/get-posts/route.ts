@@ -1,5 +1,4 @@
-import PostInterface from "@/interfaces/feed/post.interface"
-import UserInterface from "@/interfaces/feed/user.interface"
+import PostInterface from "@/interfaces/post/post.interface"
 import { commentSelect, likeSelect, prisma, userSelect } from "@/lib/prisma"
 import { NextResponse } from "next/server"
 import { auth } from "../../auth/[nextauth]/route"
@@ -59,6 +58,7 @@ export async function GET(req: Request) {
           username: post.user.username,
           profilePicture: post.user.profilePicture
         },
+        description: post.description,
         picture: post.picture,
         comments: post.comments,
         commentsCount: post._count.comments,

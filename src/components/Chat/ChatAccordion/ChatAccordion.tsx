@@ -14,7 +14,7 @@ export function ChatAccordion() {
 
   async function newChat(friend: UserInterface) {
     const newChat = await createChat({ friendId: friend.id })
-    addChat(newChat?.id)
+    addChat(newChat)
   }
 
   return (

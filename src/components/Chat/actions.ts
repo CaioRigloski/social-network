@@ -1,6 +1,7 @@
 'use server'
 
 import { auth } from '@/app/api/auth/[nextauth]/route'
+import ChatInterface from '@/interfaces/chat/chat.interface'
 import { messageSelect, prisma } from '@/lib/prisma'
 import { deleteChatSchema, deleteMessageSchema, editMessageSchema, newChatSchema, updateChatSchema } from '@/lib/zod'
 import { z } from 'zod'
@@ -66,6 +67,24 @@ export async function createChat(values: z.infer<typeof newChatSchema>) {
   try {
     const [sortedUserId, sortedFriendId] = [session?.user?.id, values.friendId].sort()
 
+    // First check if chat exists
+    const existingChat = await prisma.chat.findUnique({
+      where: {
+        userId_friendId: {
+          userId: sortedUserId,
+          friendId: sortedFriendId
+        }
+      },
+      select: {
+        id: true
+      }
+    })
+
+    if (existingChat) {
+      return existingChat.id
+    }
+
+    // If no existing chat, create new one
     const chat = await prisma.chat.create({
       data: {
         user: {
@@ -79,21 +98,12 @@ export async function createChat(values: z.infer<typeof newChatSchema>) {
           }
         }
       },
-      include: {
-        user: true,
-        friend: true,
-        messages: {
-          orderBy: {
-            createdAt: 'desc',
-          },
-          select: {
-            ...messageSelect
-          }
-        },
-      },
+      select: {
+        id: true
+      }
     })
     
-    return chat
+    return chat.id
   } catch (err) {
     console.log(err)
   }

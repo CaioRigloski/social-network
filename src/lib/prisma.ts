@@ -35,6 +35,7 @@ export const postSelect = {
     select: {
       id: true,
       picture: true,
+      description: true,
       comments: {
         select: {
           ...commentSelect

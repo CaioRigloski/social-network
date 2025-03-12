@@ -83,7 +83,7 @@ export function Chat() {
 
   async function deleteMessageAndMutateChatData(messageId: string) {
     await deleteMessage({ messageId }).then((chatData) => {
-      mutate<ChatInterface[]>("/api/feed/get-chats", data => data?.map(chat => {
+      mutate<ChatInterface[]>(API_ROUTES.user.chat.getChats, data => data?.map(chat => {
         if (chat.id === chatData?.id) {
           chat.messages.filter(message => message.id !== messageId)
         }

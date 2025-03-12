@@ -7,7 +7,7 @@ import LikeInterface from "./like.interface"
 export default interface PostInterface extends Omit<Post, "createdAt" | "updatedAt" | "userId"> {
   id: string
   user: UserInterface
-  description?: String
+  description: string | null
   comments: CommentInterface[]
   commentsCount: number
   likes: LikeInterface[]

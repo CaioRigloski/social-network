@@ -27,7 +27,8 @@ export async function createNewPost(values: z.infer<typeof newPostSchema>) {
         user: {
           connect: {id: session?.user?.id}
         },
-        picture: UUID.toString()
+        picture: UUID.toString(),
+        description: values.description
       },
       include: {
         user: {

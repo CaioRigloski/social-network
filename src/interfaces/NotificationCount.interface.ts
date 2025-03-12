@@ -1,3 +1,3 @@
-export default interface NotificationCount {
+export default interface NotificationCountInterface {
   count: number
 }

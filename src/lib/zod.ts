@@ -91,3 +91,7 @@ export const editMessageSchema = z.object({
 export const deleteMessageSchema = z.object({
   messageId: z.string()
 })
+
+export const deleteChatSchema = z.object({
+  chatId: z.string()
+})

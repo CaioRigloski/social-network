@@ -15,7 +15,8 @@ export const signInSchema = z.object({
 })
 
 export const newPostSchema = z.object({
-  picture: z.any().refine(file => "image/".includes(file))
+  picture: z.any().refine(file => "image/".includes(file)),
+  description: z.string().optional()
 })
 
 export const deletePostSchema = z.object({

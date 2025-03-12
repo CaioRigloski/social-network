@@ -15,6 +15,7 @@ import { API_ROUTES } from '@/lib/apiRoutes'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Button } from '@/components/ui/button'
 import { MoreVertical } from 'lucide-react'
+import { deleteChat } from '../actions'
 
 
 export function ChatList() {
@@ -46,7 +47,7 @@ export function ChatList() {
     }
   }, [chats])
 
-  const formatDate = (date: Date) => {
+  function formatDate(date: Date) {
     const today = new Date()
     const isToday = new Date(date).toDateString() === today.toDateString()
     
@@ -63,6 +64,16 @@ export function ChatList() {
         minute: "2-digit"
       }).replace(",", "")
     }
+  }
+
+  async function deleteChatAndMutateChatData(chatId: string) {
+    await deleteChat({chatId: chatId}).then(() => {
+      chats.mutate(data => {
+        return data?.filter(chat => chat.id !== chatId)
+      })
+
+      addChat(undefined)
+    })
   }
 
   return (
@@ -98,7 +109,7 @@ export function ChatList() {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
-                      <DropdownMenuItem className="cursor-pointer">
+                      <DropdownMenuItem className="cursor-pointer" onClick={() => deleteChatAndMutateChatData(chat.id)}>
                         Delete
                       </DropdownMenuItem>
                     </DropdownMenuContent>

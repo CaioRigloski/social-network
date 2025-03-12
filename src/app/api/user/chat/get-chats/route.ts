@@ -32,8 +32,9 @@ export async function GET() {
         },
         messages: {
           select: messageSelect,
+          take: 1,
           orderBy: {
-            createdAt: "asc"
+            createdAt: "desc"
           },
         }
       },

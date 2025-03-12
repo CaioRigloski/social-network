@@ -54,7 +54,17 @@ export function Chat() {
     friendId = chat?.friend.id === session.data?.user?.id ? chat?.user.id : chat?.friend.id
 
     if(inputValue.trim() && friendId) {
-      const newChat = await updateChat({ text: inputValue, friendId: friendId, chat: { roomId: chat?.id } })
+      const newChat = await updateChat({ text: inputValue, friendId: friendId, chat: { roomId: chat?.id } }).then((chatData) => {
+        mutate<ChatInterface>([API_ROUTES.user.chat.getChat, chat?.id], data => {
+          if(!data) return data
+          
+          return {
+            ...data,
+            messages: [...data.messages, chatData?.messages.at(-1) as MessageInterface]
+          }
+        }, false)
+        return chat
+      })
 
       if (newChat?.messages[0]) {
 
@@ -72,9 +82,9 @@ export function Chat() {
   }
 
   async function deleteMessageAndMutateChatData(messageId: string) {
-    await deleteMessage({ messageId }).then((dataChat) => {
+    await deleteMessage({ messageId }).then((chatData) => {
       mutate<ChatInterface[]>("/api/feed/get-chats", data => data?.map(chat => {
-        if (chat.id === dataChat?.id) {
+        if (chat.id === chatData?.id) {
           chat.messages.filter(message => message.id !== messageId)
         }
         return chat

@@ -1,4 +1,4 @@
-import PostInterface from "@/interfaces/feed/post.interface"
+import PostInterface from "@/interfaces/post/post.interface"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card"
 import { detectEnterKey, imageFormats, path } from "@/lib/utils"
 import { Comment } from "@/components/Post/Comment/Comment"

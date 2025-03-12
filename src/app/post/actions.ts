@@ -7,7 +7,7 @@ import { z } from "zod"
 import { randomUUID } from "crypto"
 import { existsSync, unlinkSync, writeFileSync } from "fs"
 import { imageFormats, path } from "@/lib/utils"
-import PostInterface from "@/interfaces/feed/post.interface"
+import PostInterface from "@/interfaces/post/post.interface"
 import { mkdir } from "fs/promises"
 
 

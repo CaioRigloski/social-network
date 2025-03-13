@@ -5,6 +5,7 @@ import Header from "@/components/Header/Header"
 import { auth } from "./api/auth/[nextauth]/route"
 import { SessionProvider } from 'next-auth/react'
 import { ChatProvider } from "@/contexts/ChatContext/ChatContext"
+import { Toaster } from "@/components/ui/sonner"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -27,6 +28,7 @@ export default async function RootLayout({
           <ChatProvider>
             {session?.user && <Header/>}
             {children}
+            <Toaster/>
           </ChatProvider>
         </SessionProvider>
       </body>

@@ -9,7 +9,11 @@ import { loginSchema } from "@/lib/zod"
 
 declare module "next-auth" {
   interface Session {
-    user: DefaultSession['user']
+    user: {
+      id: string
+      username: string
+      profilePicture: string | null
+    } & DefaultSession["user"]
   }
 
   interface User {
@@ -73,7 +77,14 @@ export const { handlers: { GET, POST }, auth, signIn, signOut, unstable_update }
         session.user = token.user
       }
 
-      return session;
+      return {
+        ...session,
+        user: {
+          id: token.user.id,
+          username: token.user.username,
+          profilePicture: token.user.profilePicture
+        }
+      }
     },
     async jwt({ token, trigger, user, session }) {
       if (trigger === "signIn" && user) {

@@ -14,7 +14,7 @@ import { checkCredentials } from "@/app/user/login/actions"
 import { loginSchema } from "@/lib/zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { useSession } from "next-auth/react"
+import { signIn, useSession } from "next-auth/react"
 import { z } from "zod"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
 import Link from "next/link"
@@ -49,12 +49,6 @@ export function LoginForm({
     }
   })
 
-  async function updateSessionAndReload(values: z.infer<typeof loginSchema>) {
-    await checkCredentials(values)
-    await session.update()
-    window.location.reload()
-  }
-
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
@@ -66,7 +60,7 @@ export function LoginForm({
         </CardHeader>
         <CardContent>
           <Form {...form}>
-          <form onSubmit={form.handleSubmit( async (values) => { updateSessionAndReload(values) } )} className="space-y-8" method="POST">
+          <form onSubmit={form.handleSubmit(values => checkCredentials(values))} className="space-y-8" method="POST">
               <div className="flex flex-col gap-6">
                 <div className="grid gap-2">
                 <FormField

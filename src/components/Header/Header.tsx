@@ -26,19 +26,29 @@ import { usePathname } from "next/navigation"
 import { CheckIcon, ExitIcon } from "@radix-ui/react-icons"
 import { Separator } from "../ui/separator"
 import { AvatarComponent } from "../Avatar/Avatar"
+import { useEffect, useState } from "react"
+
 
 export default function Header() {
   const session = useSession()
   const pathName = usePathname()
+  const [ isDisplayed, setIsDisplayed ] = useState<boolean>(false)
 
   const friendRequests = useSWR("/api/user/get-friend-requests", friendsRequestsFetcher)
-
+  
   const addNewFriendForm = useForm<z.infer<typeof newFriendSchema>>({
     resolver: zodResolver(newFriendSchema),
   })
+  
+  useEffect(() => {
+    if(session.status === "authenticated") {
+      setIsDisplayed(true)
+    }
+  }, [session.status])
+  
+  if (!isDisplayed) return null
 
   async function mutateFriendAndPostDatas(newFriendId: string) {
-
     addNewFriendForm.setValue("newFriendId", newFriendId)
     const res = await acceptFriendRequest(addNewFriendForm.getValues())
     friendRequests.mutate(friendRequests.data?.filter(user => user.id ! == newFriendId))
@@ -60,7 +70,6 @@ export default function Header() {
   }
 
   async function clearCacheAndSignout() {
-    await mutate(() => true, undefined, false)
     signOutAction()
   }
 

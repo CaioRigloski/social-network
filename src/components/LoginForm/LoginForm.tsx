@@ -21,6 +21,9 @@ import Link from "next/link"
 import { Alert, AlertTitle, AlertDescription } from "../ui/alert"
 import { LoginParamsInterface } from "@/interfaces/params/user/login.interface"
 import { useSearchParams } from "next/navigation"
+import { Toaster } from "../ui/sonner"
+import { useEffect } from "react"
+import { toast } from "sonner"
 
 export function LoginForm({
   className,
@@ -30,6 +33,14 @@ export function LoginForm({
   const status = searchParams.get("status")
 
   const session = useSession()
+
+  useEffect(() => {
+    if(status === "created") {
+      toast("User succesfully created!", {
+        description: "Login with your credentials"
+      })
+    }
+  }, [])
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -102,13 +113,7 @@ export function LoginForm({
               </div>
             </form>
           </Form>
-          {
-            status === "created" &&
-              <Alert className="bg-green-400 text-white">
-                <AlertTitle>User succesfully created!</AlertTitle>
-                <AlertDescription>Sign-in with your credentials</AlertDescription>
-              </Alert>
-          }
+          <Toaster/>
         </CardContent>
       </Card>
     </div>

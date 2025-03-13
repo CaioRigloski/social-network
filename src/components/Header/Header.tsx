@@ -27,6 +27,7 @@ import { CheckIcon, ExitIcon } from "@radix-ui/react-icons"
 import { Separator } from "../ui/separator"
 import { AvatarComponent } from "../Avatar/Avatar"
 import { useEffect, useState } from "react"
+import { API_ROUTES } from "@/lib/apiRoutes"
 
 
 export default function Header() {
@@ -34,7 +35,7 @@ export default function Header() {
   const pathName = usePathname()
   const [ isDisplayed, setIsDisplayed ] = useState<boolean>(false)
 
-  const friendRequests = useSWR("/api/user/get-friend-requests", friendsRequestsFetcher)
+  const friendRequests = useSWR(API_ROUTES.user.getFriendRequests, friendsRequestsFetcher)
   
   const addNewFriendForm = useForm<z.infer<typeof newFriendSchema>>({
     resolver: zodResolver(newFriendSchema),
@@ -54,16 +55,16 @@ export default function Header() {
     friendRequests.mutate(friendRequests.data?.filter(user => user.id ! == newFriendId))
 
     if(pathName === "/feed") {
-      const newFriendPostsResult = await fetch(`/api/user/get-posts?id=${newFriendId}`)
+      const newFriendPostsResult = await fetch(`${API_ROUTES.user.getPosts}?id=${newFriendId}`)
       const newFriendPosts: PostInterface[] =  await newFriendPostsResult.json()
 
-      mutate<PostInterface[]>("/api/feed/get-posts", data => {
+      mutate<PostInterface[]>(API_ROUTES.feed.getPosts, data => {
         if (data) return [...data, ...newFriendPosts]
       }, false)
     }
 
     if(pathName === "/user/friends") {
-      mutate<UserInterface[]>("/api/user/get-friends", data => {
+      mutate<UserInterface[]>(API_ROUTES.user.getFriends, data => {
         if (data && res.user) return [...data, res.user]
       })
     }

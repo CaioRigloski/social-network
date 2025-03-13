@@ -3,7 +3,7 @@ import { JWT } from "next-auth/jwt"
 import Credentials from "next-auth/providers/credentials"
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import { prisma, userSelect } from "@/lib/prisma"
-import { signInSchema } from "@/lib/zod"
+import { loginSchema } from "@/lib/zod"
 
 
 
@@ -41,7 +41,7 @@ export const { handlers: { GET, POST }, auth, signIn, signOut, unstable_update }
       },
       authorize: async (credentials) => {
         try {
-          const { username, password } = await signInSchema.parseAsync(credentials)
+          const { username, password } = await loginSchema.parseAsync(credentials)
 
           const user = await prisma.user.findFirst({
             where: {

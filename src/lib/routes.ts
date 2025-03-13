@@ -1,4 +1,4 @@
-export const SIGN_IN_URL = "/user/sign-in"
+export const SIGN_IN_URL = "/user/login"
 
 export const AUTHENTICATED_REDIRECT = [SIGN_IN_URL, "/user/sign-up"]
 

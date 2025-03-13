@@ -27,7 +27,7 @@ export default auth((req) => {
  }
 
  // If it's not authenticated and path is not already for sign-in (to prevent loop), it's redirected.
- if (!isAuthenticated && nextUrl.pathname != "/user/sign-in") {
+ if (!isAuthenticated && nextUrl.pathname != "/user/login") {
    return NextResponse.redirect(new URL(SIGN_IN_URL + `/?from=${nextUrl.pathname}`, nextUrl))
  }
 

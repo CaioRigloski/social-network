@@ -101,10 +101,12 @@ export default function Header() {
                 {
                   friendRequests?.data?.map(user =>
                     <li key={"request" + user.id} className="grid grid-cols-[80%_auto] grid-rows-[auto_auto] gap-5 w-full h-full justify-center items-center p-3 pb-0 rounded-lg hover:bg-gray-200 cursor-pointer transition-colors">
-                      <Link href={`/user/profile/${user.id}`} className="flex place-items-center gap-2">
+                      <div className="flex place-items-center gap-2">
                         <AvatarComponent user={user}/>
-                        <p>{user.username}</p>
-                      </Link>
+                        <Link href={`/user/profile/${user.id}`}>
+                          <p>{user.username}</p>
+                        </Link>
+                      </div>
                       <button title="Accept request" onClick={() => mutateFriendAndPostDatas(user.id)} className="flex items-center justify-center bg-white hover:bg-white rounded-full">
                         <CheckIcon className="w-5 h-5 hover:text-green-500"/>
                       </button>

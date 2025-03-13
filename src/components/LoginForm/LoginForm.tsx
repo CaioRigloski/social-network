@@ -14,33 +14,15 @@ import { checkCredentials } from "@/app/user/login/actions"
 import { loginSchema } from "@/lib/zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { signIn, useSession } from "next-auth/react"
 import { z } from "zod"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
 import Link from "next/link"
-import { LoginParamsInterface } from "@/interfaces/params/user/login.interface"
-import { useSearchParams } from "next/navigation"
-import { Toaster } from "../ui/sonner"
-import { useEffect } from "react"
-import { toast } from "sonner"
+
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
-  const searchParams = useSearchParams() as LoginParamsInterface
-  const status = searchParams.get("status")
-
-  const session = useSession()
-
-  useEffect(() => {
-    if(status === "created") {
-      toast("User succesfully created!", {
-        description: "Login with your credentials"
-      })
-    }
-  }, [])
-
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -106,7 +88,6 @@ export function LoginForm({
               </div>
             </form>
           </Form>
-          <Toaster/>
         </CardContent>
       </Card>
     </div>

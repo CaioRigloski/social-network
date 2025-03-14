@@ -13,7 +13,7 @@ import { toDataUrl } from "@/lib/utils"
 import { mutate } from "swr"
 import PostInterface from "@/interfaces/post/post.interface"
 import { Textarea } from "@/components/ui/textarea"
-import { ImageIcon } from "@radix-ui/react-icons"
+import { ImageIcon, PaperPlaneIcon } from "@radix-ui/react-icons"
 import { Button } from "@/components/ui/button"
 import NewPostFormInterface from "@/interfaces/post/newPostForm/newPostForm.interface"
 import { API_ROUTES } from "@/lib/apiRoutes"
@@ -70,9 +70,14 @@ export function NewPostForm(props: NewPostFormInterface) {
           )}
         />
 
-        <Button type="button" variant="ghost" className="w-fit place-self-end p-2" title="Add image" onClick={openFileDialog}>
-          <ImageIcon width={25} height={25} />
-        </Button>
+        <div>
+          <Button type="button" variant="ghost" className="w-fit place-self-end p-2" title="Add image" onClick={openFileDialog}>
+            <ImageIcon width={25} height={25} />
+          </Button>
+          <Button type="submit" variant="ghost" className="w-fit place-self-end p-2">
+            <PaperPlaneIcon width={25} height={25} />
+          </Button>
+        </div>
         
         <FormField
           control={newPostForm.control}

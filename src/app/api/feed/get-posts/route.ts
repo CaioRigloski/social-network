@@ -28,6 +28,9 @@ export async function GET(req: Request) {
       omit: {
         userId: true
       },
+      orderBy: {
+        createdAt: "desc"
+      },
       include: {
         user: {
           select: userSelect

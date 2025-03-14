@@ -16,6 +16,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { ImageIcon } from "@radix-ui/react-icons"
 import { Button } from "@/components/ui/button"
 import NewPostFormInterface from "@/interfaces/post/newPostForm/newPostForm.interface"
+import { API_ROUTES } from "@/lib/apiRoutes"
 
 
 export function NewPostForm(props: NewPostFormInterface) {
@@ -32,7 +33,7 @@ export function NewPostForm(props: NewPostFormInterface) {
   async function mutatePostsData() {
     const newPostData = await createNewPost({picture: await toDataUrl(inputImage as File)})
     
-    mutate<PostInterface[]>("/api/feed/get-posts", data => {
+    mutate<PostInterface[]>(API_ROUTES.feed.getPosts, data => {
       if (data && newPostData) return [...data, newPostData]
     }, false)
   }

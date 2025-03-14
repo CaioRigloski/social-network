@@ -60,13 +60,13 @@ export default function Header() {
 
       mutate<PostInterface[]>(API_ROUTES.feed.getPosts, data => {
         if (data) return [...data, ...newFriendPosts]
-      }, false)
+      }, { populateCache: true })
     }
 
     if(pathName === "/user/friends") {
       mutate<UserInterface[]>(API_ROUTES.user.getFriends, data => {
         if (data && res.user) return [...data, res.user]
-      })
+      }, { populateCache: true })
     }
   }
 

@@ -35,7 +35,7 @@ export function NewPostForm(props: NewPostFormInterface) {
     
     mutate<PostInterface[]>(API_ROUTES.feed.getPosts, data => {
       if (data && newPostData) return [...data, newPostData]
-    }, false)
+    }, { populateCache: true })
   }
 
   const openFileDialog = () => {

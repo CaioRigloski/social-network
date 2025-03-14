@@ -39,7 +39,7 @@ export function Comment(props: { comment: CommentInterface, isOwn?: boolean }) {
           data.map(post => post.comments.filter(comment => comment.id !== props.comment.id))
         }
         return data
-      }, false)
+      })
     )
   }
 
@@ -52,7 +52,7 @@ export function Comment(props: { comment: CommentInterface, isOwn?: boolean }) {
           }))
         }
         return data
-      }, false)
+      })
     )
     setCommentEditionIsOpen(false)
   }

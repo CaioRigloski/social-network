@@ -43,6 +43,7 @@ export async function createNewPost(values: z.infer<typeof newPostSchema>) {
     return {
       id: res.id,
       user: res.user,
+      description: res.description,
       picture: res.picture
     } as PostInterface
   } catch (err) {

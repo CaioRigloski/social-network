@@ -17,12 +17,16 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { toast } from "sonner"
 
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
+  const router = useRouter()
+
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -30,6 +34,16 @@ export function LoginForm({
       password: ""
     }
   })
+
+  async function checkCredentialsAndRedirect(values: z.infer<typeof loginSchema>) {
+    const res = await checkCredentials(values)
+
+    if(res.success) {
+      router.push("/feed")
+    } else {
+      toast(res.message)
+    }
+  }
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -42,7 +56,7 @@ export function LoginForm({
         </CardHeader>
         <CardContent>
           <Form {...form}>
-          <form onSubmit={form.handleSubmit(values => checkCredentials(values))} className="space-y-8" method="POST">
+          <form onSubmit={form.handleSubmit(values => checkCredentialsAndRedirect(values))} className="space-y-8" method="POST">
               <div className="flex flex-col gap-6">
                 <div className="grid gap-2">
                 <FormField

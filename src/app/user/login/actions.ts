@@ -5,9 +5,19 @@ import { loginSchema } from "@/lib/zod"
 import { signIn } from "@/app/api/auth/[nextauth]/route"
 
 export async function checkCredentials(values: z.infer<typeof loginSchema>) {
- await signIn("credentials", {
-    ...values,
-    redirect: true,
-    redirectTo: "/feed",
-  })
+  try {
+    await signIn("credentials", {
+      ...values,
+      redirect: false,
+    })
+    
+    return {
+      success: true
+    }
+  } catch (err) {
+    return {
+      success: false,
+      message: "Incorrect username or password"
+    }
+  }
 }

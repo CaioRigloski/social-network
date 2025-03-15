@@ -3,5 +3,16 @@
 import { signOut } from "@/app/api/auth/[nextauth]/route";
 
 export async function signOutAction() {
-  await signOut({ redirectTo: "/user/login" })
+  try {
+    await signOut({ redirect: false })
+
+    return {
+      success: true
+    }
+  } catch (err) {
+    return {
+      success: false,
+      message: "Error trying to sign out"
+    }
+  }
 }

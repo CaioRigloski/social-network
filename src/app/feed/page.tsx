@@ -10,15 +10,20 @@ import { ChatAccordion } from "@/components/Chat/ChatAccordion/ChatAccordion"
 import dynamic from "next/dynamic"
 import { useChat } from "@/contexts/ChatContext/ChatContext"
 import { NewPostForm } from "@/components/Post/NewPostForm/NewPostForm"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { API_ROUTES } from "@/lib/apiRoutes"
+import { useRouter } from "next/navigation"
+import { useSession } from "next-auth/react"
 
 const Chat = dynamic(() => import('@/components/Chat/Chat').then(mod => mod.Chat), { ssr: false })
 
 export default function Feed() {
+  const session = useSession()
+  const router = useRouter()
+
   const { chatId } = useChat()
-  const friends = useSWR(API_ROUTES.user.getFriends, friendsFetcher)
-  const friendsIds = friends.data?.map(friend => friend.id)
+  const friends = session.status === "authenticated" ? useSWR(API_ROUTES.user.getFriends, friendsFetcher) : null
+  const friendsIds = session.status === "authenticated" ? friends?.data?.map(friend => friend.id) : undefined
   const postsData = useSWR(
     friendsIds ? API_ROUTES.feed.getPosts : null,
     () => postsFetcher(API_ROUTES.feed.getPosts, friendsIds),
@@ -26,6 +31,12 @@ export default function Feed() {
   
   const [ hasImage, setHasImage ] = useState<boolean>(false)
   const [isOnHover, setIsOnHover ] = useState<boolean>(false)
+
+  useEffect(() => {
+    if(session.status === "unauthenticated") router.push("/user/login")
+  },[session.status, router])
+
+  if(session.status === "unauthenticated") return null
 
   function handleImageSelected(hasImage: boolean) {
     setHasImage(hasImage)

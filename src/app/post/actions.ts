@@ -1,6 +1,6 @@
 'use server'
 
-import { prisma } from "@/lib/prisma"
+import { commentSelect, likeSelect, prisma, userSelect } from "@/lib/prisma"
 import { auth } from "../api/auth/[nextauth]/route"
 import { deletePostSchema, newPostSchema } from "@/lib/zod"
 import { z } from "zod"
@@ -28,13 +28,22 @@ export async function createNewPost(values: z.infer<typeof newPostSchema>) {
           connect: {id: session?.user?.id}
         },
         picture: UUID.toString(),
-        description: values.description
+        description: values.description,
       },
       include: {
         user: {
+          select: userSelect
+        },
+        comments: {
+          select: commentSelect
+        },
+        likes: {
+          select: likeSelect
+        },
+        _count: {
           select: {
-            id: true,
-            username: true
+            comments: true,
+            likes: true
           }
         }
       }
@@ -44,7 +53,11 @@ export async function createNewPost(values: z.infer<typeof newPostSchema>) {
       id: res.id,
       user: res.user,
       description: res.description,
-      picture: res.picture
+      picture: res.picture,
+      comments: res.comments,
+      commentsCount: res._count.comments,
+      likes: res.likes,
+      likesCount: res._count.likes
     } as PostInterface
   } catch (err) {
     console.log(err)

@@ -34,8 +34,8 @@ export function NewPostForm(props: NewPostFormInterface) {
     const newPostData = await createNewPost({picture: await toDataUrl(inputImage as File)})
     
     mutate<PostInterface[]>(API_ROUTES.feed.getPosts, data => {
-      if (data && newPostData) return [...data, newPostData]
-    }, { populateCache: true })
+      if (data && newPostData) return [newPostData, ...data]
+    }, false)
   }
 
   const openFileDialog = () => {

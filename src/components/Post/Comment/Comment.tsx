@@ -52,7 +52,7 @@ export function Comment(props: { comment: CommentInterface, isOwn?: boolean }) {
 
   async function editCommentAndMutatePostsData() {
     await editComment({commentId: props.comment.id, text: editedComment}).then(() =>
-      mutate<PostInterface[]>("/api/feed/get-posts", data => {
+      mutate<PostInterface[]>(API_ROUTES.feed.getPosts, data => {
         if (data) {
           data.map(post => post.comments.map(comment => {
             if (comment.id === props.comment.id) comment.text = editedComment

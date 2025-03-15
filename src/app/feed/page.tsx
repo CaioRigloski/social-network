@@ -18,7 +18,11 @@ export default function Feed() {
   const { chatId } = useChat()
   const friends = useSWR("/api/user/get-friends", friendsFetcher)
   const friendsIds = friends.data?.map(friend => friend.id)
-  const postsData = useSWR(["/api/feed/get-posts", friendsIds], postsFetcher)
+  const postsData = useSWR(
+    friendsIds ? "/api/feed/get-posts" : null,
+    () => postsFetcher("/api/feed/get-posts", friendsIds),
+  )
+  
   const [ hasImage, setHasImage ] = useState<boolean>(false)
   const [isOnHover, setIsOnHover ] = useState<boolean>(false)
 

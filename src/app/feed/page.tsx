@@ -11,16 +11,17 @@ import dynamic from "next/dynamic"
 import { useChat } from "@/contexts/ChatContext/ChatContext"
 import { NewPostForm } from "@/components/Post/NewPostForm/NewPostForm"
 import { useState } from "react"
+import { API_ROUTES } from "@/lib/apiRoutes"
 
 const Chat = dynamic(() => import('@/components/Chat/Chat').then(mod => mod.Chat), { ssr: false })
 
 export default function Feed() {
   const { chatId } = useChat()
-  const friends = useSWR("/api/user/get-friends", friendsFetcher)
+  const friends = useSWR(API_ROUTES.user.getFriends, friendsFetcher)
   const friendsIds = friends.data?.map(friend => friend.id)
   const postsData = useSWR(
-    friendsIds ? "/api/feed/get-posts" : null,
-    () => postsFetcher("/api/feed/get-posts", friendsIds),
+    friendsIds ? API_ROUTES.feed.getPosts : null,
+    () => postsFetcher(API_ROUTES.feed.getPosts, friendsIds),
   )
   
   const [ hasImage, setHasImage ] = useState<boolean>(false)

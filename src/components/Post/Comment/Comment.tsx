@@ -10,6 +10,7 @@ import { mutate } from "swr"
 import { Separator } from "@/components/ui/separator"
 import { AvatarComponent } from "@/components/Avatar/Avatar"
 import Link from "next/link"
+import { API_ROUTES } from "@/lib/apiRoutes"
 
 export function Comment(props: { comment: CommentInterface, isOwn?: boolean }) {
   const [ editedComment, setEditedComment ] = useState<string>("")
@@ -33,14 +34,20 @@ export function Comment(props: { comment: CommentInterface, isOwn?: boolean }) {
   }, [props.comment.text])
 
   async function deleteCommentAndMutatePostsData() {
-    await deleteComment({commentId: props.comment.id}).then(() =>
-      mutate<PostInterface[]>("/api/feed/get-posts", data => {
+    deleteComment({commentId: props.comment.id}).then(() => {
+      mutate<PostInterface[]>(API_ROUTES.feed.getPosts, data => {
         if (data) {
-          data.map(post => post.comments.filter(comment => comment.id !== props.comment.id))
+          return data.map(post => {
+            return {
+              ...post,
+              comments: post.comments.filter(comment => comment.id !== props.comment.id),
+              commentsCount: post.commentsCount - 1
+            }
+          })
         }
         return data
-      })
-    )
+      }, false)
+    })
   }
 
   async function editCommentAndMutatePostsData() {

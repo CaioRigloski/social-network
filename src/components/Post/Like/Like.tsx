@@ -1,6 +1,6 @@
 
 import { Separator } from "@/components/ui/separator"
-import LikeInterface from "@/interfaces/feed/like.interface"
+import LikeInterface from "@/interfaces/post/like/like.interface"
 import { AvatarComponent } from "@/components/Avatar/Avatar"
 import Link from "next/link"
 

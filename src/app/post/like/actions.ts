@@ -1,7 +1,7 @@
 'use server'
 
 import { auth } from "@/app/api/auth/[nextauth]/route"
-import LikeInterface from "@/interfaces/feed/like.interface"
+import LikeInterface from "@/interfaces/post/like/like.interface"
 import { prisma } from "@/lib/prisma"
 import { newLikeSchema, unlikeSchema } from "@/lib/zod"
 import { z } from "zod"
@@ -35,15 +35,18 @@ export async function createNewLike(values: z.infer<typeof newLikeSchema>) {
           orderBy: {
             createdAt: "desc"
           },
+          select: {
+            id: true,
+            user: true
+          },
           take: 1
-        },
-        user: true
+        }
       }
     })
 
     return {
-      id: res.likes[0].id,
-      user: res.user
+      id: res.likes.at(0)?.id,
+      user: res.likes.at(0)?.user
     } as LikeInterface
   } catch (err) {
     console.log(err)

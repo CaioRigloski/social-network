@@ -16,6 +16,7 @@ import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuIte
 import { MoreVertical } from "lucide-react"
 import { AvatarComponent } from "../Avatar/Avatar"
 import Link from "next/link"
+import { API_ROUTES } from "@/lib/apiRoutes"
 
 
 export function Post(props: { post: PostInterface, className?: string }) {
@@ -36,7 +37,7 @@ export function Post(props: { post: PostInterface, className?: string }) {
 
   async function unlikeAndMutatePostsData() {
     unlike({postId: props.post.id, likeId: likeId}).then(() => 
-      mutate<PostInterface[]>("/api/feed/get-posts", data => {
+      mutate<PostInterface[]>(API_ROUTES.feed.getPosts, data => {
         return data?.map(post => {
           if (post.id === props.post.id) {
             return {
@@ -53,7 +54,7 @@ export function Post(props: { post: PostInterface, className?: string }) {
 
   async function likeAndMutatePostsData() {
     createNewLike({postId: props.post.id}).then((newLike) => {
-      mutate<PostInterface[]>("/api/feed/get-posts", data => {
+      mutate<PostInterface[]>(API_ROUTES.feed.getPosts, data => {
         return data?.map(post => {
           if (post.id === props.post.id && newLike) {
             return {
@@ -70,7 +71,7 @@ export function Post(props: { post: PostInterface, className?: string }) {
 
   async function commentAndMutatePostsData() {
     createNewComment({postId: props.post.id, text: comment}).then((newComment) => 
-      mutate<PostInterface[]>("/api/feed/get-posts", data => {
+      mutate<PostInterface[]>(API_ROUTES.feed.getPosts, data => {
         return data?.map(post => {
           if (post.id === props.post.id && newComment) {
             return {
@@ -87,7 +88,7 @@ export function Post(props: { post: PostInterface, className?: string }) {
 
   async function deletePostAndMutatePostsData() {
     deletePost({postId: props.post.id, imageName: props.post.picture}).then(() => 
-      mutate<PostInterface[]>("/api/feed/get-posts", data => data?.filter((post: PostInterface) => post.id !== props.post.id), false)
+      mutate<PostInterface[]>(API_ROUTES.feed.getPosts, data => data?.filter((post: PostInterface) => post.id !== props.post.id), false)
     )
   }
  

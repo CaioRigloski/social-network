@@ -37,13 +37,16 @@ export function Post(props: { post: PostInterface, className?: string }) {
   async function unlikeAndMutatePostsData() {
     unlike({postId: props.post.id, likeId: likeId}).then(() => 
       mutate<PostInterface[]>("/api/feed/get-posts", data => {
-        const newData = data?.map(post => {
+        return data?.map(post => {
           if (post.id === props.post.id) {
-            post.likes = post.likes.filter(like => like.id !== likeId)
+            return {
+              ...post,
+              likes: post.likes.filter(like => like.id !== likeId),
+              likesCount: post.likesCount - 1
+            }
           }
           return post
         })
-        return newData
       }, false)
     )
   }
@@ -72,7 +75,7 @@ export function Post(props: { post: PostInterface, className?: string }) {
           if (post.id === props.post.id && newComment) post.comments.unshift(newComment)
         })
       return data
-      }),
+      }, false),
     )
   }
 

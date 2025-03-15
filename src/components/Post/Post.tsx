@@ -35,7 +35,7 @@ export function Post(props: { post: PostInterface, className?: string }) {
   }, [props.post.likes])
 
   async function unlikeAndMutatePostsData() {
-    await unlike({postId: props.post.id, likeId: likeId}).then(() => 
+    unlike({postId: props.post.id, likeId: likeId}).then(() => 
       mutate<PostInterface[]>("/api/feed/get-posts", data => {
         data?.map(post => post.likes.filter(like => like.id !== likeId))
         return data
@@ -44,18 +44,18 @@ export function Post(props: { post: PostInterface, className?: string }) {
   }
 
   async function likeAndMutatePostsData() {
-    await createNewLike({postId: props.post.id}).then((newLike) => 
+    createNewLike({postId: props.post.id}).then((newLike) => {
       mutate<PostInterface[]>("/api/feed/get-posts", data => {
         data?.map(post => {
           if (post.id === props.post.id && newLike) post.likes.unshift(newLike)
         })
         return data
       })
-    )
+    })
   }
 
   async function commentAndMutatePostsData() {
-    await createNewComment({postId: props.post.id, text: comment}).then((newComment) => 
+    createNewComment({postId: props.post.id, text: comment}).then((newComment) => 
       mutate<PostInterface[]>("/api/feed/get-posts", data => {
         data?.map(post => {
           if (post.id === props.post.id && newComment) post.comments.unshift(newComment)
@@ -66,8 +66,8 @@ export function Post(props: { post: PostInterface, className?: string }) {
   }
 
   async function deletePostAndMutatePostsData() {
-    await deletePost({postId: props.post.id, imageName: props.post.picture}).then(() => 
-        mutate<PostInterface[]>("/api/feed/get-posts", data => data?.filter((post: PostInterface) => post.id !== props.post.id), false)
+    deletePost({postId: props.post.id, imageName: props.post.picture}).then(() => 
+      mutate<PostInterface[]>("/api/feed/get-posts", data => data?.filter((post: PostInterface) => post.id !== props.post.id), false)
     )
   }
  

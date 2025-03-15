@@ -1,7 +1,7 @@
 'use server'
 
 import { auth } from "@/app/api/auth/[nextauth]/route"
-import CommentInterface from "@/interfaces/feed/comment.interface"
+import CommentInterface from "@/interfaces/post/comment/comment.interface"
 import { prisma } from "@/lib/prisma"
 import { deleteCommentSchema, editCommentSchema, newCommentSchema } from "@/lib/zod"
 import { z } from "zod"
@@ -33,19 +33,23 @@ export async function createNewComment(values: z.infer<typeof newCommentSchema>)
               id: session?.user?.id,
             }
           },
+          select: {
+            id: true,
+            text: true,
+            user: true
+          },
           orderBy: {
             createdAt: "desc"
           },
           take: 1
-        },
-        user: true
+        }
       }
     })
 
     return {
-      id: res.comments[0].id,
-      text: res.comments[0].text,
-      user: res.user
+      id: res.comments.at(0)?.id,
+      text: res.comments.at(0)?.text,
+      user: res.comments.at(0)?.user
     } as CommentInterface
   } catch (err) {
     console.log(err)

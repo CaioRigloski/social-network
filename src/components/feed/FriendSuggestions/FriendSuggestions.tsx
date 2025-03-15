@@ -8,10 +8,11 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { z } from "zod"
+import { API_ROUTES } from "@/lib/apiRoutes"
 
 
 export function FriendSuggestions() {
-  const friendsSuggestions = useSWR("/api/user/get-friend-suggestions", friendsSuggestionsFetcher)
+  const friendsSuggestions = useSWR(API_ROUTES.user.getFriendSuggestions, friendsSuggestionsFetcher)
 
   const addNewFriendForm = useForm<z.infer<typeof newFriendSchema>>({
     resolver: zodResolver(newFriendSchema),

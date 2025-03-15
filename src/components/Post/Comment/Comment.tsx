@@ -59,7 +59,7 @@ export function Comment(props: { comment: CommentInterface, isOwn?: boolean }) {
           }))
         }
         return data
-      })
+      }, false)
     )
     setCommentEditionIsOpen(false)
   }

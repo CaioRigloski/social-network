@@ -37,20 +37,31 @@ export function Post(props: { post: PostInterface, className?: string }) {
   async function unlikeAndMutatePostsData() {
     unlike({postId: props.post.id, likeId: likeId}).then(() => 
       mutate<PostInterface[]>("/api/feed/get-posts", data => {
-        data?.map(post => post.likes.filter(like => like.id !== likeId))
-        return data
-      })
+        const newData = data?.map(post => {
+          if (post.id === props.post.id) {
+            post.likes = post.likes.filter(like => like.id !== likeId)
+          }
+          return post
+        })
+        return newData
+      }, false)
     )
   }
 
   async function likeAndMutatePostsData() {
     createNewLike({postId: props.post.id}).then((newLike) => {
       mutate<PostInterface[]>("/api/feed/get-posts", data => {
-        data?.map(post => {
-          if (post.id === props.post.id && newLike) post.likes.unshift(newLike)
-        })
-        return data
-      })
+          return data?.map(post => {
+            if (post.id === props.post.id && newLike) {
+              return {
+                ...post,
+                likes: [newLike, ...post.likes],
+                likesCount: post.likesCount + 1
+              }
+            }
+            return post
+          })
+        }, false)
     })
   }
 

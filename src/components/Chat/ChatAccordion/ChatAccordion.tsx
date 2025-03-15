@@ -7,10 +7,11 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import UserInterface from "@/interfaces/feed/user.interface"
 import { useChat } from "@/contexts/ChatContext/ChatContext"
 import { createChat } from "../actions"
+import { API_ROUTES } from "@/lib/apiRoutes"
 
 export function ChatAccordion() {
   const { addChat } = useChat()
-  const friends = useSWR("/api/user/get-friends", friendsFetcher)
+  const friends = useSWR(API_ROUTES.user.getFriends, friendsFetcher)
 
   async function newChat(friend: UserInterface) {
     const newChat = await createChat({ friendId: friend.id })

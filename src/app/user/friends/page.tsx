@@ -17,9 +17,10 @@ import removeFriend from "./actions"
 import Link from "next/link"
 import { FriendSuggestions } from "@/components/feed/FriendSuggestions/FriendSuggestions"
 import { AvatarComponent } from "@/components/Avatar/Avatar"
+import { API_ROUTES } from "@/lib/apiRoutes"
 
 export default function Friends() {
-  const friends = useSWR("/api/user/get-friends", friendsFetcher)
+  const friends = useSWR(API_ROUTES.user.getFriends, friendsFetcher)
  
   if(friends.data?.length === 0) {
     return (

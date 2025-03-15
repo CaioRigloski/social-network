@@ -7,7 +7,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { useEffect } from "react"
 import { toast } from "sonner"
 
-export default function SignIn() {
+export default function Login() {
   const session = useSession()
   const router = useRouter()
 

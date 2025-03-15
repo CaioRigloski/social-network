@@ -19,8 +19,12 @@ export function FriendSuggestions() {
 
   async function mutateFriendsSuggestions(newFriendId: string) {
     addNewFriendForm.setValue("newFriendId", newFriendId)
-    await sendFriendRequest(addNewFriendForm.getValues())
-    friendsSuggestions.mutate(friendsSuggestions.data?.filter(user => user.id !== newFriendId))
+    sendFriendRequest(addNewFriendForm.getValues()).then(() => {
+      friendsSuggestions.mutate(friendsSuggestions.data?.filter(user => user.id !== newFriendId), {
+        revalidate: false,
+        optimisticData: currentData => currentData?.filter(user => user.id !== newFriendId) || []
+      })
+    })
   }
 
   return (

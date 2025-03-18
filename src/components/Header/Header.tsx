@@ -26,7 +26,6 @@ import { usePathname, useRouter } from "next/navigation"
 import { CheckIcon, ExitIcon } from "@radix-ui/react-icons"
 import { Separator } from "../ui/separator"
 import { AvatarComponent } from "../Avatar/Avatar"
-import { useEffect, useState } from "react"
 import { API_ROUTES } from "@/lib/apiRoutes"
 import { toast } from "sonner"
 

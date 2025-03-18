@@ -22,15 +22,17 @@ import { useSession } from "next-auth/react"
 import PostInterface from "@/interfaces/post/post.interface"
 import { signOutAction } from "@/app/user/sign-out/actions"
 import UserInterface from "@/interfaces/feed/user.interface"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { CheckIcon, ExitIcon } from "@radix-ui/react-icons"
 import { Separator } from "../ui/separator"
 import { AvatarComponent } from "../Avatar/Avatar"
 import { useEffect, useState } from "react"
 import { API_ROUTES } from "@/lib/apiRoutes"
+import { toast } from "sonner"
 
 
 export default function Header() {
+  const router = useRouter()
   const session = useSession()
   const pathName = usePathname()
   const [ isDisplayed, setIsDisplayed ] = useState<boolean>(false)
@@ -70,8 +72,14 @@ export default function Header() {
     }
   }
 
-  async function clearCacheAndSignout() {
-    signOutAction()
+  async function signOutAndRefresh() {
+    const res = await signOutAction()
+
+    if(res.success) {
+      router.refresh()
+    } else {
+      toast(res.message)
+    }
   }
 
   return (
@@ -87,7 +95,7 @@ export default function Header() {
             </Link>
           </div>
         </div>
-        <form className="flex justify-end w-fit" action={clearCacheAndSignout}>
+        <form className="flex justify-end w-fit" action={signOutAndRefresh}>
           <button type="submit" title="Sign out">
             <ExitIcon/>
           </button>

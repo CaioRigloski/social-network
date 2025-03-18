@@ -24,7 +24,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <SessionProvider session={session}>
+        <SessionProvider session={session} key={session?.user.id}>
           <ChatProvider>
             {session?.user && <Header/>}
             {children}

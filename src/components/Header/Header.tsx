@@ -35,21 +35,14 @@ export default function Header() {
   const router = useRouter()
   const session = useSession()
   const pathName = usePathname()
-  const [ isDisplayed, setIsDisplayed ] = useState<boolean>(false)
 
   const friendRequests = useSWR(API_ROUTES.user.getFriendRequests, friendsRequestsFetcher)
   
   const addNewFriendForm = useForm<z.infer<typeof newFriendSchema>>({
     resolver: zodResolver(newFriendSchema),
   })
-  
-  useEffect(() => {
-    if(session.status === "authenticated") {
-      setIsDisplayed(true)
-    }
-  }, [session.status])
-  
-  if (!isDisplayed) return null
+
+  if (session.status === "unauthenticated") return null
 
   async function mutateFriendAndPostDatas(newFriendId: string) {
     addNewFriendForm.setValue("newFriendId", newFriendId)

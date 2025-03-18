@@ -35,7 +35,8 @@ export function Chat() {
 
   if(!chatId) return null
 
-  const chat = useSWR([API_ROUTES.user.chat.getChat, chatId], chatFetcher).data
+  const chatResult = useSWR([API_ROUTES.user.chat.getChat, chatId], chatFetcher)
+  const chat = chatResult.data
 
   // scroll to bottom on new message with instant behavior
   useEffect(() => {
@@ -72,13 +73,31 @@ export function Chat() {
   }
 
   async function deleteMessageAndMutateChatData(messageId: string) {
-    await deleteMessage({ messageId }).then((chatData) => {
-      mutate<ChatInterface[]>(API_ROUTES.user.chat.getChats, data => data?.map(chat => {
-        if (chat.id === chatData?.id) {
-          chat.messages.filter(message => message.id !== messageId)
+    deleteMessage({ messageId }).then(() => {
+      chatResult.mutate((data) => {
+        if (!data) return data
+    
+        return {
+          ...data,
+          messages: data.messages.filter((message) => message.id !== messageId),
         }
-        return chat
-      }), false)
+      }, false)
+
+      mutate<ChatInterface[]>(API_ROUTES.user.chat.getChats, data => {
+        return data?.map(chatData => {
+          if (chatData.id === chatId && chatData.messages.at(0)?.id === messageId && chat) {
+            return {
+                ...chatData,
+                messages: [
+                  {
+                    ...chat.messages[chatData.messages.length - 1]
+                  }
+                ]
+            }
+          }
+          return chatData
+        })
+      }, false)
     })
   }
 

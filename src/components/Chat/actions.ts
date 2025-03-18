@@ -2,6 +2,7 @@
 
 import { auth } from '@/app/api/auth/[nextauth]/route'
 import ChatInterface from '@/interfaces/chat/chat.interface'
+import MessageInterface from '@/interfaces/chat/message.interface'
 import { messageSelect, prisma } from '@/lib/prisma'
 import { deleteChatSchema, deleteMessageSchema, editMessageSchema, newChatSchema, updateChatSchema } from '@/lib/zod'
 import { z } from 'zod'
@@ -130,10 +131,11 @@ export async function deleteMessage(values: z.infer<typeof deleteMessageSchema>)
     const message = await prisma.message.delete({
       where: {
         id: values.messageId
-      }
+      },
+      select: messageSelect
     })
     
-    return message
+    return message as MessageInterface
   } catch (err) {
     console.log(err)
   }

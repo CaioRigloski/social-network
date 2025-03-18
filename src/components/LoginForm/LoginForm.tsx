@@ -39,7 +39,7 @@ export function LoginForm({
     const res = await checkCredentials(values)
 
     if(res.success) {
-      router.push("/feed")
+      router.refresh()
     } else {
       toast(res.message)
     }

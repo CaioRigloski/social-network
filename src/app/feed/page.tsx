@@ -26,7 +26,7 @@ export default function Feed() {
     }
   })
 
-  if(session.status === "loading") return null
+  if(session.status === "loading") return <div>Loading...</div>
 
   const { chatId } = useChat()
   const friends = useSWR(API_ROUTES.user.getFriends, friendsFetcher)

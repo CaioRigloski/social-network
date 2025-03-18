@@ -56,7 +56,7 @@ export function Chat() {
 
     if(inputValue.trim() && friendId) {
       const newChat = await updateChat({ text: inputValue, friendId: friendId, chat: { roomId: chat?.id } }).then((chatData) => {
-        mutate<ChatInterface>([API_ROUTES.user.chat.getChat, chat?.id], data => {
+        chatResult.mutate(data => {
           if(!data) return data
 
           return {

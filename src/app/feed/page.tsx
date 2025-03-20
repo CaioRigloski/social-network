@@ -26,8 +26,7 @@ export default function Feed() {
     }
   })
 
-  if(session.status === "loading") return <div>Loading...</div>
-
+  
   const { chatId } = useChat()
   const friends = useSWR(API_ROUTES.user.getFriends, friendsFetcher)
   const friendsIds = friends?.data?.map(friend => friend.id)
@@ -38,6 +37,8 @@ export default function Feed() {
   
   const [ hasImage, setHasImage ] = useState<boolean>(false)
   const [isOnHover, setIsOnHover ] = useState<boolean>(false)
+  
+  if(session.status === "loading") return <div>Loading...</div>
 
   function handleImageSelected(hasImage: boolean) {
     setHasImage(hasImage)
@@ -68,16 +69,16 @@ export default function Feed() {
         {
           postsData.data?.length === 0 && !postsData.error &&
           <Alert>
-            <AlertTitle>:(</AlertTitle>
+            <AlertTitle>:&#41;</AlertTitle>
             <AlertDescription>
-              There's no posts. Make friends and add some posts!
+              There&apos;s no posts. Make friends and add some posts!
             </AlertDescription>
           </Alert>
         }
         {
           postsData.error &&
           <Alert>
-            <AlertTitle>:(</AlertTitle>
+            <AlertTitle>:&#41;</AlertTitle>
             <AlertDescription>
               Error. Please contact the administrator.
             </AlertDescription>

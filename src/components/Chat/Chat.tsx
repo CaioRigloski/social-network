@@ -23,6 +23,7 @@ import updateChat from "@/components/Chat/actions"
 import { chatFetcher } from "@/lib/swr"
 import { API_ROUTES } from "@/lib/apiRoutes"
 import { io } from "socket.io-client"
+import { DeleteMessage } from "@/interfaces/socket/data/deleteMessage.interface"
 
 export function Chat() {
   const socket = io()
@@ -48,8 +49,8 @@ export function Chat() {
     scrollToBottom()
   }, [chat?.messages])
 
-  const handleReceiveMessage = (msg: ReceiveMessage) => {
-    if(msg.chatId === chat?.id)  {
+  function handleReceiveMessage(msg: ReceiveMessage) {
+    if(msg.chatId === chat?.id) {
       chatResult.mutate(chatData => {
         if(chatData && msg.message.user.id !== session.data?.user.id) {
           return {
@@ -63,8 +64,22 @@ export function Chat() {
     }
   }
 
+  function handleDeleteMessage(msg: DeleteMessage) {
+    if(msg.chatId === chat?.id) {
+      chatResult.mutate(chatData => {
+        if(chatData) {
+          return {
+            ...chatData,
+            messages: chatData.messages.filter(message => message.id !== msg.messageId)
+          }
+        }
+      }, false)
+    }
+  }
+
   useEffect(() => {
     socket.on<SocketEvent>("receive_message", handleReceiveMessage)
+    socket.on<SocketEvent>("delete_message", handleDeleteMessage)
   
     return () => {
       socket.off("receive_message", handleReceiveMessage)
@@ -128,6 +143,8 @@ export function Chat() {
         })
       }, false)
     })
+
+    socket.emit<SocketEvent>("delete_message", { chatId: chat?.id, messageId: messageId })
   }
 
   function openMessageEdit(message: MessageInterface) {

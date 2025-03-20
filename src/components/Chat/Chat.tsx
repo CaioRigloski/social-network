@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from "react"
 import { detectEnterKey } from "@/lib/utils"
 import { deleteMessage, editMessage } from "@/components/Chat/actions"
 import { SocketEvent } from "@/types/socket/event.type"
-import { socket } from "@/socket"
+//import { socket } from "@/socket"
 import { ReceiveMessage } from "@/interfaces/socket/data/receiveMessage.interface"
 import { Separator } from "../ui/separator"
 import { ScrollArea } from "../ui/scroll-area"
@@ -22,9 +22,10 @@ import MessageInterface from "@/interfaces/chat/message.interface"
 import updateChat from "@/components/Chat/actions"
 import { chatFetcher } from "@/lib/swr"
 import { API_ROUTES } from "@/lib/apiRoutes"
-
+import { io } from "socket.io-client"
 
 export function Chat() {
+  const socket = io()
   const session = useSession()
   const { chatId, addChat } = useChat()
   const [ inputValue, setInputValue ] = useState<string>("")
@@ -38,10 +39,38 @@ export function Chat() {
   const chatResult = useSWR([API_ROUTES.user.chat.getChat, chatId], chatFetcher)
   const chat = chatResult.data
 
+  useEffect(() => {
+    socket.emit<SocketEvent>("join_room", chat?.id)
+  }, [socket])
+
   // scroll to bottom on new message with instant behavior
   useEffect(() => {
     scrollToBottom()
   }, [chat?.messages])
+
+  const handleReceiveMessage = (msg: ReceiveMessage) => {
+    if(msg.chatId === chat?.id)  {
+      chatResult.mutate(chatData => {
+        if(chatData && msg.message.user.id !== session.data?.user.id) {
+          return {
+            ...chatData,
+            messages: [...chatData.messages, msg.message]
+          }
+        } else {
+          return chatData
+        }
+      }, false)
+    }
+  }
+
+  useEffect(() => {
+    socket.on<SocketEvent>("receive_message", handleReceiveMessage)
+  
+    return () => {
+      socket.off("receive_message", handleReceiveMessage)
+    }
+  }, [socket])
+
 
   function scrollToBottom() {
     messagesEndRef.current?.scrollIntoView({ 
@@ -64,10 +93,10 @@ export function Chat() {
             messages: [...data.messages, chatData?.messages.at(0) as MessageInterface]
           }
         }, false)
-        return chat
+        return chatData
       })
 
-      socket.emit<SocketEvent>("send_message", { message: newChat?.messages.at(0), roomId: newChat?.id})
+      socket.emit<SocketEvent>("send_message", { message: newChat?.messages.at(0), chatId: newChat?.id})
       setInputValue("")
     }
   }
@@ -90,7 +119,7 @@ export function Chat() {
                 ...chatData,
                 messages: [
                   {
-                    ...chat.messages[chatData.messages.length - 1]
+                    ...chat.messages[chat.messages.length - 1]
                   }
                 ]
             }

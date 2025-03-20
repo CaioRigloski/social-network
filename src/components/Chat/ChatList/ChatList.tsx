@@ -1,6 +1,5 @@
 'use client'
 
-import { socket } from '@/socket'
 import { chatsFetcher } from "@/lib/swr"
 import { useSession } from "next-auth/react"
 import { useEffect, useState } from "react"
@@ -16,10 +15,12 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Button } from '@/components/ui/button'
 import { MoreVertical } from 'lucide-react'
 import { deleteChat } from '../actions'
+import { io } from "socket.io-client"
 
 
 export function ChatList() {
   const session = useSession()
+  const socket = io()
 
   const chats = useSWR(API_ROUTES.user.chat.getChats, chatsFetcher)
 
@@ -27,25 +28,34 @@ export function ChatList() {
 
   const [ optionsIsOnHover, setOptionsIsOnHover ] = useState<boolean>(false)
 
-  useEffect(() => {
-    socket.on<SocketEvent>("receive_message", (msg: ReceiveMessage) => {
-      chats.mutate((data) => {
-        return data?.map((chat) => {
-          if (chat.id === msg.message.chatId) {
-            const updatedChat = { 
-              ...chat, 
-              messages: [...chat.messages, msg.message] 
-            }
-            return updatedChat
+  const handleReceiveMessage = (msg: ReceiveMessage) => {
+    chats.mutate((data) => {
+      return data?.map((chat) => {
+        if (chat.id === msg.message.chatId) {
+          const updatedChat = { 
+            ...chat, 
+            messages: [...chat.messages, msg.message] 
           }
-          return chat
-        })
+          return updatedChat
+        }
+        return chat
       })
-    })
+    }, false)
+  }
+
+  useEffect(() => {
+    const chatIds = chats.data?.map(chat => chat.id)
+  
+    if(chatIds) {
+      socket.emit<SocketEvent>("join_room", chatIds)
+    }
+
+    socket.on<SocketEvent>("receive_message", handleReceiveMessage)
+
     return () => {
       socket.off("receive_message")
     }
-  }, [chats])
+  }, [socket])
 
   function formatDate(date: Date) {
     const today = new Date()

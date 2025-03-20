@@ -3,7 +3,7 @@ import next from "next"
 import { Server, Socket } from "socket.io"
 import { SocketEvent } from "./src/types/socket/event.type"
 import { ReceiveMessage } from "@/interfaces/socket/data/receiveMessage.interface"
-import { DeleteMessage } from "@/interfaces/socket/deleteMessage.interface"
+import { DeleteMessage } from "@/interfaces/socket/data/deleteMessage.interface"
 
 const dev = process.env.NODE_ENV !== "production"
 const hostname = "localhost"

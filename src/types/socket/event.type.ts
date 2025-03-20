@@ -1,1 +1,1 @@
-export type SocketEvent = "send_message" | "receive_message"
+export type SocketEvent = "send_message" | "receive_message" | "delete_message" | "join_room"

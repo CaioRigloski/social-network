@@ -16,9 +16,7 @@ export default function Login() {
 
   useEffect(() => {
     if(session.status === "authenticated") router.push("/feed")
-  }, [session])
-
-  if(session.status === "authenticated") return null
+  }, [session, router])
 
   useEffect(() => {
     if(status === "created") {
@@ -27,6 +25,8 @@ export default function Login() {
       })
     }
   }, [status])
+
+  if(session.status === "authenticated") return null
 
   return (
     <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">

@@ -28,7 +28,7 @@ export default function Friends() {
         <Alert>
           <AlertTitle>:(</AlertTitle>
           <AlertDescription>
-            You don't have friends, make some!
+            You don&apos;t have friends, make some!
           </AlertDescription>
         </Alert>
         <FriendSuggestions/>

@@ -16,6 +16,7 @@ import { Button } from '@/components/ui/button'
 import { MoreVertical } from 'lucide-react'
 import { deleteChat } from '../actions'
 import { io } from "socket.io-client"
+import { DeleteMessage } from "@/interfaces/socket/data/deleteMessage.interface"
 
 
 export function ChatList() {
@@ -28,15 +29,30 @@ export function ChatList() {
 
   const [ optionsIsOnHover, setOptionsIsOnHover ] = useState<boolean>(false)
 
-  const handleReceiveMessage = (msg: ReceiveMessage) => {
-    chats.mutate((data) => {
-      return data?.map((chat) => {
+  function handleReceiveMessage(msg: ReceiveMessage) {
+    chats.mutate(data => {
+      return data?.map(chat => {
         if (chat.id === msg.message.chatId) {
           const updatedChat = { 
             ...chat, 
-            messages: [...chat.messages, msg.message] 
+            messages: [msg.message] 
           }
+
           return updatedChat
+        }
+        return chat
+      })
+    }, false)
+  }
+
+  function handleDeleteMessage(msg: DeleteMessage) {
+    chats.mutate(data => {
+      return data?.map(chat => {
+        if(chat.id === msg.chatId && chat.messages[0] && chat.messages[0].id === msg.messageId) {
+          return {
+            ...chat,
+            messages: [ msg.previousMessage ]
+          }
         }
         return chat
       })
@@ -51,6 +67,7 @@ export function ChatList() {
     }
 
     socket.on<SocketEvent>("receive_message", handleReceiveMessage)
+    socket.on<SocketEvent>("delete_message", handleDeleteMessage)
 
     return () => {
       socket.off("receive_message")
@@ -108,9 +125,12 @@ export function ChatList() {
                   }
                 </div>
                 <span className="ml-auto text-xs">
-                  <time className="ml-auto text-[0.50rem]" dateTime={chat.messages.at(-1)?.createdAt.toString()}>
-                    { formatDate(chat.messages.at(-1)!.createdAt)} 
-                  </time>
+                  {
+                    chat.messages[0] &&
+                    <time className="ml-auto text-[0.50rem]" dateTime={chat.messages[0].createdAt.toString()}>
+                      { formatDate(chat.messages[0].createdAt) } 
+                    </time>
+                  }
                 </span>
                   <DropdownMenu modal={false}>
                     <DropdownMenuTrigger asChild>
@@ -126,7 +146,7 @@ export function ChatList() {
                   </DropdownMenu>
               </div>
               <span className="line-clamp-2 w-[260px] whitespace-break-spaces text-xs">
-                {chat.messages.at(-1)?.text}
+                {chat.messages[0] && chat.messages[0].text}
               </span>
             </div>
         ))

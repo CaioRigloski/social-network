@@ -101,11 +101,11 @@ export function Chat() {
     if(inputValue.trim() && friendId) {
       const newChat = await updateChat({ text: inputValue, friendId: friendId, chat: { roomId: chat?.id } }).then((chatData) => {
         chatResult.mutate(data => {
-          if(!data) return data
-
-          return {
-            ...data,
-            messages: [...data.messages, chatData?.messages.at(0) as MessageInterface]
+          if(data && chatData) {
+            return {
+              ...data,
+              messages: [...data.messages, chatData?.messages[0]]
+            }
           }
         }, false)
         return chatData
@@ -125,26 +125,10 @@ export function Chat() {
           ...data,
           messages: data.messages.filter((message) => message.id !== messageId),
         }
-      }, false)
-
-      mutate<ChatInterface[]>(API_ROUTES.user.chat.getChats, data => {
-        return data?.map(chatData => {
-          if (chatData.id === chatId && chatData.messages.at(0)?.id === messageId && chat) {
-            return {
-                ...chatData,
-                messages: [
-                  {
-                    ...chat.messages[chat.messages.length - 1]
-                  }
-                ]
-            }
-          }
-          return chatData
-        })
-      }, false)
+      }, false).then((newData) =>
+        socket.emit<SocketEvent>("delete_message", { chatId: chat?.id, messageId: messageId, previousMessage: newData?.messages.findLast(message => message)})
+      )
     })
-
-    socket.emit<SocketEvent>("delete_message", { chatId: chat?.id, messageId: messageId })
   }
 
   function openMessageEdit(message: MessageInterface) {

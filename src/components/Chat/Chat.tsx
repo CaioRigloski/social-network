@@ -24,6 +24,7 @@ import { chatFetcher } from "@/lib/swr"
 import { API_ROUTES } from "@/lib/apiRoutes"
 import { io } from "socket.io-client"
 import { DeleteMessage } from "@/interfaces/socket/data/deleteMessage.interface"
+import { EditMessage } from "@/interfaces/socket/data/editMessage.interface"
 
 export function Chat() {
   const socket = io()
@@ -48,6 +49,28 @@ export function Chat() {
   useEffect(() => {
     scrollToBottom()
   }, [chat?.messages])
+
+  function handleEditMessage(msg: EditMessage) {
+    if(msg.chatId === chat?.id) {
+      chatResult.mutate(chatData => {
+        if(chatData) {
+          return {
+            ...chatData,
+            messages: chatData.messages.map(message => {
+              if(message.id === msg.messageId) {
+                return {
+                  ...message,
+                  text: msg.text,
+                  updatedAt: msg.updatedAt
+                }
+              }
+              return message
+            })
+          }
+        }
+      }, false)
+    }
+  }
 
   function handleReceiveMessage(msg: ReceiveMessage) {
     if(msg.chatId === chat?.id) {
@@ -80,9 +103,12 @@ export function Chat() {
   useEffect(() => {
     socket.on<SocketEvent>("receive_message", handleReceiveMessage)
     socket.on<SocketEvent>("delete_message", handleDeleteMessage)
+    socket.on<SocketEvent>("edit_message", handleEditMessage)
   
     return () => {
-      socket.off("receive_message", handleReceiveMessage)
+      socket.off<SocketEvent>("receive_message", handleReceiveMessage)
+      socket.off<SocketEvent>("delete_message", handleDeleteMessage)
+      socket.off<SocketEvent>("edit_message", handleEditMessage)
     }
   }, [socket])
 
@@ -139,36 +165,7 @@ export function Chat() {
   function saveMessageEdit() {
     if(messageToEdit?.id && editedMessage.length > 0 && editedMessage !== messageToEdit.text) {
       editMessage({ messageId: messageToEdit?.id, text: editedMessage }).then((messageData) => {
-        chatResult.mutate(chatData => {
-          if(chatData && messageData) {
-            return {
-              ...chatData,
-              messages: chatData.messages.map(message => {
-                if(message.id === messageData.id) {
-                  return {
-                    ...message,
-                    text: messageData.text,
-                    updatedAt: messageData.updatedAt
-                  }
-                }
-                return message
-              })
-            }
-          }
-        }, false)
-
-        mutate<ChatInterface[]>(API_ROUTES.user.chat.getChats, data => data?.map(chat => {
-          if (chat.id === messageData?.chatId) {
-            chat.messages.map(message => {
-              if (message.id === messageData?.id) {
-                message.text = messageData?.text
-                message.updatedAt = messageData?.updatedAt
-              }
-              return message
-            })
-          }
-          return chat
-        }), false)
+        socket.emit<SocketEvent>("edit_message", {chatId: chat?.id, messageId: messageToEdit.id, text: editedMessage, updatedAt: messageData?.updatedAt } as EditMessage)
       })
     }
     setIsMessageEditOpen(false)

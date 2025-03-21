@@ -107,7 +107,7 @@ export function ChatList() {
     <ScrollArea className="h-[20rem]">
       {
         chats.data?.map((chat) => (
-          chat.messages.length > 0 &&
+          chat.messages[0] &&
             <div key={chat.id} onClick={() => { !optionsIsOnHover && addChat(chat.id) }} className="flex flex-col items-start gap-2 whitespace-nowrap border-b p-4 text-sm leading-tight last:border-b-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground w-[20rem] cursor-pointer">
               <div className="flex w-full items-center gap-2">
                 <div className='flex flex-row items-center gap-2'>

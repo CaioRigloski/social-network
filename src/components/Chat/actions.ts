@@ -1,7 +1,6 @@
 'use server'
 
 import { auth } from '@/app/api/auth/[nextauth]/route'
-import ChatInterface from '@/interfaces/chat/chat.interface'
 import MessageInterface from '@/interfaces/chat/message.interface'
 import { messageSelect, prisma } from '@/lib/prisma'
 import { deleteChatSchema, deleteMessageSchema, editMessageSchema, newChatSchema, updateChatSchema } from '@/lib/zod'
@@ -114,11 +113,13 @@ export async function deleteChat(values: z.infer<typeof deleteChatSchema>) {
   const session = await auth()
 
   try {
-    await prisma.chat.delete({
+    await prisma.message.deleteMany({
       where: {
-        id: values.chatId
+        userId: session?.user.id,
+        chatId: values.chatId
       }
     })
+    
   } catch (err) {
     console.log(err)
   }

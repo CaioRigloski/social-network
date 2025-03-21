@@ -24,11 +24,11 @@ app.prepare().then(async () => {
     })
 
     socket.on<SocketEvent>("send_message", (data: ReceiveMessage) => {
-      socket.to(data.chatId).emit<SocketEvent>("receive_message", data)
+      io.to(data.chatId).emit<SocketEvent>("receive_message", data)
     })
 
     socket.on<SocketEvent>("delete_message", (data: DeleteMessage) => {
-      socket.to(data.chatId).emit('delete_message', data)
+      io.to(data.chatId).emit('delete_message', data)
     })
 
     socket.on("disconnect", () => {

@@ -17,6 +17,7 @@ import { MoreVertical } from 'lucide-react'
 import { deleteChat } from '../actions'
 import { io } from "socket.io-client"
 import { DeleteMessage } from "@/interfaces/socket/data/deleteMessage.interface"
+import { EditMessage } from "@/interfaces/socket/data/editMessage.interface"
 
 
 export function ChatList() {
@@ -59,6 +60,26 @@ export function ChatList() {
     }, false)
   }
 
+  function handleEditMessage(msg: EditMessage) {
+    chats.mutate(data => {
+      return data?.map(chat => {
+        if(chat.id === msg.chatId && chat.messages[0] && chat.messages[0].id === msg.messageId) {
+          return {
+            ...chat,
+            messages: chat.messages.map(message => {
+              return {
+                ...message,
+                text: msg.text,
+                updatedAt: msg.updatedAt
+              }
+            })
+          }
+        }
+        return chat
+      })
+    }, false)
+  }
+
   useEffect(() => {
     const chatIds = chats.data?.map(chat => chat.id)
   
@@ -68,9 +89,13 @@ export function ChatList() {
 
     socket.on<SocketEvent>("receive_message", handleReceiveMessage)
     socket.on<SocketEvent>("delete_message", handleDeleteMessage)
+    socket.on<SocketEvent>("edit_message", handleEditMessage)
+
 
     return () => {
-      socket.off("receive_message")
+      socket.off<SocketEvent>("receive_message")
+      socket.off<SocketEvent>("delete_message")
+      socket.off<SocketEvent>("edit_message")
     }
   }, [socket])
 
@@ -97,7 +122,7 @@ export function ChatList() {
     await deleteChat({chatId: chatId}).then(() => {
       chats.mutate(data => {
         return data?.filter(chat => chat.id !== chatId)
-      })
+      }, false)
 
       addChat(undefined)
     })

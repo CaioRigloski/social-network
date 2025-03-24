@@ -256,21 +256,24 @@ export function Chat() {
                         { new Date(message.createdAt).toLocaleTimeString() }
                       </time>
                     </div>
-                    <DropdownMenu modal={false}>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="p-0 m-0 h-fit w-fit duration-400 ease-in" title="Options">
-                          <MoreVertical className="text-gray-300 w-5 p-0 duration-300 ease-in hover:text-black"/>
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent>
-                        <DropdownMenuItem className="cursor-pointer" onClick={() => openMessageEdit(message)}>
-                          Edit
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => deleteMessageAndMutateChatData(message.id)} className="cursor-pointer">
-                          Delete
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                    {
+                      !message.deleted &&
+                      <DropdownMenu modal={false}>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" className="p-0 m-0 h-fit w-fit duration-400 ease-in" title="Options">
+                            <MoreVertical className="text-gray-300 w-5 p-0 duration-300 ease-in hover:text-black"/>
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                          <DropdownMenuItem className="cursor-pointer" onClick={() => openMessageEdit(message)}>
+                            Edit
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => deleteMessageAndMutateChatData(message.id)} className="cursor-pointer">
+                            Delete
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    }
                   </span>
                   :
                   <span key={message.id} className="w-fit flex flex-col">

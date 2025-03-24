@@ -18,6 +18,7 @@ import { deleteChat } from '../actions'
 import { io } from "socket.io-client"
 import { DeleteMessage } from "@/interfaces/socket/data/deleteMessage.interface"
 import { EditMessage } from "@/interfaces/socket/data/editMessage.interface"
+import { DeleteChat } from "@/interfaces/socket/data/deleteChat.interface"
 
 
 export function ChatList() {
@@ -52,7 +53,10 @@ export function ChatList() {
         if(chat.id === msg.chatId && chat.messages[0] && chat.messages[0].id === msg.messageId) {
           return {
             ...chat,
-            messages: [ msg.previousMessage ]
+            messages: [{
+              ...chat.messages[0],
+              deleted: true
+            }]
           }
         }
         return chat
@@ -80,6 +84,17 @@ export function ChatList() {
     }, false)
   }
 
+  function handleDeleteChat(msg: DeleteChat) {
+    chats.mutate(data => {
+      return data?.map(chat => {
+        if(chat.id === msg.chatId) {
+
+        }
+        return chat
+      })
+    })
+  }
+
   useEffect(() => {
     const chatIds = chats.data?.map(chat => chat.id)
   
@@ -90,12 +105,13 @@ export function ChatList() {
     socket.on<SocketEvent>("receive_message", handleReceiveMessage)
     socket.on<SocketEvent>("delete_message", handleDeleteMessage)
     socket.on<SocketEvent>("edit_message", handleEditMessage)
-
+    //socket.on<SocketEvent>("delete_chat", handleDeleteChat)
 
     return () => {
       socket.off<SocketEvent>("receive_message")
       socket.off<SocketEvent>("delete_message")
       socket.off<SocketEvent>("edit_message")
+      //socket.off<SocketEvent>("delete_chat")
     }
   }, [socket])
 
@@ -119,12 +135,18 @@ export function ChatList() {
   }
 
   async function deleteChatAndMutateChatData(chatId: string) {
-    await deleteChat({chatId: chatId}).then(() => {
+    deleteChat({chatId: chatId}).then(() => {
       chats.mutate(data => {
-        return data?.filter(chat => chat.id !== chatId)
+        return data?.filter(chat => chat.user.id !== session.data?.user.id)
       }, false)
 
-      addChat(undefined)
+      const chatData = chats.data?.find(chat => chat.id === chatId)
+      
+      if(chatData?.messages.length === 0) {
+        addChat(undefined)
+      }
+
+      socket.emit<SocketEvent>("delete_chat", { chatId: chatId, userId: session.data?.user.id } as DeleteChat)
     })
   }
 
@@ -171,7 +193,7 @@ export function ChatList() {
                   </DropdownMenu>
               </div>
               <span className="line-clamp-2 w-[260px] whitespace-break-spaces text-xs">
-                {chat.messages[0] && chat.messages[0].text}
+                {chat.messages[0].deleted ? "Deleted message" : chat.messages[0].text}
               </span>
             </div>
         ))

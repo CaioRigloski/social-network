@@ -129,13 +129,17 @@ export async function deleteMessage(values: z.infer<typeof deleteMessageSchema>)
   const session = await auth()
 
   try {
-    const message = await prisma.message.delete({
+    const message = await prisma.message.update({
       where: {
         id: values.messageId
+      },
+      data: {
+        deleted: true
       },
       select: messageSelect
     })
     
+    console.log(message)
     return message as MessageInterface
   } catch (err) {
     console.log(err)

@@ -25,6 +25,7 @@ import { API_ROUTES } from "@/lib/apiRoutes"
 import { io } from "socket.io-client"
 import { DeleteMessage } from "@/interfaces/socket/data/deleteMessage.interface"
 import { EditMessage } from "@/interfaces/socket/data/editMessage.interface"
+import { DeleteChat } from "@/interfaces/socket/data/deleteChat.interface"
 
 export function Chat() {
   const socket = io()
@@ -90,10 +91,33 @@ export function Chat() {
   function handleDeleteMessage(msg: DeleteMessage) {
     if(msg.chatId === chat?.id) {
       chatResult.mutate(chatData => {
+        console.log(chatData, msg)
         if(chatData) {
           return {
             ...chatData,
-            messages: chatData.messages.filter(message => message.id !== msg.messageId)
+            messages: chatData.messages.map(message => {
+              if(message.id === msg.messageId) {
+                return {
+                  ...message,
+                  deleted: true
+                }
+              } else {
+                return message
+              }
+            })
+          }
+        }
+      }, false)
+    }
+  }
+
+  function handleDeleteChat(msg: DeleteChat) {
+    if(msg.chatId === chat?.id) {
+      chatResult.mutate(chatData => {
+        if(chatData) {
+          return {
+            ...chatData,
+            messages: chat?.messages.filter(message => message.user.id !== msg.userId)
           }
         }
       }, false)
@@ -104,11 +128,13 @@ export function Chat() {
     socket.on<SocketEvent>("receive_message", handleReceiveMessage)
     socket.on<SocketEvent>("delete_message", handleDeleteMessage)
     socket.on<SocketEvent>("edit_message", handleEditMessage)
+    socket.on<SocketEvent>("delete_chat", handleDeleteChat)
   
     return () => {
       socket.off<SocketEvent>("receive_message", handleReceiveMessage)
       socket.off<SocketEvent>("delete_message", handleDeleteMessage)
       socket.off<SocketEvent>("edit_message", handleEditMessage)
+      socket.off<SocketEvent>("delete_chat", handleDeleteChat)
     }
   }, [socket])
 
@@ -149,7 +175,16 @@ export function Chat() {
     
         return {
           ...data,
-          messages: data.messages.filter((message) => message.id !== messageId),
+          messages: data.messages.map(message => {
+            if(message.id === messageId) {
+              return {
+                ...message,
+                deleted: true
+              }
+            } else {
+              return message
+            }
+          })
         }
       }, false).then((newData) =>
         socket.emit<SocketEvent>("delete_message", { chatId: chat?.id, messageId: messageId, previousMessage: newData?.messages.findLast(message => message)})
@@ -208,7 +243,7 @@ export function Chat() {
                   message.user.id === session.data?.user?.id ?
                   <span key={message.id} className="flex w-full justify-end items-start">
                     <div className="w-fit h-fit flex flex-col items-end">
-                      <p className="text-white p-2 bg-green-500 rounded-xl w-fit whitespace-pre-wrap">{message.text}</p>
+                      <p className="text-white p-2 bg-green-500 rounded-xl w-fit whitespace-pre-wrap">{message.deleted ? "Deleted message" : message.text}</p>
                       <time className="ml-auto text-[0.50rem]" dateTime={message.createdAt.toString()}>
                         { new Date(message.createdAt).toLocaleTimeString() }
                       </time>
@@ -231,7 +266,7 @@ export function Chat() {
                   </span>
                   :
                   <span key={message.id} className="w-fit flex flex-col">
-                    <p className="text-white p-2 bg-cyan-500 rounded-xl w-fit whitespace-pre-wrap">{message.text}</p>
+                    <p className="text-white p-2 bg-cyan-500 rounded-xl w-fit whitespace-pre-wrap">{message.deleted ? "Deleted message" : message.text}</p>
                     <time className="ml-auto text-[0.50rem] self-start ml-0" dateTime={message.createdAt.toString()}>
                       { new Date(message.createdAt).toLocaleTimeString() }
                     </time>

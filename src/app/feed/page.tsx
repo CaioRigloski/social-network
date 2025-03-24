@@ -10,7 +10,7 @@ import { ChatAccordion } from "@/components/Chat/ChatAccordion/ChatAccordion"
 import dynamic from "next/dynamic"
 import { useChat } from "@/contexts/ChatContext/ChatContext"
 import { NewPostForm } from "@/components/Post/NewPostForm/NewPostForm"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { API_ROUTES } from "@/lib/apiRoutes"
 import { useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
@@ -61,7 +61,7 @@ export default function Feed() {
       <div className="grid auto-rows-auto grid-cols-1 justify-items-center gap-4 w-[35rem] self-start">
         <NewPostForm onImageSelected={handleImageSelected} element={handlePostFormHover}/>
         {
-          postsData?.data?.map(post => <Post key={"post" + post?.id} post={post} className={getImageClass()}/>)
+          postsData?.data?.map(post => <Post key={"post" + post?.id} post={post} className={`${getImageClass()} w-[35rem]`}/>)
         }
         {
           postsData.data && postsData.data?.length > 0 && <p className="p-5 text-gray-300">No more posts.</p>

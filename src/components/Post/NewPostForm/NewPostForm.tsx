@@ -17,6 +17,7 @@ import { ImageIcon, PaperPlaneIcon } from "@radix-ui/react-icons"
 import { Button } from "@/components/ui/button"
 import NewPostFormInterface from "@/interfaces/post/newPostForm/newPostForm.interface"
 import { API_ROUTES } from "@/lib/apiRoutes"
+import { toast } from "sonner"
 
 
 export function NewPostForm(props: NewPostFormInterface) {
@@ -26,16 +27,35 @@ export function NewPostForm(props: NewPostFormInterface) {
   const newPostForm = useForm<z.infer<typeof newPostSchema>>({
     resolver: zodResolver(newPostSchema),
     defaultValues: {
-      picture: ""
+      picture: "",
+      description: ""
     }
   })
 
   async function mutatePostsData() {
-    const newPostData = await createNewPost({picture: await toDataUrl(inputImage as File)})
-    
-    mutate<PostInterface[]>(API_ROUTES.feed.getPosts, data => {
-      if (data && newPostData) return [newPostData, ...data]
-    }, false)
+    try {
+      const newPostData = await createNewPost({
+        picture: await toDataUrl(inputImage as File),
+        description: newPostForm.getValues("description")
+      })
+
+      mutate<PostInterface[]>(API_ROUTES.feed.getPosts, data => {
+        if (data && newPostData) return [newPostData, ...data]
+      }, false)
+
+      newPostForm.reset()
+      setInputImage(undefined)
+      props.onImageSelected(false)
+
+      toast("Succesfully published post")
+    } catch (err) {
+
+      if (err instanceof Error) {
+        toast(err.message)
+      } else {
+        toast("An unknown error occurred.")
+      }
+    }
   }
 
   const openFileDialog = () => {
@@ -69,7 +89,6 @@ export function NewPostForm(props: NewPostFormInterface) {
             </FormItem>
           )}
         />
-
         <div>
           <Button type="button" variant="ghost" className="w-fit place-self-end p-2" title="Add image" onClick={openFileDialog}>
             <ImageIcon width={25} height={25} />

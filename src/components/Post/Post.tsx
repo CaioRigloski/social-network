@@ -1,5 +1,5 @@
 import PostInterface from "@/interfaces/post/post.interface"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card"
 import { detectEnterKey, imageFormats, path } from "@/lib/utils"
 import { Comment } from "@/components/Post/Comment/Comment"
 import { Textarea } from "../ui/textarea"
@@ -94,13 +94,15 @@ export function Post(props: { post: PostInterface, className?: string }) {
  
   return (
     <Card className={`${props.className} shadow-md`}>
-      <CardHeader className="flex flex-row gap-2 p-4">
-        <AvatarComponent user={props.post.user}/>
-        <CardTitle className="text-zinc-600 dark:text-sky-400/75">
-        <Link href={ session.data?.user?.id === props.post.user.id ? "/user/profile" : `/user/profile/${props.post.user.id}`}>
-          {props.post.user?.username}
-        </Link>
-        </CardTitle>
+      <CardHeader className="flex flex-row p-4">
+        <div className="w-full">
+          <CardTitle className="flex items-center gap-2 text-zinc-600 dark:text-sky-400/75">
+            <AvatarComponent user={props.post.user}/>
+            <Link href={ session.data?.user?.id === props.post.user.id ? "/user/profile" : `/user/profile/${props.post.user.id}`}>
+              {props.post.user?.username}
+            </Link>
+          </CardTitle>
+        </div>
         {
           props.post.user.id === session.data?.user?.id &&
             <div className="ml-auto">
@@ -119,7 +121,13 @@ export function Post(props: { post: PostInterface, className?: string }) {
             </div>
         }
       </CardHeader>
-      <CardContent className="p-1 w-[35rem] h-[35rem] ml-auto mr-auto">
+      {
+        props.post.description &&
+        <CardDescription className="p-5">
+          <p className="break-words">{ props.post.description }</p>
+        </CardDescription>
+      }
+      <CardContent className="p-1 w-[35rem] h-[35rem] ml-auto mr-auto border">
         <img alt="post picture" width={0} height={0} src={`/images/${path.posts}/${props.post.picture}.${imageFormats.posts}`} className="w-full h-full object-cover cursor-pointer" onClick={() => setCommentModalIsOpen(true)}/>
       </CardContent>
       <CardFooter className="p-1 pb-4 flex flex-row gap-2 justify-end w-[32rem] ml-auto mr-auto">

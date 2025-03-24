@@ -113,10 +113,13 @@ export async function deleteChat(values: z.infer<typeof deleteChatSchema>) {
   const session = await auth()
 
   try {
-    await prisma.message.deleteMany({
+    await prisma.message.updateMany({
       where: {
         userId: session?.user.id,
         chatId: values.chatId
+      },
+      data: {
+        deleted: true
       }
     })
     
@@ -129,13 +132,16 @@ export async function deleteMessage(values: z.infer<typeof deleteMessageSchema>)
   const session = await auth()
 
   try {
-    const message = await prisma.message.delete({
+    const message = await prisma.message.update({
       where: {
         id: values.messageId
       },
+      data: {
+        deleted: true
+      },
       select: messageSelect
     })
-    
+
     return message as MessageInterface
   } catch (err) {
     console.log(err)

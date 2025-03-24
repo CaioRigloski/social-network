@@ -64,7 +64,8 @@ export const messageSelect = {
   chatId: true,
   text: true,
   createdAt: true,
-  updatedAt: true
+  updatedAt: true,
+  deleted: true
 }
 
 export const friendSuggestionsSelect= {

@@ -5,6 +5,7 @@ import { SocketEvent } from "./src/types/socket/event.type"
 import { ReceiveMessage } from "@/interfaces/socket/data/receiveMessage.interface"
 import { DeleteMessage } from "@/interfaces/socket/data/deleteMessage.interface"
 import { EditMessage } from "@/interfaces/socket/data/editMessage.interface"
+import { DeleteChat } from "@/interfaces/socket/data/deleteChat.interface"
 
 const dev = process.env.NODE_ENV !== "production"
 const hostname = "localhost"
@@ -34,6 +35,10 @@ app.prepare().then(async () => {
 
     socket.on<SocketEvent>("edit_message", (data: EditMessage) => {
       io.to(data.chatId).emit<SocketEvent>("edit_message", data)
+    })
+
+    socket.on<SocketEvent>("delete_chat", (data: DeleteChat) => {
+      io.to(data.chatId).emit<SocketEvent>("delete_chat", data)
     })
 
     socket.on("disconnect", () => {

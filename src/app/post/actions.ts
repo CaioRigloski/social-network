@@ -60,7 +60,7 @@ export async function createNewPost(values: z.infer<typeof newPostSchema>) {
       likesCount: res._count.likes
     } as PostInterface
   } catch (err) {
-    console.log(err)
+    throw new Error("Failed to create a new post. Please try again later.")
   }
 }
 

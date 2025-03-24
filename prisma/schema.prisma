@@ -129,5 +129,6 @@ model Message {
   userId String
   chat Chat @relation(fields: [chatId], references: [id], onDelete: Cascade)
   chatId String
-  text String @db.VarChar(500) 
+  text String @db.VarChar(500)
+  deleted Boolean @default(false)
 }

@@ -138,8 +138,7 @@ export async function deleteMessage(values: z.infer<typeof deleteMessageSchema>)
       },
       select: messageSelect
     })
-    
-    console.log(message)
+
     return message as MessageInterface
   } catch (err) {
     console.log(err)

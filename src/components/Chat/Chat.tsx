@@ -91,7 +91,6 @@ export function Chat() {
   function handleDeleteMessage(msg: DeleteMessage) {
     if(msg.chatId === chat?.id) {
       chatResult.mutate(chatData => {
-        console.log(chatData, msg)
         if(chatData) {
           return {
             ...chatData,
@@ -117,7 +116,16 @@ export function Chat() {
         if(chatData) {
           return {
             ...chatData,
-            messages: chat?.messages.filter(message => message.user.id !== msg.userId)
+            messages: chat?.messages.map(message => {
+              if(message.user.id === msg.userId) {
+                return {
+                  ...message,
+                  deleted: true
+                }
+              } else {
+                return message
+              }
+            })
           }
         }
       }, false)

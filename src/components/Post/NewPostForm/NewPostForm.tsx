@@ -35,7 +35,7 @@ export function NewPostForm(props: NewPostFormInterface) {
   async function mutatePostsData() {
     try {
       const newPostData = await createNewPost({
-        picture: await toDataUrl(inputImage as File),
+        picture: inputImage ? await toDataUrl(inputImage as File) : null,
         description: newPostForm.getValues("description")
       })
 
@@ -76,7 +76,6 @@ export function NewPostForm(props: NewPostFormInterface) {
   }
 
   useEffect(() => {
-    console.log(newPostForm)
     if(newPostForm.formState.errors) {
       toast(newPostForm.formState.errors.picture?.message?.toString() || newPostForm.formState.errors.description?.message?.toString())
     }

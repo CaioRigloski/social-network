@@ -17,11 +17,13 @@ import { MoreVertical } from "lucide-react"
 import { AvatarComponent } from "../Avatar/Avatar"
 import Link from "next/link"
 import { API_ROUTES } from "@/lib/apiRoutes"
+import { Separator } from "../ui/separator"
+import LikeModal from "./LikeModal/LikeModal"
+import { CommentModal } from "./CommentModal/CommentModal"
 
 
 export function Post(props: { post: PostInterface, className?: string }) {
   const session = useSession()
-
   const [ likeId, setLikeId ] = useState<string>("")
   const [ comment, setComment ] = useState<string>("")
   const [ commentModalIsOpen, setCommentModalIsOpen ] = useState<boolean>(false)
@@ -74,10 +76,11 @@ export function Post(props: { post: PostInterface, className?: string }) {
       mutate<PostInterface[]>(API_ROUTES.feed.getPosts, data => {
         return data?.map(post => {
           if (post.id === props.post.id && newComment) {
+            console.log(post)
             return {
               ...post,
               comments: [newComment, ...post.comments],
-              commentsCount: post.likesCount + 1
+              commentsCount: post.commentsCount + 1
             }
           }
           return post
@@ -127,78 +130,16 @@ export function Post(props: { post: PostInterface, className?: string }) {
           { props.post.description }
         </CardDescription>
       }
-      <CardContent className="p-1 w-[35rem] h-[35rem] ml-auto mr-auto border">
-        <img alt="post picture" width={0} height={0} src={`/images/${path.posts}/${props.post.picture}.${imageFormats.posts}`} className="w-full h-full object-cover cursor-pointer" onClick={() => setCommentModalIsOpen(true)}/>
-      </CardContent>
+      {
+        props.post.picture &&
+        <CardContent className="p-1 w-[35rem] h-[35rem] ml-auto mr-auto border">
+          <img alt="post picture" width={0} height={0} src={`/images/${path.posts}/${props.post.picture}.${imageFormats.posts}`} className="w-full h-full object-cover cursor-pointer" onClick={() => setCommentModalIsOpen(true)}/>
+        </CardContent>
+      }
+      <Separator/>
       <CardFooter className="p-1 pb-4 flex flex-row gap-2 justify-end w-[32rem] ml-auto mr-auto">
-        <div className="flex flex-col items-center gap-1">
-          <Dialog open={commentModalIsOpen} onOpenChange={() => setCommentModalIsOpen(!commentModalIsOpen)}>
-            <DialogTrigger asChild>
-              <ChatBubbleIcon width={25} height={25} cursor={"pointer"}/>
-            </DialogTrigger>
-            <p className="cursor-default">{props.post.commentsCount}</p>
-            <DialogContent className="max-w-[80vw] max-w-[80vw] max-h-[95vh] w-[80vw] h-[95vh] grid grid-rows-[auto_auto_1fr] break-all">
-              <DialogHeader className="flex flex-row gap-2">
-                <AvatarComponent user={props.post.user}/>
-                <h3>
-                  <Link href={`/user/profile/${props.post.user.id}`}>{props.post.user?.username}</Link>
-                </h3>
-              </DialogHeader>
-              <DialogTitle className="hidden">
-                Post details.
-              </DialogTitle>
-              <DialogDescription className="overflow-y-auto">
-                { props.post.description }
-              </DialogDescription>
-              <div className="grid grid-cols-3 grid-rows-1 gap-2">
-                <img alt="post picture" width={0} height={0} src={`/images/${path.posts}/${props.post.picture}.${imageFormats.posts}`} className="w-full h-full max-w-[60rem] max-h-[40rem] object-contain col-span-2 border"/>
-                {
-                  props.post.comments && props.post.comments.length > 0 ?
-                  <div className="col-span-1 overflow-y-scroll max-h-[70vh]">
-                    {
-                      props.post.comments?.map(comment => <Comment key={comment.id} comment={comment} isOwn={comment.user.id === session.data?.user?.id}/>)
-                    }
-                  </div>
-                  :
-                  <div className="grid items-start text-center text-gray-400">
-                    <p>No comments yet</p>
-                  </div>
-                }
-                <Textarea className="col-span-3 resize-none" placeholder="Leave a comment!" onChange={e => setComment(e.target.value)} onKeyUp={e => detectEnterKey(e) && commentAndMutatePostsData()} maxLength={500}/>
-              </div>
-              <DialogDescription className="hidden">
-                See the posts details!
-              </DialogDescription>
-            </DialogContent>
-          </Dialog>
-        </div>
-        <div className="flex flex-col items-center gap-1">
-          {
-            likeId.length > 0 ?
-              <HeartFilledIcon width={25} height={25} color="red" cursor={"pointer"} onClick={unlikeAndMutatePostsData}/>
-              :
-              <HeartIcon width={25} height={25} cursor={"pointer"} onClick={likeAndMutatePostsData}/>
-          }
-          <Dialog>
-            <DialogTrigger asChild>
-              <p className="cursor-pointer">{props.post.likesCount}</p>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Likes</DialogTitle>
-              </DialogHeader>
-                {
-                  props.post.likesCount > 0 ?
-                  props.post?.likes?.map(like => <Like key={like.id} like={like} isOwn={like.user.id === session.data?.user?.id}/>)
-                  :
-                  <p>No likes yet.</p>
-                }
-                <DialogDescription>
-                  See who liked it!
-                </DialogDescription>
-            </DialogContent>
-          </Dialog>
-        </div>
+        <CommentModal isOpen={commentModalIsOpen} commentOnChange={e => {setComment(e.target.value)}} commentOnKeyUp={commentAndMutatePostsData} post={props.post}/>
+        <LikeModal likeId={likeId} likes={props.post.likes} likesCount={props.post.likesCount} likeOnClick={likeAndMutatePostsData} unlikeOnClick={unlikeAndMutatePostsData}/>
       </CardFooter>
     </Card>
   )

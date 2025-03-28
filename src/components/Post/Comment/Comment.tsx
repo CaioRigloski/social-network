@@ -11,8 +11,9 @@ import { Separator } from "@/components/ui/separator"
 import { AvatarComponent } from "@/components/Avatar/Avatar"
 import Link from "next/link"
 import { API_ROUTES } from "@/lib/apiRoutes"
+import CommentComponentInterface from "../CommentComponent/CommentComponent"
 
-export function Comment(props: { comment: CommentInterface, isOwn?: boolean }) {
+export function Comment(props: CommentComponentInterface) {
   const [ editedComment, setEditedComment ] = useState<string>("")
   const [ commentEditionIsOpen, setCommentEditionIsOpen ] = useState<boolean>(false)
   const [isTruncated, setIsTruncated] = useState(false)
@@ -38,11 +39,14 @@ export function Comment(props: { comment: CommentInterface, isOwn?: boolean }) {
       mutate<PostInterface[]>(API_ROUTES.feed.getPosts, data => {
         if (data) {
           return data.map(post => {
-            return {
-              ...post,
-              comments: post.comments.filter(comment => comment.id !== props.comment.id),
-              commentsCount: post.commentsCount - 1
+            if(post.id === props.postId) {
+              return {
+                ...post,
+                comments: post.comments.filter(comment => comment.id !== props.comment.id),
+                commentsCount: post.commentsCount - 1
+              }
             }
+            return post
           })
         }
         return data

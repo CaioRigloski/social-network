@@ -18,16 +18,16 @@ export async function createNewPost(values: z.infer<typeof newPostSchema>) {
     if (!existsSync(path.public_post_images)) {
       await mkdir(path.public_post_images, {recursive: true})
     }
-
+    
     const UUID = randomUUID()
-    writeFileSync(`${path.public_post_images}/${UUID}.${imageFormats.posts}`, Buffer.from(values.picture.replace(/^data:image\/\w+;base64,/, ""), "base64"))
+    values.picture && writeFileSync(`${path.public_post_images}/${UUID}.${imageFormats.posts}`, Buffer.from(values.picture.replace(/^data:image\/\w+;base64,/, ""), "base64"))
 
     const res = await prisma.post.create({
       data: {
         user: {
           connect: {id: session?.user?.id}
         },
-        picture: UUID.toString(),
+        picture: values.picture && UUID.toString(),
         description: values.description,
       },
       include: {
@@ -76,7 +76,8 @@ export async function deletePost(values: z.infer<typeof deletePostSchema>) {
         }
       }
     })
-    unlinkSync(`${path.public_post_images}/${values.imageName}.${imageFormats.posts}`)
+    
+    values.imageName && unlinkSync(`${path.public_post_images}/${values.imageName}.${imageFormats.posts}`)
   } catch (err) {
     console.log(err)
   }

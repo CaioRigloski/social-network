@@ -80,7 +80,7 @@ model Post {
   user User @relation(fields: [userId], references: [id])
   userId String
   description String? @db.VarChar(500)
-  picture String
+  picture String?
   comments Comment[]
   likes Like[]
 }

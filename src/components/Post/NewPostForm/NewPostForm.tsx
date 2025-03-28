@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import Image from "next/image"
 import { z } from "zod"
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { toDataUrl } from "@/lib/utils"
 import { mutate } from "swr"
 import PostInterface from "@/interfaces/post/post.interface"
@@ -23,7 +23,7 @@ import { toast } from "sonner"
 export function NewPostForm(props: NewPostFormInterface) {
   const [ inputImage, setInputImage ] = useState<File | undefined>(undefined)
   const fileInputRef = useRef<HTMLInputElement>(null)
-
+  
   const newPostForm = useForm<z.infer<typeof newPostSchema>>({
     resolver: zodResolver(newPostSchema),
     defaultValues: {
@@ -75,6 +75,13 @@ export function NewPostForm(props: NewPostFormInterface) {
     }
   }
 
+  useEffect(() => {
+    console.log(newPostForm)
+    if(newPostForm.formState.errors) {
+      toast(newPostForm.formState.errors.picture?.message?.toString() || newPostForm.formState.errors.description?.message?.toString())
+    }
+  }, [newPostForm.formState.errors.description, newPostForm.formState.errors.picture])
+
   return (
     <Form {...newPostForm}>
       <form onSubmit={newPostForm.handleSubmit(async() => await mutatePostsData())} className="flex flex-col w-full items-end shadow-md p-2" onMouseEnter={() => props.element(true)} onMouseLeave={() => props.element(false)}>
@@ -84,7 +91,7 @@ export function NewPostForm(props: NewPostFormInterface) {
           render={({ field }) => (
             <FormItem className="w-full">
               <FormControl>
-                <Textarea placeholder="What's on your mind?" className="resize-none focus:!ring-transparent" {...field} maxLength={500}/>
+                <Textarea placeholder="What's on your mind?" className="resize-none focus:!ring-transparent" {...field}/>
               </FormControl>
             </FormItem>
           )}

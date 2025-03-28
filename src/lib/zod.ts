@@ -26,7 +26,7 @@ export const deletePostSchema = z.object({
 
 export const newCommentSchema = z.object({
   postId: z.string(),
-  text: z.string()
+  text: z.string().max(500, "Description must have a maximum 500 characters")
 })
 
 export const deleteCommentSchema = z.object({
@@ -35,7 +35,7 @@ export const deleteCommentSchema = z.object({
 
 export const editCommentSchema = z.object({
   commentId: z.string(),
-  text: z.string()
+  text: z.string().max(500, "Description must have a maximum 500 characters")
 })
 
 export const newLikeSchema = z.object({

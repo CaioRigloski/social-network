@@ -102,6 +102,6 @@ export function Comment(props: { comment: CommentInterface, isOwn?: boolean }) {
       <Separator/>
     </div>
     :
-    <Textarea placeholder={props.comment.text} onChange={e => setEditedComment(e.target.value)} onKeyUp={e => detectEnterKey(e) && editCommentAndMutatePostsData() }/>
+    <Textarea placeholder={props.comment.text} onChange={e => setEditedComment(e.target.value)} onKeyUp={e => detectEnterKey(e) && editCommentAndMutatePostsData()} maxLength={500}/>
   )
 }

@@ -158,7 +158,7 @@ export function Post(props: { post: PostInterface, className?: string }) {
                     <p>No comments yet</p>
                   </div>
                 }
-                <Textarea className="col-span-3 resize-none" placeholder="Leave a comment!" onChange={e => setComment(e.target.value)} onKeyUp={e => detectEnterKey(e) && commentAndMutatePostsData()}/>
+                <Textarea className="col-span-3 resize-none" placeholder="Leave a comment!" onChange={e => setComment(e.target.value)} onKeyUp={e => detectEnterKey(e) && commentAndMutatePostsData()} maxLength={500}/>
               </div>
               <DialogDescription className="hidden">
                 See the posts details!

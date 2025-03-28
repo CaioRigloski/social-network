@@ -16,7 +16,7 @@ export const loginSchema = z.object({
 
 export const newPostSchema = z.object({
   picture: z.any().refine(file => "image/".includes(file)),
-  description: z.string().optional()
+  description: z.string().max(500, "Description must have a maximum 500 characters").optional()
 })
 
 export const deletePostSchema = z.object({

@@ -84,7 +84,7 @@ export function NewPostForm(props: NewPostFormInterface) {
           render={({ field }) => (
             <FormItem className="w-full">
               <FormControl>
-                <Textarea placeholder="What's on your mind?" className="resize-none focus:!ring-transparent" {...field} />
+                <Textarea placeholder="What's on your mind?" className="resize-none focus:!ring-transparent" {...field} maxLength={500}/>
               </FormControl>
             </FormItem>
           )}

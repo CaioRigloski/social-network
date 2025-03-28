@@ -146,6 +146,8 @@ export function ChatList() {
     })
   }
 
+  if(chats.data?.length === 0) return <p className="text-center">No chats yet!</p>
+
   return (
     <ScrollArea className="h-[20rem]">
       {

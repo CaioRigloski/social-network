@@ -24,52 +24,8 @@ import { CommentModal } from "./CommentModal/CommentModal"
 
 export function Post(props: { post: PostInterface, className?: string }) {
   const session = useSession()
-  const [ likeId, setLikeId ] = useState<string>("")
   const [ comment, setComment ] = useState<string>("")
   const [ commentModalIsOpen, setCommentModalIsOpen ] = useState<boolean>(false)
-
-  useEffect(() => {
-    const userLikeId = props.post?.likes?.find(like => like.user.id === session.data?.user?.id)
-    if(userLikeId) {
-      setLikeId(userLikeId.id)
-    } else {
-      setLikeId("")
-    }
-  }, [props.post.likes])
-
-  async function unlikeAndMutatePostsData() {
-    unlike({postId: props.post.id, likeId: likeId}).then(() => 
-      mutate<PostInterface[]>(API_ROUTES.feed.getPosts, data => {
-        return data?.map(post => {
-          if (post.id === props.post.id) {
-            return {
-              ...post,
-              likes: post.likes.filter(like => like.id !== likeId),
-              likesCount: post.likesCount - 1
-            }
-          }
-          return post
-        })
-      }, false)
-    )
-  }
-
-  async function likeAndMutatePostsData() {
-    createNewLike({postId: props.post.id}).then((newLike) => {
-      mutate<PostInterface[]>(API_ROUTES.feed.getPosts, data => {
-        return data?.map(post => {
-          if (post.id === props.post.id && newLike) {
-            return {
-              ...post,
-              likes: [newLike, ...post.likes],
-              likesCount: post.likesCount + 1
-            }
-          }
-          return post
-        })
-      }, false)
-    })
-  }
 
   async function commentAndMutatePostsData() {
     createNewComment({postId: props.post.id, text: comment}).then((newComment) => 
@@ -139,7 +95,7 @@ export function Post(props: { post: PostInterface, className?: string }) {
       <Separator/>
       <CardFooter className="p-1 pb-4 flex flex-row gap-2 justify-end w-[32rem] ml-auto mr-auto">
         <CommentModal isOpen={commentModalIsOpen} commentOnChange={e => {setComment(e.target.value)}} commentOnKeyUp={commentAndMutatePostsData} post={props.post}/>
-        <LikeModal likeId={likeId} likes={props.post.likes} likesCount={props.post.likesCount} likeOnClick={likeAndMutatePostsData} unlikeOnClick={unlikeAndMutatePostsData}/>
+        <LikeModal postId={props.post.id} likes={props.post.likes} likesCount={props.post.likesCount}/>
       </CardFooter>
     </Card>
   )

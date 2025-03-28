@@ -121,12 +121,6 @@ export function Post(props: { post: PostInterface, className?: string }) {
             </div>
         }
       </CardHeader>
-      {
-        props.post.description &&
-        <CardDescription className="p-5 overflow-y-auto comment-line-limit">
-          { props.post.description }
-        </CardDescription>
-      }
       <CardContent className="p-1 w-[35rem] h-[35rem] ml-auto mr-auto border">
         <img alt="post picture" width={0} height={0} src={`/images/${path.posts}/${props.post.picture}.${imageFormats.posts}`} className="w-full h-full object-cover cursor-pointer" onClick={() => setCommentModalIsOpen(true)}/>
       </CardContent>
@@ -137,7 +131,7 @@ export function Post(props: { post: PostInterface, className?: string }) {
               <ChatBubbleIcon width={25} height={25} cursor={"pointer"}/>
             </DialogTrigger>
             <p className="cursor-default">{props.post.commentsCount}</p>
-            <DialogContent className="max-w-[80vw] max-w-[80vw] max-h-[95vh] w-[80vw] h-[95vh] grid grid-rows-[auto_1fr] break-all">
+            <DialogContent className="max-w-[80vw] max-w-[80vw] max-h-[95vh] w-[80vw] h-[95vh] grid grid-rows-[auto_auto_1fr] break-all">
               <DialogHeader className="flex flex-row gap-2">
                 <AvatarComponent user={props.post.user}/>
                 <h3>

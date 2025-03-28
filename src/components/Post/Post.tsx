@@ -1,17 +1,9 @@
 import PostInterface from "@/interfaces/post/post.interface"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card"
-import { detectEnterKey, imageFormats, path } from "@/lib/utils"
-import { Comment } from "@/components/Post/Comment/Comment"
-import { Textarea } from "../ui/textarea"
-import { useEffect, useState } from "react"
-import { createNewComment } from "@/app/post/comment/actions"
-import { createNewLike, unlike } from "@/app/post/like/actions"
+import { imageFormats, path } from "@/lib/utils"
 import { useSession } from "next-auth/react"
 import { mutate } from "swr"
 import { deletePost } from "@/app/post/actions"
-import { ChatBubbleIcon, HeartFilledIcon, HeartIcon } from "@radix-ui/react-icons"
-import { Dialog, DialogHeader, DialogContent, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog"
-import { Like } from "./Like/Like"
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu"
 import { MoreVertical } from "lucide-react"
 import { AvatarComponent } from "../Avatar/Avatar"
@@ -20,30 +12,12 @@ import { API_ROUTES } from "@/lib/apiRoutes"
 import { Separator } from "../ui/separator"
 import LikeModal from "./LikeModal/LikeModal"
 import { CommentModal } from "./CommentModal/CommentModal"
+import { useState } from "react"
 
 
 export function Post(props: { post: PostInterface, className?: string }) {
   const session = useSession()
-  const [ comment, setComment ] = useState<string>("")
   const [ commentModalIsOpen, setCommentModalIsOpen ] = useState<boolean>(false)
-
-  async function commentAndMutatePostsData() {
-    createNewComment({postId: props.post.id, text: comment}).then((newComment) => 
-      mutate<PostInterface[]>(API_ROUTES.feed.getPosts, data => {
-        return data?.map(post => {
-          if (post.id === props.post.id && newComment) {
-            console.log(post)
-            return {
-              ...post,
-              comments: [newComment, ...post.comments],
-              commentsCount: post.commentsCount + 1
-            }
-          }
-          return post
-        })
-      }, false)
-    )
-  }
 
   async function deletePostAndMutatePostsData() {
     deletePost({postId: props.post.id, imageName: props.post.picture}).then(() => 
@@ -94,7 +68,7 @@ export function Post(props: { post: PostInterface, className?: string }) {
       }
       <Separator/>
       <CardFooter className="p-1 pb-4 flex flex-row gap-2 justify-end w-[32rem] ml-auto mr-auto">
-        <CommentModal isOpen={commentModalIsOpen} commentOnChange={e => {setComment(e.target.value)}} commentOnKeyUp={commentAndMutatePostsData} post={props.post}/>
+        <CommentModal isOpen={commentModalIsOpen} post={props.post}/>
         <LikeModal postId={props.post.id} likes={props.post.likes} likesCount={props.post.likesCount}/>
       </CardFooter>
     </Card>

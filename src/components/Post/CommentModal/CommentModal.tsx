@@ -8,10 +8,33 @@ import { Comment } from "../Comment/Comment"
 import { detectEnterKey, imageFormats, path } from "@/lib/utils"
 import { useSession } from "next-auth/react"
 import { useState } from "react"
+import { createNewComment } from "@/app/post/comment/actions"
+import { mutate } from "swr"
+import PostInterface from "@/interfaces/post/post.interface"
+import { API_ROUTES } from "@/lib/apiRoutes"
 
 export function CommentModal(props: CommentModalInterface) {
   const session = useSession()
+  const [ comment, setComment ] = useState<string>("")
   const [ commentModalIsOpen, setCommentModalIsOpen ] = useState<boolean>(false)
+
+  async function commentAndMutatePostsData() {
+    createNewComment({postId: props.post.id, text: comment}).then((newComment) => 
+      mutate<PostInterface[]>(API_ROUTES.feed.getPosts, data => {
+        return data?.map(post => {
+          if (post.id === props.post.id && newComment) {
+            console.log(post)
+            return {
+              ...post,
+              comments: [newComment, ...post.comments],
+              commentsCount: post.commentsCount + 1
+            }
+          }
+          return post
+        })
+      }, false)
+    )
+  }
 
   return (
     <Dialog open={commentModalIsOpen} onOpenChange={() => setCommentModalIsOpen(!commentModalIsOpen)}>
@@ -48,7 +71,7 @@ export function CommentModal(props: CommentModalInterface) {
               <p>No comments yet</p>
             </div>
           }
-          <Textarea className="col-span-3 resize-none" placeholder="Leave a comment!" onChange={e => props.commentOnChange(e)} onKeyUp={e => detectEnterKey(e) && props.commentOnKeyUp()} maxLength={500}/>
+          <Textarea className="col-span-3 resize-none" placeholder="Leave a comment!" onChange={e => setComment(e.target.value)} onKeyUp={e => detectEnterKey(e) && commentAndMutatePostsData()} maxLength={500}/>
         </div>
         <DialogDescription className="hidden">
           See the posts details!

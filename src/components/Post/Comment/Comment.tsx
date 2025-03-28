@@ -11,7 +11,7 @@ import { Separator } from "@/components/ui/separator"
 import { AvatarComponent } from "@/components/Avatar/Avatar"
 import Link from "next/link"
 import { API_ROUTES } from "@/lib/apiRoutes"
-import CommentComponentInterface from "../CommentComponent/CommentComponent"
+import CommentComponentInterface from "../../../interfaces/post/CommentComponent/CommentComponent"
 
 export function Comment(props: CommentComponentInterface) {
   const [ editedComment, setEditedComment ] = useState<string>("")

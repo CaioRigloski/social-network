@@ -16,7 +16,6 @@ import { API_ROUTES } from "@/lib/apiRoutes"
 export function CommentModal(props: CommentModalInterface) {
   const session = useSession()
   const [ comment, setComment ] = useState<string>("")
-  const [ commentModalIsOpen, setCommentModalIsOpen ] = useState<boolean>(false)
 
   async function commentAndMutatePostsData() {
     createNewComment({postId: props.post.id, text: comment}).then((newComment) => 
@@ -37,7 +36,7 @@ export function CommentModal(props: CommentModalInterface) {
   }
 
   return (
-    <Dialog open={commentModalIsOpen} onOpenChange={() => setCommentModalIsOpen(!commentModalIsOpen)}>
+    <Dialog open={props.isOpen} onOpenChange={props.setIsOpen}>
       <DialogTrigger asChild>
         <div className="grid justify-items-center cursor-pointer gap-1">
           <ChatBubbleIcon width={25} height={25}/>

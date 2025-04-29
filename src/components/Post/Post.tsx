@@ -68,7 +68,7 @@ export function Post(props: { post: PostInterface, className?: string }) {
       }
       <Separator/>
       <CardFooter className="p-1 pb-4 flex flex-row gap-2 justify-end w-[32rem] ml-auto mr-auto">
-        <CommentModal isOpen={commentModalIsOpen} post={props.post}/>
+        <CommentModal isOpen={commentModalIsOpen} setIsOpen={setCommentModalIsOpen} post={props.post}/>
         <LikeModal postId={props.post.id} likes={props.post.likes} likesCount={props.post.likesCount}/>
       </CardFooter>
     </Card>

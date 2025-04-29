@@ -22,7 +22,6 @@ export function CommentModal(props: CommentModalInterface) {
       mutate<PostInterface[]>(API_ROUTES.feed.getPosts, data => {
         return data?.map(post => {
           if (post.id === props.post.id && newComment) {
-            console.log(post)
             return {
               ...post,
               comments: [newComment, ...post.comments],
@@ -70,7 +69,7 @@ export function CommentModal(props: CommentModalInterface) {
               <p>No comments yet</p>
             </div>
           }
-          <Textarea className="col-span-3 resize-none" placeholder="Leave a comment!" onChange={e => setComment(e.target.value)} onKeyUp={e => detectEnterKey(e) && commentAndMutatePostsData()} maxLength={500}/>
+          <Textarea className="col-span-3 resize-none" placeholder="Leave a comment!" onChange={e => setComment(e.target.value)} onKeyDown={e => detectEnterKey(e) && commentAndMutatePostsData()} maxLength={500}/>
         </div>
         <DialogDescription className="hidden">
           See the posts details!

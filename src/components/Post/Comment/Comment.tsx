@@ -13,7 +13,7 @@ import { API_ROUTES } from "@/lib/apiRoutes"
 import CommentComponentInterface from "../../../interfaces/post/commentComponent/commentComponent.interface"
 
 export function Comment(props: CommentComponentInterface) {
-  const [ editedComment, setEditedComment ] = useState<string>("")
+  const [ editedComment, setEditedComment ] = useState<string>(props.comment.text)
   const [ commentEditionIsOpen, setCommentEditionIsOpen ] = useState<boolean>(false)
   const [isTruncated, setIsTruncated] = useState(false)
   const [isExpanded, setIsExpanded] = useState(false)
@@ -105,6 +105,6 @@ export function Comment(props: CommentComponentInterface) {
       <Separator/>
     </div>
     :
-    <Textarea placeholder={props.comment.text} onChange={e => setEditedComment(e.target.value)} onKeyUp={e => detectEnterKey(e) && editCommentAndMutatePostsData()} maxLength={500}/>
+    <Textarea value={editedComment} onChange={e => setEditedComment(e.target.value)} onKeyDown={e => detectEnterKey(e) && editCommentAndMutatePostsData()} maxLength={500}/>
   )
 }

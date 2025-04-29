@@ -1,6 +1,5 @@
 import { deleteComment, editComment } from "@/app/post/comment/actions"
 import { Textarea } from "@/components/ui/textarea"
-import CommentInterface from "@/interfaces/post/comment/comment.interface"
 import PostInterface from "@/interfaces/post/post.interface"
 import { detectEnterKey } from "@/lib/utils"
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu"
@@ -11,7 +10,7 @@ import { Separator } from "@/components/ui/separator"
 import { AvatarComponent } from "@/components/Avatar/Avatar"
 import Link from "next/link"
 import { API_ROUTES } from "@/lib/apiRoutes"
-import CommentComponentInterface from "../../../interfaces/post/CommentComponent/CommentComponent"
+import CommentComponentInterface from "../../../interfaces/post/commentComponent/commentComponent.interface"
 
 export function Comment(props: CommentComponentInterface) {
   const [ editedComment, setEditedComment ] = useState<string>("")

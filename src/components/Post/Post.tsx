@@ -13,6 +13,8 @@ import { Separator } from "../ui/separator"
 import LikeModal from "./LikeModal/LikeModal"
 import { CommentModal } from "./CommentModal/CommentModal"
 import { useEffect, useRef, useState } from "react"
+import { ChatBubbleIcon } from "@radix-ui/react-icons"
+import { Comment } from "./Comment/Comment"
 
 
 export function Post(props: { post: PostInterface, className?: string }) {
@@ -41,23 +43,21 @@ export function Post(props: { post: PostInterface, className?: string }) {
   }
  
   return (
-    <Card className={`${props.className} shadow-md break-all whitespace-pre-wrap`}>
-      <CardHeader className="flex flex-row p-4">
-        <div className="w-full">
-          <CardTitle className="flex items-center gap-2 text-zinc-600 dark:text-sky-400/75">
-            <AvatarComponent user={props.post.user}/>
-            <Link href={ session.data?.user?.id === props.post.user.id ? "/user/profile" : `/user/profile/${props.post.user.id}`}>
-              {props.post.user?.username}
-            </Link>
-          </CardTitle>
-        </div>
+    <Card className={`${props.className} shadow-md break-all whitespace-pre-wrape`}>
+      <CardHeader className="flex flex-row rounded-t-md bg-cyan-800 text-white h-14 items-center">
+        <CardTitle className="flex items-center gap-2 text-white dark:text-sky-400/75">
+          <AvatarComponent user={props.post.user}/>
+          <Link href={ session.data?.user?.id === props.post.user.id ? "/user/profile" : `/user/profile/${props.post.user.id}`}>
+            {props.post.user?.username}
+          </Link>
+        </CardTitle>
         {
           props.post.user.id === session.data?.user?.id &&
             <div className="ml-auto">
               <DropdownMenu modal={false}>
                 <DropdownMenuTrigger asChild>
                   <button>
-                    <MoreVertical/>
+                    <MoreVertical className="h-[1rem]"/>
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
@@ -84,9 +84,31 @@ export function Post(props: { post: PostInterface, className?: string }) {
         </CardContent>
       }
       <Separator/>
-      <CardFooter className="p-1 pb-4 flex flex-row gap-2 justify-end w-[32rem] ml-auto mr-auto">
-        <CommentModal isOpen={commentModalIsOpen} setIsOpen={setCommentModalIsOpen} post={props.post}/>
-        <LikeModal postId={props.post.id} likes={props.post.likes} likesCount={props.post.likesCount}/>
+      <CardFooter className="p-0 pb-4 flex flex-col rounded-b-md  bg-cyan-800 ">
+        <div className="p-1 flex flex-row gap-2 justify-end w-full ml-auto mr-auto text-white">
+          {
+            props.post.picture ?
+              <CommentModal isOpen={commentModalIsOpen} setIsOpen={setCommentModalIsOpen} post={props.post}/>
+              :
+              <div className="grid justify-items-center cursor-pointer gap-1">
+                <ChatBubbleIcon width={22} height={22}/>
+                <p>{props.post.commentsCount}</p>
+              </div>
+          }
+          <LikeModal postId={props.post.id} likes={props.post.likes} likesCount={props.post.likesCount}/>
+        </div>
+          {
+            !props.post.picture &&
+            <div className="w-full p-3">
+              <div className="grid grid-cols-1 overflow-y-auto max-h-[10rem] w-full bg-white rounded-sm">
+                {
+                  props.post.comments.map(comment =>
+                    <Comment key={comment.id} postId={props.post.id} comment={comment} isOwn={comment.user.id === session.data?.user?.id} />
+                  )
+                }
+              </div>
+            </div>
+          }
       </CardFooter>
     </Card>
   )

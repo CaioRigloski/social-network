@@ -58,7 +58,7 @@ export default function Feed() {
         <FriendsAvatars/>
         <FriendSuggestions/>
       </div>
-      <div className="grid auto-rows-auto grid-cols-1 justify-items-center gap-4 w-[35rem] self-start">
+      <div className="grid auto-rows-auto grid-cols-1 justify-items-center gap-10 w-[35rem] self-start">
         <NewPostForm onImageSelected={handleImageSelected} element={handlePostFormHover}/>
         {
           postsData?.data?.map(post => <Post key={"post" + post?.id} post={post} className={`${getImageClass()} w-[35rem]`}/>)

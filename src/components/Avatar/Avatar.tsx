@@ -16,7 +16,7 @@ export const AvatarComponent = forwardRef<HTMLDivElement, { user: UserInterface 
           src={`/images/${path.profile}/${props.user.profilePicture}.${imageFormats.profilePicture}`} 
           alt={`@${props.user.username}`} 
         />
-        <AvatarFallback>
+        <AvatarFallback className="text-black text-sm">
           {props.user.username?.charAt(0).toUpperCase()}
         </AvatarFallback>
       </Avatar>

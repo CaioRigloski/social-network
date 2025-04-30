@@ -70,7 +70,6 @@ export function Comment(props: CommentComponentInterface) {
   return (
     !commentEditionIsOpen ?
     <div>
-
       <div className="flex min-w-0 gap-x-4 p-4">
         <AvatarComponent user={props.comment.user}/>
         <div className="min-w-0 flex-auto">
@@ -87,7 +86,7 @@ export function Comment(props: CommentComponentInterface) {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button>
-                  <MoreVertical/>
+                  <MoreVertical className="h-[0.8rem]"/>
                 </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>

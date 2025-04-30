@@ -78,7 +78,7 @@ export function Comment(props: CommentComponentInterface) {
             <Link href={props.isOwn ? "/user/profile" : `user/profile/${id}`}>{username}</Link>
             </p>
           <p ref={textRef} className={`${isExpanded && "block"} mt-1 text-xs leading-5 text-gray-500 comment-line-limit`}>{props.comment.text}</p>
-          {isTruncated && !isExpanded && <button className="mt-1 text-xs leading-5 text-sky-700" onClick={() => setIsExpanded(true)}>See more</button>}
+          {isTruncated && !isExpanded && <button className="mt-1 text-xs leading-5 text-sky-700" onClick={() => setIsExpanded(true)}>view more</button>}
           {isExpanded && <button className="mt-1 text-xs leading-5 text-sky-700" onClick={() => setIsExpanded(false)}>view less</button>}
         </div>
         {

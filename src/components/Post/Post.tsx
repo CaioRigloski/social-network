@@ -12,12 +12,27 @@ import { API_ROUTES } from "@/lib/apiRoutes"
 import { Separator } from "../ui/separator"
 import LikeModal from "./LikeModal/LikeModal"
 import { CommentModal } from "./CommentModal/CommentModal"
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 
 export function Post(props: { post: PostInterface, className?: string }) {
   const session = useSession()
   const [ commentModalIsOpen, setCommentModalIsOpen ] = useState<boolean>(false)
+
+  const textRef = useRef<HTMLParagraphElement>(null)
+  const [isTruncated, setIsTruncated] = useState(false)
+  const [isExpanded, setIsExpanded] = useState(false)
+
+  function checkIfTruncated() {
+    if (textRef.current) {
+      const { scrollHeight, clientHeight } = textRef.current
+      setIsTruncated(scrollHeight > clientHeight)
+    }
+  }
+
+  useEffect(() => {
+    checkIfTruncated()
+  }, [props.post.description])
 
   async function deletePostAndMutatePostsData() {
     deletePost({postId: props.post.id, imageName: props.post.picture}).then(() => 
@@ -26,7 +41,7 @@ export function Post(props: { post: PostInterface, className?: string }) {
   }
  
   return (
-    <Card className={`${props.className} shadow-md break-all`}>
+    <Card className={`${props.className} shadow-md break-all whitespace-pre-wrap`}>
       <CardHeader className="flex flex-row p-4">
         <div className="w-full">
           <CardTitle className="flex items-center gap-2 text-zinc-600 dark:text-sky-400/75">
@@ -56,10 +71,12 @@ export function Post(props: { post: PostInterface, className?: string }) {
       </CardHeader>
       {
         props.post.description &&
-        <CardDescription className="p-5 overflow-y-auto comment-line-limit">
+        <CardDescription ref={textRef} className={`${isExpanded && "block"} p-5 comment-line-limit pb-1`}>
           { props.post.description }
         </CardDescription>
       }
+      {isTruncated && !isExpanded && <button className="mt-1 text-xs leading-5 text-sky-700 ml-5" onClick={() => setIsExpanded(true)}>view more</button>}
+      {isExpanded && <button className="mt-1 text-xs leading-5 text-sky-700 ml-5" onClick={() => setIsExpanded(false)}>view less</button>}
       {
         props.post.picture &&
         <CardContent className="p-1 w-[35rem] h-[35rem] ml-auto mr-auto border">

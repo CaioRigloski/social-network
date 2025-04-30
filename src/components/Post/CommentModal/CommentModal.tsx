@@ -43,7 +43,7 @@ export function CommentModal(props: CommentModalInterface) {
           <p>{props.post.commentsCount}</p>
         </div>
       </DialogTrigger>
-      <DialogContent className={`max-w-[80vw] max-w-[80vw] max-h-[95vh] ${props.post.picture ? "w-[80vw]" : "w-[40vw]"} h-[95vh] grid grid-rows-[auto_auto_auto_1fr] break-all`}>
+      <DialogContent className={`max-w-[80vw] max-w-[80vw] max-h-[95vh] ${props.post.picture ? "w-[80vw]" : "w-[40vw]"} h-[95vh] grid grid-rows-[auto_1fr_auto_auto] break-all`}>
         <DialogHeader className="flex flex-row gap-2">
           <AvatarComponent user={props.post.user}/>
           <h3>
@@ -53,15 +53,15 @@ export function CommentModal(props: CommentModalInterface) {
         <DialogTitle className="hidden">
           Post details.
         </DialogTitle>
-        <DialogDescription className="overflow-y-auto">
+        <DialogDescription className="overflow-y-auto whitespace-pre-line">
           { props.post.description }
         </DialogDescription>
-        <Separator className="col-span-none"/>
-        <div className={`grid ${props.post.picture ? "grid-cols-3" : "grid-cols-1"}  grid-rows-[auto_max-content] gap-2`}>
+        <Separator/>
+        <div className={`grid ${props.post.picture ? "grid-cols-3" : "grid-cols-1"} grid-rows-[auto_max-content] gap-2`}>
           { props.post.picture && <img alt="post picture" width={0} height={0} src={`/images/${path.posts}/${props.post.picture}.${imageFormats.posts}`} className="w-full h-full max-w-[60rem] max-h-[40rem] object-contain col-span-2 border"/> }
           {
             props.post.comments && props.post.comments.length > 0 ?
-            <div className="col-span-1 overflow-y-scroll max-h-[70vh]">
+            <div className="col-span-1 overflow-y-scroll min-h-[25vh] max-h-[25vh]">
               {
                 props.post.comments?.map(comment => <Comment key={comment.id} postId={props.post.id} comment={comment} isOwn={comment.user.id === session.data?.user?.id}/>)
               }

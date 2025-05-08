@@ -18,6 +18,12 @@ export async function GET() {
     })
     return NextResponse.json( res?.friendRequestOf, { status: 200 })
   } catch (err) {
-    throw new Error('Friend requests retrieving error')
+    return NextResponse.json(
+      {
+        error: "Friend requests retrieving error",
+        details: err instanceof Error ? err.message : "Unknown error"
+      },
+      { status: 500 }
+    )
   }
 }

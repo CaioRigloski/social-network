@@ -22,6 +22,12 @@ export async function GET(req: NextRequest) {
       return NextResponse.json(user, { status: 200 })
     }
   } catch (err) {
-    throw new Error("User retrieving error")
+    return NextResponse.json(
+      {
+        error: "User retrieving error",
+        details: err instanceof Error ? err.message : "Unknown error"
+      },
+      { status: 500 }
+    )
   }
 }

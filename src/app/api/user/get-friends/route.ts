@@ -41,6 +41,12 @@ export async function GET() {
     
     return NextResponse.json( friends, { status: 200 } )
   } catch (err) {
-    throw new Error("User's friends retrieving error")
+    return NextResponse.json(
+      {
+        error: "Error retrieving user's friends",
+        details: err instanceof Error ? err.message : "Unknown error"
+      },
+      { status: 500 }
+    )
   }
 }

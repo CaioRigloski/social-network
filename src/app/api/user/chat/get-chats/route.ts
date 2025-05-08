@@ -45,6 +45,12 @@ export async function GET() {
     
     return NextResponse.json( chats, { status: 200 })
   } catch (err) {
-    throw new Error('Chats retrieving error')
+    return NextResponse.json(
+      {
+        error: "Failed to get chats",
+        details: err instanceof Error ? err.message : "Unknown error"
+      },
+      { status: 500 }
+    )
   }
 }

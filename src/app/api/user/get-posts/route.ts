@@ -29,7 +29,7 @@ export async function GET(req: NextRequest) {
             profilePicture: user.profilePicture
           },
           description: post.description,
-          picture: post.picture,
+          picture: post.picture || "",
           comments: post.comments,
           commentsCount: post._count.comments,
           likes: post.likes,
@@ -40,6 +40,12 @@ export async function GET(req: NextRequest) {
       return NextResponse.json( modeledPosts, { status: 200 } )
     }
   } catch (err) {
-    throw new Error("User's posts retrieving error")
+    return NextResponse.json(
+      {
+        error: "Error retrieving user's posts",
+        details: err instanceof Error ? err.message : "Unknown error"
+      },
+      { status: 500 }
+    )
   }
 }

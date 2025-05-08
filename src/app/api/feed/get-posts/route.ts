@@ -72,7 +72,12 @@ export async function GET(req: Request) {
  
     return NextResponse.json( modeledPosts ) 
   } catch (err) {
-    console.log(err)
-    throw new Error("Posts retrieving error")
+    return NextResponse.json(
+      {
+        error: "Posts retrieving error",
+        details: err instanceof Error ? err.message : "Unknown error"
+      },
+      { status: 500 }
+    )
   }
 }

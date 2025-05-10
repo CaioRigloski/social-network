@@ -18,6 +18,7 @@ import Link from "next/link"
 import { FriendSuggestions } from "@/components/feed/FriendSuggestions/FriendSuggestions"
 import { AvatarComponent } from "@/components/Avatar/Avatar"
 import { API_ROUTES } from "@/lib/apiRoutes"
+import { ProfileCard } from "@/components/ProfileCard/ProfileCard"
 
 export default function Friends() {
   const friends = useSWR(API_ROUTES.user.getFriends, friendsFetcher)
@@ -54,34 +55,13 @@ export default function Friends() {
 
   return (
     <main className="h-[calc(100vh-var(--header-height)-var(--header-padding))]">
-      <Table>
-        <TableCaption>A list of your friends!</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Name</TableHead>
-            <TableHead>Since<br/>mm/dd/yyyy</TableHead>
-            <TableHead className="text-right">Action</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {
-            friends.data?.map(friend => (
-              <TableRow key={"friend" + friend.id}>
-                <TableCell>
-                  <div className="flex place-items-center gap-2 cursor-pointer w-fit">
-                    <AvatarComponent user={friend}/>
-                    <Link href={`/user/profile/${friend.id}`}>
-                      <p>{friend.username}</p>
-                    </Link>
-                  </div>
-                  </TableCell>
-                <TableCell>{friend.createdAt ? new Date(friend.createdAt).toLocaleDateString("en-US") : "No info"}</TableCell>
-                <TableCell className="text-right" onClick={() => removeFriendAndMutateFriendsData(friend.id)}><Button>Remove</Button></TableCell>
-              </TableRow>
-            ))
-          }
-        </TableBody>
-      </Table>
+      <div className="grid grid-cols-8 grid-rows-auto p-5">
+        {
+          friends.data?.map(friend => 
+            <ProfileCard key={friend.id} user={friend} rightButtonText="Remove" rightButtonAction={() => removeFriendAndMutateFriendsData(friend.id)} style={{position: "static"}}/>
+          )
+        }
+      </div>
     </main>
   )
 }

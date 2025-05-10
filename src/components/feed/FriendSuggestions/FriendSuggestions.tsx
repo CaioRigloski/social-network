@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { z } from "zod"
 import { API_ROUTES } from "@/lib/apiRoutes"
 import { Card } from "@/components/ui/card"
+import { ProfileCard } from "@/components/ProfileCard/ProfileCard"
 
 
 export function FriendSuggestions() {
@@ -34,31 +35,11 @@ export function FriendSuggestions() {
     })
   }
 
-  if (friendsSuggestions.data?.length === 0) return null
-
+  if (friendsSuggestions.data?.length === 0 || !friendsSuggestions.data?.[0]) return null
+  
   const firstUser = friendsSuggestions.data?.[0]
 
   return (
-  <Card className="h-76 w-56 rounded-md border self-start shadow-md bg-foreground text-color" style={{position: "static"}}>
-    <div className="p-4 h-full">
-      <h4 className="mb-4 text-sm font-medium leading-none">Friend suggestions</h4>
-      {
-        <div className="flex flex-col w-full items-center align-center">
-          <div className="rounded-sm h-5/6 w-5/6">
-            <img src={firstUser?.profilePicture ? firstUser.profilePicture : '/avatar.png'} alt={firstUser?.username} className="h-full w-full object-cover mix-blend-multiply"/>
-          </div>
-          <p className="max-w-full overflow-x-hidden pb-2">{firstUser?.username}</p>
-          <div className="grid grid-cols-[1fr_1fr] justify-items-center w-full">
-            <Button variant="secondary" className="w-11/12 h-fit px-2 py-1 text-xs" onClick={() => firstUser && addAndMutateFriendsSuggestions(firstUser.id)}>
-              Add friend
-            </Button>
-            <Button variant="secondary" className="w-11/12 h-fit px-2 py-1 text-xs" onClick={() => firstUser &&  ignoreAndMutateFriendsSuggestions(firstUser.id)}>
-              Ignore
-            </Button>
-          </div>
-        </div>
-      }
-    </div>
-  </Card>
+    <ProfileCard user={firstUser} leftButtonText={"Add friend"} rightButtonText={"Ignore"} leftButtonAction={() => addAndMutateFriendsSuggestions(firstUser.id)} rightButtonAction={() => ignoreAndMutateFriendsSuggestions(firstUser.id)}/>
   )
 } 

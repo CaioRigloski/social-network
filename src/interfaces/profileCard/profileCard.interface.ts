@@ -1,9 +1,11 @@
+import { HTMLAttributes } from "react";
 import UserInterface from "../feed/user.interface";
 
-export default interface profileCardInterface {
+export default interface profileCardInterface extends HTMLAttributes<HTMLDivElement> {
   user: UserInterface
-  leftButtonText: string
-  rightButtonText: string
-  leftButtonAction: () => void
-  rightButtonAction: () => void
+  cardTitle?: string
+  leftButtonText?: string
+  rightButtonText?: string
+  leftButtonAction?: () => void
+  rightButtonAction?: () => void
 }

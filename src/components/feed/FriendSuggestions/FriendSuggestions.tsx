@@ -40,6 +40,6 @@ export function FriendSuggestions() {
   const firstUser = friendsSuggestions.data?.[0]
 
   return (
-    <ProfileCard user={firstUser} leftButtonText={"Add friend"} rightButtonText={"Ignore"} leftButtonAction={() => addAndMutateFriendsSuggestions(firstUser.id)} rightButtonAction={() => ignoreAndMutateFriendsSuggestions(firstUser.id)}/>
+    <ProfileCard cardTitle="Friend suggestions" user={firstUser} leftButtonText={"Add friend"} rightButtonText={"Ignore"} leftButtonAction={() => addAndMutateFriendsSuggestions(firstUser.id)} rightButtonAction={() => ignoreAndMutateFriendsSuggestions(firstUser.id)}/>
   )
 } 

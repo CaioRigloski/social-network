@@ -39,6 +39,11 @@
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
+  .light {
+    --post: 0 0% 100%;
+    --post-color: 0 0% 0%;
+  }
+
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
@@ -72,6 +77,11 @@
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .standard {
+    --post: 192 70% 27%;
+    --post-color:  0 0% 100%;
   }
 }
 

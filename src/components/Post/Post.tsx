@@ -43,9 +43,9 @@ export function Post(props: { post: PostInterface, className?: string }) {
   }
  
   return (
-    <Card className={`${props.className} shadow-md break-all whitespace-pre-wrape`}>
-      <CardHeader className="flex flex-row rounded-t-md bg-cyan-800 text-white h-14 items-center">
-        <CardTitle className="flex items-center gap-2 text-white dark:text-sky-400/75">
+    <Card className={`${props.className} shadow-md break-all whitespace-pre-wrap text-post-color`}>
+      <CardHeader className="flex flex-row rounded-t-md bg-post h-14 items-center">
+        <CardTitle className="flex items-center gap-2">
           <AvatarComponent user={props.post.user}/>
           <Link href={ session.data?.user?.id === props.post.user.id ? "/user/profile" : `/user/profile/${props.post.user.id}`}>
             {props.post.user?.username}
@@ -84,8 +84,8 @@ export function Post(props: { post: PostInterface, className?: string }) {
         </CardContent>
       }
       <Separator/>
-      <CardFooter className="p-0 pb-4 flex flex-col rounded-b-md  bg-cyan-800 ">
-        <div className="p-1 flex flex-row gap-2 justify-end w-full ml-auto mr-auto text-white">
+      <CardFooter className="p-0 pb-4 flex flex-col rounded-b-md bg-post text-post-color ">
+        <div className="p-1 flex flex-row gap-2 justify-end w-full ml-auto mr-auto text-post-color">
           {
             props.post.picture ?
               <CommentModal isOpen={commentModalIsOpen} setIsOpen={setCommentModalIsOpen} post={props.post}/>

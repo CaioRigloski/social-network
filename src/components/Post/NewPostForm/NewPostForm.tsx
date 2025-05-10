@@ -83,24 +83,24 @@ export function NewPostForm(props: NewPostFormInterface) {
 
   return (
     <Form {...newPostForm}>
-      <form onSubmit={newPostForm.handleSubmit(async() => await mutatePostsData())} className="flex flex-col w-full items-end shadow-md p-2" onMouseEnter={() => props.element(true)} onMouseLeave={() => props.element(false)}>
+      <form onSubmit={newPostForm.handleSubmit(async() => await mutatePostsData())} className="flex flex-col w-full items-end shadow-md p-2 bg-post text-post-color rounded-md" onMouseEnter={() => props.element(true)} onMouseLeave={() => props.element(false)}>
         <FormField
           control={newPostForm.control}
           name="description"
           render={({ field }) => (
             <FormItem className="w-full">
               <FormControl>
-                <Textarea placeholder="What's on your mind?" className="resize-none focus:!ring-transparent" {...field}/>
+                <Textarea placeholder="What's on your mind?" className="resize-none focus:!ring-transparent text-black rounded-sm" {...field}/>
               </FormControl>
             </FormItem>
           )}
         />
-        <div>
-          <Button type="button" variant="ghost" className="w-fit place-self-end p-2" title="Add image" onClick={openFileDialog}>
-            <ImageIcon width={25} height={25} />
+        <div className="pt-2">
+          <Button type="button" variant="ghost" className="w-fit h-fit place-self-end p-1" title="Add image" onClick={openFileDialog}>
+            <ImageIcon width={22} height={22} />
           </Button>
-          <Button type="submit" variant="ghost" className="w-fit place-self-end p-2">
-            <PaperPlaneIcon width={25} height={25} />
+          <Button type="submit" variant="ghost" className="w-fit h-fit place-self-end p-1">
+            <PaperPlaneIcon width={22} height={22} />
           </Button>
         </div>
         
@@ -109,7 +109,6 @@ export function NewPostForm(props: NewPostFormInterface) {
           name="picture"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Picture</FormLabel>
               <FormControl>
                 <input type="file" accept="image/*" {...field} ref={fileInputRef} onChange={e => handleImageChange(e)} className="hidden"/>
               </FormControl>

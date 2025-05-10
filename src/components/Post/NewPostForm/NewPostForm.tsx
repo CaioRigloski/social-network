@@ -83,7 +83,7 @@ export function NewPostForm(props: NewPostFormInterface) {
 
   return (
     <Form {...newPostForm}>
-      <form onSubmit={newPostForm.handleSubmit(async() => await mutatePostsData())} className="flex flex-col w-full items-end shadow-md p-2 bg-post text-post-color rounded-md" onMouseEnter={() => props.element(true)} onMouseLeave={() => props.element(false)}>
+      <form onSubmit={newPostForm.handleSubmit(async() => await mutatePostsData())} className="flex flex-col w-full items-end shadow-md p-2 bg-foreground text-color rounded-md" onMouseEnter={() => props.element(true)} onMouseLeave={() => props.element(false)}>
         <FormField
           control={newPostForm.control}
           name="description"

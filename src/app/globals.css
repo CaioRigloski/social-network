@@ -40,8 +40,8 @@
   }
 
   .light {
-    --post: 0 0% 100%;
-    --post-color: 0 0% 0%;
+    --foreground: 0 0% 100%;
+    --color: 0 0% 0%;
   }
 
   .dark {
@@ -80,8 +80,8 @@
   }
 
   .standard {
-    --post: 192 70% 27%;
-    --post-color:  0 0% 100%;
+    --foreground: 192 70% 27%;
+    --color: 0 0% 100%;
   }
 }
 

@@ -75,13 +75,13 @@ export default function Header() {
   }
 
   return (
-    <header className="flex flex-row-reverse place-content-around after:content-[''] after:flex-1 *:flex-1 items-end p-4 w-auto min-w-screen sticky top-0 z-50 shadow-md hover:bg-white backdrop-blur-sm">
+    <header className="flex flex-row-reverse place-content-around after:content-[''] after:flex-1 *:flex-1 items-end p-4 w-auto min-w-screen sticky top-0 z-50 shadow-md backdrop-blur-sm standard:bg-foreground text-color">
       <div className="relative flex gap-x-4 justify-center">
         <div className="text-sm leading-6">
           <div  className="flex items-center gap-x-2">
             {session.data?.user && <AvatarComponent user={session.data.user}/>}
             <Link href="/user/profile">
-              <p className="font-semibold text-gray-900">
+              <p className="font-semibold text-color">
                   {session.status === "authenticated" && session.data.user?.username}
               </p>
             </Link>
@@ -96,13 +96,13 @@ export default function Header() {
       <NavigationMenu>
         <NavigationMenuList>
           <NavigationMenuItem>
-            <NavigationMenuLink href="/feed" className={navigationMenuTriggerStyle()}>Feed</NavigationMenuLink>
+            <NavigationMenuLink href="/feed" className={`${navigationMenuTriggerStyle()} text-color bg-foreground`}>Feed</NavigationMenuLink>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <NavigationMenuLink href="/user/friends" className={navigationMenuTriggerStyle()}>Friends list</NavigationMenuLink>
+            <NavigationMenuLink href="/user/friends" className={`${navigationMenuTriggerStyle()} text-color bg-foreground`}>Friends list</NavigationMenuLink>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <NavigationMenuTrigger disabled={friendRequests.data?.length === 0}>
+            <NavigationMenuTrigger disabled={friendRequests.data?.length === 0} className="text-color bg-foreground">
               <p>Friend requests</p>
               <NotificationCount count={friendRequests.data ? friendRequests.data.length : 0}></NotificationCount>
             </NavigationMenuTrigger>
@@ -114,7 +114,7 @@ export default function Header() {
                       <div className="flex place-items-center gap-2">
                         <AvatarComponent user={user}/>
                         <Link href={`/user/profile/${user.id}`}>
-                          <p>{user.username}</p>
+                          <p className="text-color">{user.username}</p>
                         </Link>
                       </div>
                       <button title="Accept request" onClick={() => mutateFriendAndPostDatas(user.id)} className="flex items-center justify-center bg-white hover:bg-white rounded-full">

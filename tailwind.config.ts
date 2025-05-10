@@ -25,9 +25,10 @@ const config = {
   			ring: 'hsl(var(--ring))',
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
+        color: 'hsl(var(--color))',
   			primary: {
   				DEFAULT: 'hsl(var(--primary))',
-  				foreground: 'hsl(var(--primary-foreground))'
+  				foreground: 'hsl(var(--primary-foreground))',
   			},
   			secondary: {
   				DEFAULT: 'hsl(var(--secondary))',
@@ -62,11 +63,7 @@ const config = {
   				'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
   				border: 'hsl(var(--sidebar-border))',
   				ring: 'hsl(var(--sidebar-ring))'
-  			},
-        post: {
-          DEFAULT: 'hsl(var(--post))',
-          color: 'hsl(var(--post-color))',
-        }
+  			}
   		},
   		borderRadius: {
   			lg: 'var(--radius)',
@@ -99,7 +96,7 @@ const config = {
   },
   plugins: [
 		require("tailwindcss-animate"),
-		function ({ addComponents }: PluginAPI) {
+		function ({ addComponents, addVariant }: PluginAPI) {
 			addComponents({
 				'.comment-line-limit': {
           display: '-webkit-box',
@@ -116,7 +113,8 @@ const config = {
         '.hide-scrollbar::-webkit-scrollbar': {
           display: 'none',
         }
-			})
+			}),
+      addVariant('standard', '.standard &')
 		}
 	],
 } satisfies Config

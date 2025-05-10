@@ -19,7 +19,7 @@ export function ChatAccordion() {
   }
 
   return (
-    <Accordion type="single" collapsible className="w-[20rem] shadow-md">
+    <Accordion type="single" collapsible className="w-[20rem] shadow-md bg-foreground text-color">
       <AccordionItem value="item-1">
         <AccordionTrigger className="p-4">Lets talk to someone?</AccordionTrigger>
         <AccordionContent className="">

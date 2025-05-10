@@ -218,7 +218,7 @@ export function Chat() {
       {
         chat &&
           <div key={chat.id}>
-            <header className="grid grid-cols-2 text-left text-sm leading-tight truncate font-semibold bg-gray-800 p-3 text-white rounded-t-xl">
+            <header className="grid grid-cols-2 text-left text-sm leading-tight truncate font-semibold bg-secondary-foreground p-3 text-color rounded-t-xl">
               <div className="text-sm leading-6 text-black">
                 <div className="flex items-center gap-x-2">
                 {

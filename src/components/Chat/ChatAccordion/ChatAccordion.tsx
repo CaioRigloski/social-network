@@ -30,7 +30,7 @@ export function ChatAccordion() {
             <ScrollArea className="h-[20rem]">
             {
               friends.data?.map(friend => (
-                  <button key={friend.id} onClick={() => newChat(friend)} className="flex items-center p-2 justify-start gap-3 justify-self-start hover:bg-sidebar-accent hover:text-sidebar-accent-foreground w-full">
+                  <button key={friend.id} onClick={() => newChat(friend)} className="flex items-center p-2 justify-start gap-3 justify-self-start hover:bg-primary-foreground hover:text-color-secondary w-11/12 rounded-lg justify-self-center">
                     <AvatarComponent user={friend}/>
                     <p>{friend.username}</p>
                   </button>

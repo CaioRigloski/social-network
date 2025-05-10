@@ -68,8 +68,8 @@ export default function Feed() {
         }
         {
           postsData.data?.length === 0 && !postsData.error &&
-          <Alert>
-            <AlertTitle>:&#41;</AlertTitle>
+          <Alert className="bg-foreground text-color">
+            <AlertTitle>:&#40;</AlertTitle>
             <AlertDescription>
               There&apos;s no posts. Make friends and add some posts!
             </AlertDescription>
@@ -77,8 +77,8 @@ export default function Feed() {
         }
         {
           postsData.error &&
-          <Alert>
-            <AlertTitle>:&#41;</AlertTitle>
+          <Alert className="bg-foreground text-color">
+            <AlertTitle>:&#40;</AlertTitle>
             <AlertDescription>
               Error. Please contact the administrator.
             </AlertDescription>

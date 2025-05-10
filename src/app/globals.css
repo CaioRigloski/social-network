@@ -42,6 +42,9 @@
   .light {
     --foreground: 0 0% 100%;
     --color: 0 0% 0%;
+    --secondary-color: 0 0% 100%;
+    --primary-foreground: 216, 13.12%, 84%;
+    --secondary-foreground: 214.99, 30.99%, 16.95%
   }
 
   .dark {
@@ -82,6 +85,8 @@
   .standard {
     --foreground: 192 70% 27%;
     --color: 0 0% 100%;
+    --secondary-color: 0 0% 0%;
+    --secondary-foreground: 203, 19%, 23.7%;
   }
 }
 

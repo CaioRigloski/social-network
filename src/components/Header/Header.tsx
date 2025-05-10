@@ -107,10 +107,10 @@ export default function Header() {
               <NotificationCount count={friendRequests.data ? friendRequests.data.length : 0}></NotificationCount>
             </NavigationMenuTrigger>
             <NavigationMenuContent>
-              <ul className="gap-3 p-3 md:w-[400px] lg:w-[500px]">
+              <ul className="gap-3 p-3 md:w-[400px] lg:w-[400px] bg-foreground h-max-[500px]">
                 {
                   friendRequests?.data?.map(user =>
-                    <li key={"request" + user.id} className="grid grid-cols-[80%_auto] grid-rows-[auto_auto] gap-5 w-full h-full justify-center items-center p-3 pb-0 rounded-lg hover:bg-gray-200 cursor-pointer transition-colors">
+                    <li key={"request" + user.id} className="grid grid-cols-[80%_auto] grid-rows-[auto_auto] p-0 gap-5 w-full h-[3rem] justify-center items-center align-center rounded-lg hover:bg-gray-200 cursor-pointer transition-colors">
                       <div className="flex place-items-center gap-2">
                         <AvatarComponent user={user}/>
                         <Link href={`/user/profile/${user.id}`}>
@@ -120,7 +120,6 @@ export default function Header() {
                       <button title="Accept request" onClick={() => mutateFriendAndPostDatas(user.id)} className="flex items-center justify-center bg-white hover:bg-white rounded-full">
                         <CheckIcon className="w-5 h-5 hover:text-green-500"/>
                       </button>
-                      <Separator className="col-span-2"/>
                     </li>
                   )
                 }

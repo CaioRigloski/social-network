@@ -75,7 +75,7 @@ export default function Header() {
   }
 
   return (
-    <header className="flex flex-row-reverse place-content-around after:content-[''] after:flex-1 *:flex-1 items-end p-4 w-auto min-w-screen sticky top-0 z-50 shadow-md backdrop-blur-sm standard:bg-foreground text-color">
+    <header className="flex flex-row-reverse place-content-around after:content-[''] after:flex-1 *:flex-1 items-end w-auto min-w-screen sticky top-0 z-50 shadow-md backdrop-blur-sm standard:bg-foreground text-color h-[var(--header-height)] p-[var(--header-padding)]">
       <div className="relative flex gap-x-4 justify-center">
         <div className="text-sm leading-6">
           <div  className="flex items-center gap-x-2">

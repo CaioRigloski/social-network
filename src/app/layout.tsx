@@ -23,7 +23,7 @@ export default async function RootLayout({
   
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`${inter.className} standard min-h-screen`}>
         <SessionProvider session={session} key={session?.user?.id || null}>
           <ChatProvider>
             {session?.user && <Header/>}

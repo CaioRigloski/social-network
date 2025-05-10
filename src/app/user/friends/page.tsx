@@ -53,33 +53,35 @@ export default function Friends() {
   }
 
   return (
-    <Table>
-      <TableCaption>A list of your friends!</TableCaption>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Name</TableHead>
-          <TableHead>Since<br/>mm/dd/yyyy</TableHead>
-          <TableHead className="text-right">Action</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {
-          friends.data?.map(friend => (
-            <TableRow key={"friend" + friend.id}>
-              <TableCell>
-                <div className="flex place-items-center gap-2 cursor-pointer w-fit">
-                  <AvatarComponent user={friend}/>
-                  <Link href={`/user/profile/${friend.id}`}>
-                    <p>{friend.username}</p>
-                  </Link>
-                </div>
-                </TableCell>
-              <TableCell>{friend.createdAt ? new Date(friend.createdAt).toLocaleDateString("en-US") : "No info"}</TableCell>
-              <TableCell className="text-right" onClick={() => removeFriendAndMutateFriendsData(friend.id)}><Button>Remove</Button></TableCell>
-            </TableRow>
-          ))
-        }
-      </TableBody>
-    </Table>
+    <main className="h-[calc(100vh-var(--header-height)-var(--header-padding))]">
+      <Table>
+        <TableCaption>A list of your friends!</TableCaption>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Name</TableHead>
+            <TableHead>Since<br/>mm/dd/yyyy</TableHead>
+            <TableHead className="text-right">Action</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {
+            friends.data?.map(friend => (
+              <TableRow key={"friend" + friend.id}>
+                <TableCell>
+                  <div className="flex place-items-center gap-2 cursor-pointer w-fit">
+                    <AvatarComponent user={friend}/>
+                    <Link href={`/user/profile/${friend.id}`}>
+                      <p>{friend.username}</p>
+                    </Link>
+                  </div>
+                  </TableCell>
+                <TableCell>{friend.createdAt ? new Date(friend.createdAt).toLocaleDateString("en-US") : "No info"}</TableCell>
+                <TableCell className="text-right" onClick={() => removeFriendAndMutateFriendsData(friend.id)}><Button>Remove</Button></TableCell>
+              </TableRow>
+            ))
+          }
+        </TableBody>
+      </Table>
+    </main>
   )
 }

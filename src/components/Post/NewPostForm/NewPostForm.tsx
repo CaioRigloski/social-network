@@ -30,7 +30,6 @@ export function NewPostForm(props: NewPostFormInterface) {
 
   async function mutatePostsData() {
     try {
-      
       const newPostData = await createNewPost({
         picture: newPostForm.getValues("picture"),
         description: newPostForm.getValues("description")
@@ -83,6 +82,11 @@ export function NewPostForm(props: NewPostFormInterface) {
     }
   }, [newPostForm.formState.errors.description, newPostForm.formState.errors.picture])
 
+  const description = newPostForm.watch("description")
+  const picture = newPostForm.watch("picture")
+
+  const isSubmitDisabled = !description && !picture
+
   return (
     <Form {...newPostForm}>
       <form onSubmit={newPostForm.handleSubmit(async() => await mutatePostsData())} className="flex flex-col w-full items-end shadow-md p-2 bg-foreground text-color rounded-md" onMouseEnter={() => props.element(true)} onMouseLeave={() => props.element(false)}>
@@ -102,7 +106,7 @@ export function NewPostForm(props: NewPostFormInterface) {
           <Button type="button" variant="ghost" className="w-fit h-fit place-self-end p-1" title="Add image" onClick={openFileDialog}>
             <ImageIcon width={22} height={22} />
           </Button>
-          <Button type="submit" variant="ghost" className="w-fit h-fit place-self-end p-1">
+          <Button type="submit" variant="ghost" className="w-fit h-fit place-self-end p-1" disabled={isSubmitDisabled} title="Publish post">
             <PaperPlaneIcon width={22} height={22} />
           </Button>
         </div>

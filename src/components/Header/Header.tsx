@@ -28,8 +28,11 @@ import { AvatarComponent } from "../Avatar/Avatar"
 import { API_ROUTES } from "@/lib/apiRoutes"
 import { toast } from "sonner"
 import { Input } from "../ui/input"
-import { SearchIcon } from "lucide-react"
+import { FilterIcon, SearchIcon } from "lucide-react"
 import { Button } from "../ui/button"
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
+import { Switch } from "../ui/switch"
+import { Separator } from "../ui/separator"
 
 
 export default function Header() {
@@ -133,9 +136,31 @@ export default function Header() {
           <NavigationMenuItem>
             <div className="relative">
               <Input type="text" placeholder="Search" className="w-64 h-8 outline-none border-foreground border-[1.5px] focus:border-2 text-color-secondary" style={{ boxShadow: "revert" }}/>
-              <Button type="button" className="absolute right-2 top-1/2 -translate-y-1/2 bg-transparent h-fit w-fit p-0 m-0 hover:bg-transparent">
-                <SearchIcon width={22} height={22} className="text-foreground hover:text-color-secondary" />
-              </Button>
+              <div className="absolute right-2 top-1/2 -translate-y-1/2 h-fit leading-none">
+                <Button type="button" className="bg-transparent h-fit w-fit p-0 m-0 hover:bg-transparent">
+                  <SearchIcon width={22} height={22} className="text-foreground hover:text-color-secondary" />
+                </Button>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button type="button" className="bg-transparent h-fit w-fit p-0 m-0 hover:bg-transparent">
+                      <FilterIcon width={22} height={22} className="text-foreground hover:text-color-secondary" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="text-sm w-36 p-3">
+                    <ul className="flex flex-col gap-2">
+                      <li className="grid grid-cols-2 place-items-center">
+                        <p>Posts</p>
+                        <Switch size={"sm"} className="data-[state=checked]:!bg-foreground"/>
+                      </li>
+                      <Separator />
+                      <li className="grid grid-cols-2 place-items-center">
+                        <p>Users</p>
+                        <Switch size={"sm"} className="data-[state=checked]:!bg-foreground"/>
+                      </li>
+                    </ul>
+                  </PopoverContent>
+                </Popover>
+              </div>
             </div>
           </NavigationMenuItem>
         </NavigationMenuList>

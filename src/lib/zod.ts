@@ -103,3 +103,16 @@ export const deleteMessageSchema = z.object({
 export const deleteChatSchema = z.object({
   chatId: z.string()
 })
+
+
+export const searchSchema = z.object({
+  query: z.string().min(1, "Search term is required"),
+  posts: z.boolean().optional(),
+  users: z.boolean().optional(),
+}).refine(data =>
+  data.posts || data.users,
+  {
+    message: "You must select at least one search type.",
+    path: ["posts"]
+  }
+)

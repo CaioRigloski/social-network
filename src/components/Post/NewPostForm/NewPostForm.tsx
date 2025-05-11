@@ -25,17 +25,14 @@ export function NewPostForm(props: NewPostFormInterface) {
   const fileInputRef = useRef<HTMLInputElement>(null)
   
   const newPostForm = useForm<z.infer<typeof newPostSchema>>({
-    resolver: zodResolver(newPostSchema),
-    defaultValues: {
-      picture: "",
-      description: ""
-    }
+    resolver: zodResolver(newPostSchema)
   })
 
   async function mutatePostsData() {
     try {
+      
       const newPostData = await createNewPost({
-        picture: inputImage ? await toDataUrl(inputImage as File) : null,
+        picture: newPostForm.getValues("picture"),
         description: newPostForm.getValues("description")
       })
 
@@ -64,13 +61,15 @@ export function NewPostForm(props: NewPostFormInterface) {
     }
   }
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  async function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
     if (file && file.type.startsWith('image/')) {
       setInputImage(file)
+      newPostForm.setValue("picture", await toDataUrl(file))
       props.onImageSelected(true)
     } else {
       setInputImage(undefined)
+      newPostForm.setValue("picture", "")
       props.onImageSelected(false)
     }
   }
@@ -95,6 +94,7 @@ export function NewPostForm(props: NewPostFormInterface) {
             </FormItem>
           )}
         />
+        
         <div className="pt-2">
           <Button type="button" variant="ghost" className="w-fit h-fit place-self-end p-1" title="Add image" onClick={openFileDialog}>
             <ImageIcon width={22} height={22} />
@@ -110,12 +110,12 @@ export function NewPostForm(props: NewPostFormInterface) {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <input type="file" accept="image/*" {...field} ref={fileInputRef} onChange={e => handleImageChange(e)} className="hidden"/>
+                <input type="file" accept="image/*" ref={fileInputRef} onChange={handleImageChange} className="hidden"/>
               </FormControl>
             </FormItem>
           )}
         />
-        {inputImage && <Image src={URL.createObjectURL(inputImage)} width={500} height={500} alt="image" className="w-auto h-auto"/>}
+        { inputImage && <Image src={URL.createObjectURL(inputImage)} width={500} height={500} alt="image" className="w-auto h-auto"/> }
         <FormMessage/>
       </form>
     </Form>

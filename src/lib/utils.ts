@@ -20,12 +20,20 @@ export const imageFormats = {
   profilePicture: "jpeg"
 }
 
-export const toDataUrl = (file: File) => new Promise((resolve, reject) => {
-  const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = reject;
-})
+export function toDataUrl(file:File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = () => {
+      if (typeof reader.result === "string") {
+        resolve(reader.result);
+      } else {
+        reject(new Error("Failed to convert file to data URL"));
+      }
+    }
+    reader.onerror = reject
+  })
+}
 
 export function base64toBytes(picture: string) {
   return atob(Buffer.from(picture, 'base64').toString('latin1'))

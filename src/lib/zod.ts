@@ -15,9 +15,17 @@ export const loginSchema = z.object({
 })
 
 export const newPostSchema = z.object({
-  picture: z.any().refine(file => "image/".includes(file)).optional(),
+  picture: z.string().refine((val) => !val || val.startsWith("data:image/"), {
+    message: "The file must be a valid image",
+  }).optional(),
   description: z.string().max(500, "Description must have a maximum of 500 characters").optional()
-})
+}).refine(data =>
+  data.picture || data.description,
+  {
+    message: "You must provide either a picture or a description.",
+    path: ["description"]
+  }
+)
 
 export const deletePostSchema = z.object({
   postId: z.string(),

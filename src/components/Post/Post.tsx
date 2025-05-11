@@ -71,12 +71,12 @@ export function Post(props: { post: PostInterface, className?: string }) {
       </CardHeader>
       {
         props.post.description &&
-        <CardDescription ref={textRef} className={`${isExpanded && "block"} p-5 comment-line-limit pb-1`}>
+        <CardDescription ref={textRef} className={`${isExpanded && "block"} ${!props.post.picture && "min-h-32"} p-5 comment-line-limit pb-1`}>
           { props.post.description }
         </CardDescription>
       }
-      {isTruncated && !isExpanded && <button className="mt-1 text-xs leading-5 text-sky-700 ml-5" onClick={() => setIsExpanded(true)}>view more</button>}
-      {isExpanded && <button className="mt-1 text-xs leading-5 text-sky-700 ml-5" onClick={() => setIsExpanded(false)}>view less</button>}
+      { isTruncated && !isExpanded && <button className="mt-1 text-xs leading-5 text-sky-700 ml-5" onClick={() => setIsExpanded(true)}>view more</button> }
+      { isExpanded && <button className="mt-1 text-xs leading-5 text-sky-700 ml-5" onClick={() => setIsExpanded(false)}>view less</button> }
       {
         props.post.picture &&
         <CardContent className="p-1 w-[35rem] h-[35rem] ml-auto mr-auto border">

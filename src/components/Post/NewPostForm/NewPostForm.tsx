@@ -40,7 +40,10 @@ export function NewPostForm(props: NewPostFormInterface) {
         if (data && newPostData) return [newPostData, ...data]
       }, false)
 
-      newPostForm.reset()
+      newPostForm.reset({
+        description: "",
+        picture: ""
+      })
       setInputImage(undefined)
       props.onImageSelected(false)
 

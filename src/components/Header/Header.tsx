@@ -24,7 +24,6 @@ import { signOutAction } from "@/app/user/sign-out/actions"
 import UserInterface from "@/interfaces/feed/user.interface"
 import { usePathname, useRouter } from "next/navigation"
 import { CheckIcon, ExitIcon } from "@radix-ui/react-icons"
-import { Separator } from "../ui/separator"
 import { AvatarComponent } from "../Avatar/Avatar"
 import { API_ROUTES } from "@/lib/apiRoutes"
 import { toast } from "sonner"
@@ -74,6 +73,8 @@ export default function Header() {
     }
   }
 
+  const isFriendRequestsTriggerDisabled = !friendRequests.data || friendRequests.data.length === 0
+
   return (
     <header className="flex flex-row-reverse place-content-around after:content-[''] after:flex-1 *:flex-1 items-end w-auto min-w-screen sticky top-0 z-50 shadow-md backdrop-blur-sm standard:bg-foreground text-color h-[var(--header-height)] p-[var(--header-padding)]">
       <div className="relative flex gap-x-4 justify-center">
@@ -102,7 +103,7 @@ export default function Header() {
             <NavigationMenuLink href="/user/friends" className={`${navigationMenuTriggerStyle()} text-color bg-foreground`}>Friends list</NavigationMenuLink>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <NavigationMenuTrigger disabled={friendRequests.data?.length === 0} className="text-color bg-foreground">
+            <NavigationMenuTrigger disabled={isFriendRequestsTriggerDisabled} className="text-color bg-foreground">
               <p>Friend requests</p>
               <NotificationCount count={friendRequests.data ? friendRequests.data.length : 0}></NotificationCount>
             </NavigationMenuTrigger>

@@ -1,6 +1,7 @@
 import profileCardInterface from "@/interfaces/profileCard/profileCard.interface";
 import { Button } from "../ui/button";
 import { Card } from "../ui/card";
+import Link from "next/link";
 
 export function ProfileCard(props: profileCardInterface, ref: React.Ref<HTMLDivElement>) {
   return (
@@ -10,9 +11,13 @@ export function ProfileCard(props: profileCardInterface, ref: React.Ref<HTMLDivE
           {
             <div className="flex flex-col w-full items-center align-center">
               <div className="rounded-sm h-5/6 w-5/6">
-                <img src={props.user.profilePicture ? props.user.profilePicture : '/avatar.png'} alt={props.user.username} className="h-full w-full object-cover mix-blend-multiply"/>
+                <Link href={`/user/profile/${props.user.id}`}>
+                  <img src={props.user.profilePicture ? props.user.profilePicture : '/avatar.png'} alt={props.user.username} className="h-full w-full object-cover mix-blend-multiply"/>
+                </Link>
               </div>
-              <p className="max-w-full overflow-x-hidden pb-2">{props.user.username}</p>
+              <Link href={`/user/profile/${props.user.id}`}>
+                <p className="max-w-full overflow-x-hidden pb-2">{props.user.username}</p>
+              </Link>
               <div className={`grid ${props.leftButtonText && props.rightButtonText ? "grid-cols-[1fr_1fr]" : "grid-cols-1"} justify-items-center w-full`}>
                 {
                   props.leftButtonText && props.leftButtonAction &&

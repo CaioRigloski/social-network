@@ -18,10 +18,29 @@ import Link from "next/link"
 import { FriendSuggestions } from "@/components/feed/FriendSuggestions/FriendSuggestions"
 import { AvatarComponent } from "@/components/Avatar/Avatar"
 import { API_ROUTES } from "@/lib/apiRoutes"
+import { ProfileCard } from "@/components/ProfileCard/ProfileCard"
+import { ChangeEvent, useEffect, useState } from "react"
+import UserInterface from "@/interfaces/feed/user.interface"
+import { Input } from "@/components/ui/input"
 
 export default function Friends() {
   const friends = useSWR(API_ROUTES.user.getFriends, friendsFetcher)
+  const [filteredFriends, setFilteredFriends] = useState<UserInterface[] | undefined>(friends.data)
+  const [search, setSearch] = useState<string>("")
  
+  useEffect(() => {
+    setFilteredFriends(friends.data)
+  }, [friends.data])
+
+  function handleSearch(e: ChangeEvent<HTMLInputElement>) {
+    setSearch(e.target.value)
+    if(e.target.value.length > 0) {
+      setFilteredFriends(friends.data?.filter(friend => friend.username.toLowerCase().includes(e.target.value.toLowerCase())))
+    } else {
+      setFilteredFriends(friends.data)
+    }
+  }
+
   if(friends.data?.length === 0) {
     return (
       <div className="grid justify-items-center">
@@ -53,33 +72,17 @@ export default function Friends() {
   }
 
   return (
-    <Table>
-      <TableCaption>A list of your friends!</TableCaption>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Name</TableHead>
-          <TableHead>Since<br/>mm/dd/yyyy</TableHead>
-          <TableHead className="text-right">Action</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
+    <main className="h-[calc(100vh-var(--header-height)-var(--header-padding))]">
+      <div className="place-items-left pt-5 px-5">
+        <Input type="text" placeholder="Search friends" className="w-64 h-8 outline-none focus-visible:ring-transparent focus:border-2 border-foreground border-[1.5px]" value={search} onChange={handleSearch}/>
+      </div>
+      <div className="grid grid-cols-8 grid-rows-auto p-5">
         {
-          friends.data?.map(friend => (
-            <TableRow key={"friend" + friend.id}>
-              <TableCell>
-                <div className="flex place-items-center gap-2 cursor-pointer w-fit">
-                  <AvatarComponent user={friend}/>
-                  <Link href={`/user/profile/${friend.id}`}>
-                    <p>{friend.username}</p>
-                  </Link>
-                </div>
-                </TableCell>
-              <TableCell>{friend.createdAt ? new Date(friend.createdAt).toLocaleDateString("en-US") : "No info"}</TableCell>
-              <TableCell className="text-right" onClick={() => removeFriendAndMutateFriendsData(friend.id)}><Button>Remove</Button></TableCell>
-            </TableRow>
-          ))
+          filteredFriends?.map(friend => 
+            <ProfileCard key={friend.id} user={friend} rightButtonText="Remove" rightButtonAction={() => removeFriendAndMutateFriendsData(friend.id)} style={{position: "static"}}/>
+          )
         }
-      </TableBody>
-    </Table>
+      </div>
+    </main>
   )
 }

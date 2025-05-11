@@ -39,6 +39,12 @@ export async function GET() {
 
     return NextResponse.json( suggestions )
   } catch (err) {
-    throw new Error("Friend suggestions retrieving error")
+    return NextResponse.json(
+      {
+        error: "Friend suggestions retrieving error",
+        details: err instanceof Error ? err.message : "Unknown error"
+      },
+      { status: 500 }
+    )
   }
 }

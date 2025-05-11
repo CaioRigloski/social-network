@@ -15,18 +15,26 @@ export const loginSchema = z.object({
 })
 
 export const newPostSchema = z.object({
-  picture: z.any().refine(file => "image/".includes(file)),
-  description: z.string().optional()
-})
+  picture: z.string().refine((val) => !val || val.startsWith("data:image/"), {
+    message: "The file must be a valid image",
+  }).optional(),
+  description: z.string().max(500, "Description must have a maximum of 500 characters").optional()
+}).refine(data =>
+  data.picture || data.description,
+  {
+    message: "You must provide either a picture or a description.",
+    path: ["description"]
+  }
+)
 
 export const deletePostSchema = z.object({
   postId: z.string(),
-  imageName: z.string()
+  imageName: z.string().optional()
 })
 
 export const newCommentSchema = z.object({
   postId: z.string(),
-  text: z.string()
+  text: z.string().max(500, "Comment must have a maximum of 500 characters")
 })
 
 export const deleteCommentSchema = z.object({
@@ -35,7 +43,7 @@ export const deleteCommentSchema = z.object({
 
 export const editCommentSchema = z.object({
   commentId: z.string(),
-  text: z.string()
+  text: z.string().max(500, "Comment must have a maximum of 500 characters")
 })
 
 export const newLikeSchema = z.object({
@@ -78,14 +86,14 @@ export const updateChatSchema = z.object({
 })
 
 export const newMessageSchema = z.object({
-  text: z.string().optional(),
+  text: z.string().max(500, "Message must have a maximum of 500 characters"),
   friendId: z.string(),
   chat: chatSchema.optional()
 })
 
 export const editMessageSchema = z.object({
   messageId: z.string(),
-  text: z.string()
+  text: z.string().max(500, "Message must have a maximum of 500 characters")
 })
 
 export const deleteMessageSchema = z.object({

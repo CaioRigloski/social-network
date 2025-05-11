@@ -7,7 +7,6 @@ import { useEffect, useRef, useState } from "react"
 import { detectEnterKey } from "@/lib/utils"
 import { deleteMessage, editMessage } from "@/components/Chat/actions"
 import { SocketEvent } from "@/types/socket/event.type"
-//import { socket } from "@/socket"
 import { ReceiveMessage } from "@/interfaces/socket/data/receiveMessage.interface"
 import { Separator } from "../ui/separator"
 import { ScrollArea } from "../ui/scroll-area"
@@ -15,8 +14,7 @@ import { Cross1Icon, PaperPlaneIcon } from "@radix-ui/react-icons"
 import { Button } from "../ui/button"
 import { MoreVertical } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu"
-import useSWR, { mutate } from "swr"
-import ChatInterface from "@/interfaces/chat/chat.interface"
+import useSWR from "swr"
 import { Dialog,  DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from "../ui/dialog"
 import MessageInterface from "@/interfaces/chat/message.interface"
 import updateChat from "@/components/Chat/actions"
@@ -220,7 +218,7 @@ export function Chat() {
       {
         chat &&
           <div key={chat.id}>
-            <header className="grid grid-cols-2 text-left text-sm leading-tight truncate font-semibold bg-gray-800 p-3 text-white rounded-t-xl">
+            <header className="grid grid-cols-2 text-left text-sm leading-tight truncate font-semibold bg-secondary-foreground p-3 text-color rounded-t-xl">
               <div className="text-sm leading-6 text-black">
                 <div className="flex items-center gap-x-2">
                 {
@@ -288,7 +286,7 @@ export function Chat() {
             </ScrollArea>
             <Separator className="w-[95%] justify-self-center mb-2"/>
             <div className="flex flex-row gap-2 p-2 items-center justify-center">
-              <Textarea value={inputValue} onChange={e => setInputValue(e.target.value)} onKeyDown={e => detectEnterKey(e) && sendMessage()} className="resize-none focus:!ring-transparent border border-2 gray-100 w-[90%] justify-self-center scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-100" placeholder="Type here..."/>
+              <Textarea value={inputValue} onChange={e => setInputValue(e.target.value)} onKeyDown={e => detectEnterKey(e) && sendMessage()} className="resize-none focus:!ring-transparent border border-2 gray-100 w-[90%] justify-self-center scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-100" placeholder="Type here..." maxLength={500}/>
               <Button variant="ghost" onClick={() => sendMessage()} className="p-2">
                 <PaperPlaneIcon width={20} height={20}/>
               </Button>
@@ -305,7 +303,7 @@ export function Chat() {
               Edit your message to perfection.
             </DialogDescription>
           </DialogHeader>
-          <Textarea defaultValue={messageToEdit?.text} onChange={e => setEditedMessage(e.target.value)}/>
+          <Textarea defaultValue={messageToEdit?.text} onChange={e => setEditedMessage(e.target.value)} maxLength={500}/>
           <DialogFooter>
             <Button onClick={(() => saveMessageEdit())}>
               Save

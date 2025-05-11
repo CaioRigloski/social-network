@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import Image from "next/image"
 import { z } from "zod"
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { toDataUrl } from "@/lib/utils"
 import { mutate } from "swr"
 import PostInterface from "@/interfaces/post/post.interface"
@@ -23,19 +23,15 @@ import { toast } from "sonner"
 export function NewPostForm(props: NewPostFormInterface) {
   const [ inputImage, setInputImage ] = useState<File | undefined>(undefined)
   const fileInputRef = useRef<HTMLInputElement>(null)
-
+  
   const newPostForm = useForm<z.infer<typeof newPostSchema>>({
-    resolver: zodResolver(newPostSchema),
-    defaultValues: {
-      picture: "",
-      description: ""
-    }
+    resolver: zodResolver(newPostSchema)
   })
 
   async function mutatePostsData() {
     try {
       const newPostData = await createNewPost({
-        picture: await toDataUrl(inputImage as File),
+        picture: newPostForm.getValues("picture"),
         description: newPostForm.getValues("description")
       })
 
@@ -43,7 +39,10 @@ export function NewPostForm(props: NewPostFormInterface) {
         if (data && newPostData) return [newPostData, ...data]
       }, false)
 
-      newPostForm.reset()
+      newPostForm.reset({
+        description: "",
+        picture: ""
+      })
       setInputImage(undefined)
       props.onImageSelected(false)
 
@@ -64,37 +63,51 @@ export function NewPostForm(props: NewPostFormInterface) {
     }
   }
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  async function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
     if (file && file.type.startsWith('image/')) {
       setInputImage(file)
+      newPostForm.setValue("picture", await toDataUrl(file))
       props.onImageSelected(true)
     } else {
       setInputImage(undefined)
+      newPostForm.setValue("picture", "")
       props.onImageSelected(false)
     }
   }
 
+  useEffect(() => {
+    if(newPostForm.formState.errors) {
+      toast(newPostForm.formState.errors.picture?.message?.toString() || newPostForm.formState.errors.description?.message?.toString())
+    }
+  }, [newPostForm.formState.errors.description, newPostForm.formState.errors.picture])
+
+  const description = newPostForm.watch("description")
+  const picture = newPostForm.watch("picture")
+
+  const isSubmitDisabled = !description && !picture
+
   return (
     <Form {...newPostForm}>
-      <form onSubmit={newPostForm.handleSubmit(async() => await mutatePostsData())} className="flex flex-col w-full items-end shadow-md p-2" onMouseEnter={() => props.element(true)} onMouseLeave={() => props.element(false)}>
+      <form onSubmit={newPostForm.handleSubmit(async() => await mutatePostsData())} className="flex flex-col w-full items-end shadow-md p-2 bg-foreground text-color rounded-md" onMouseEnter={() => props.element(true)} onMouseLeave={() => props.element(false)}>
         <FormField
           control={newPostForm.control}
           name="description"
           render={({ field }) => (
             <FormItem className="w-full">
               <FormControl>
-                <Textarea placeholder="What's on your mind?" className="resize-none focus:!ring-transparent" {...field} />
+                <Textarea placeholder="What's on your mind?" className="resize-none focus:!ring-transparent text-black rounded-sm" {...field}/>
               </FormControl>
             </FormItem>
           )}
         />
-        <div>
-          <Button type="button" variant="ghost" className="w-fit place-self-end p-2" title="Add image" onClick={openFileDialog}>
-            <ImageIcon width={25} height={25} />
+        
+        <div className="pt-2">
+          <Button type="button" variant="ghost" className="w-fit h-fit place-self-end p-1" title="Add image" onClick={openFileDialog}>
+            <ImageIcon width={22} height={22} />
           </Button>
-          <Button type="submit" variant="ghost" className="w-fit place-self-end p-2">
-            <PaperPlaneIcon width={25} height={25} />
+          <Button type="submit" variant="ghost" className="w-fit h-fit place-self-end p-1" disabled={isSubmitDisabled} title="Publish post">
+            <PaperPlaneIcon width={22} height={22} />
           </Button>
         </div>
         
@@ -103,14 +116,13 @@ export function NewPostForm(props: NewPostFormInterface) {
           name="picture"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Picture</FormLabel>
               <FormControl>
-                <input type="file" accept="image/*" {...field} ref={fileInputRef} onChange={e => handleImageChange(e)} className="hidden"/>
+                <input type="file" accept="image/*" ref={fileInputRef} onChange={handleImageChange} className="hidden"/>
               </FormControl>
             </FormItem>
           )}
         />
-        {inputImage && <Image src={URL.createObjectURL(inputImage)} width={500} height={500} alt="image" className="w-auto h-auto"/>}
+        { inputImage && <Image src={URL.createObjectURL(inputImage)} width={500} height={500} alt="image" className="w-auto h-auto"/> }
         <FormMessage/>
       </form>
     </Form>

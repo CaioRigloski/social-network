@@ -146,12 +146,14 @@ export function ChatList() {
     })
   }
 
+  if(chats.data?.length === 0) return <p className="text-center">No chats yet!</p>
+
   return (
     <ScrollArea className="h-[20rem]">
       {
         chats.data?.map((chat) => (
           chat.messages[0] &&
-            <div key={chat.id} onClick={() => { !optionsIsOnHover && addChat(chat.id) }} className="flex flex-col items-start gap-2 whitespace-nowrap border-b p-4 text-sm leading-tight last:border-b-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground w-[20rem] cursor-pointer">
+            <div key={chat.id} onClick={() => { !optionsIsOnHover && addChat(chat.id) }} className="flex flex-col items-start gap-2 whitespace-nowrap border-b p-4 text-sm leading-tight last:border-b-0 hover:bg-primary-foreground hover:text-color-secondary w-11/12 rounded-lg justify-self-center cursor-pointer h-18">
               <div className="flex w-full items-center gap-2">
                 <div className='flex flex-row items-center gap-2'>
                   {
@@ -178,7 +180,7 @@ export function ChatList() {
                   <DropdownMenu modal={false}>
                     <DropdownMenuTrigger asChild>
                       <Button variant="ghost" className="p-0 m-0 h-fit w-fit duration-400 ease-in" title="Options" onMouseEnter={() => setOptionsIsOnHover(true)} onMouseLeave={() => setOptionsIsOnHover(false)}>
-                        <MoreVertical className="text-gray-300 w-5 p-0 duration-300 ease-in hover:text-black"/>
+                        <MoreVertical className="text-gray-300 w-4 p-0 duration-300 ease-in hover:text-black"/>
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>

@@ -58,7 +58,7 @@ export default function Feed() {
         <FriendsAvatars/>
         <FriendSuggestions/>
       </div>
-      <div className="grid auto-rows-auto grid-cols-1 justify-items-center gap-4 w-[35rem] self-start">
+      <div className="grid auto-rows-auto grid-cols-1 justify-items-center gap-10 w-[35rem] self-start">
         <NewPostForm onImageSelected={handleImageSelected} element={handlePostFormHover}/>
         {
           postsData?.data?.map(post => <Post key={"post" + post?.id} post={post} className={`${getImageClass()} w-[35rem]`}/>)
@@ -68,8 +68,8 @@ export default function Feed() {
         }
         {
           postsData.data?.length === 0 && !postsData.error &&
-          <Alert>
-            <AlertTitle>:&#41;</AlertTitle>
+          <Alert className="bg-foreground text-color">
+            <AlertTitle>:&#40;</AlertTitle>
             <AlertDescription>
               There&apos;s no posts. Make friends and add some posts!
             </AlertDescription>
@@ -77,8 +77,8 @@ export default function Feed() {
         }
         {
           postsData.error &&
-          <Alert>
-            <AlertTitle>:&#41;</AlertTitle>
+          <Alert className="bg-foreground text-color">
+            <AlertTitle>:&#40;</AlertTitle>
             <AlertDescription>
               Error. Please contact the administrator.
             </AlertDescription>

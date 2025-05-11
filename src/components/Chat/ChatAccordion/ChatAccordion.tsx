@@ -19,20 +19,25 @@ export function ChatAccordion() {
   }
 
   return (
-    <Accordion type="single" collapsible className="w-[20rem] shadow-md">
+    <Accordion type="single" collapsible className="w-[20rem] shadow-md bg-foreground text-color">
       <AccordionItem value="item-1">
         <AccordionTrigger className="p-4">Lets talk to someone?</AccordionTrigger>
         <AccordionContent className="">
-          <ScrollArea className="h-[20rem]">
+          {
+            friends.data?.length === 0 ?
+            <p className="text-center">No friends to talk!</p>
+            :
+            <ScrollArea className="h-[20rem]">
             {
               friends.data?.map(friend => (
-                  <button key={friend.id} onClick={() => newChat(friend)} className="flex items-center p-2 justify-start gap-3 justify-self-start hover:bg-sidebar-accent hover:text-sidebar-accent-foreground w-full">
+                  <button key={friend.id} onClick={() => newChat(friend)} className="flex items-center p-2 justify-start gap-3 justify-self-start hover:bg-primary-foreground hover:text-color-secondary w-11/12 rounded-lg justify-self-center">
                     <AvatarComponent user={friend}/>
                     <p>{friend.username}</p>
                   </button>
-              ))
+              )) 
             }
-          </ScrollArea>
+            </ScrollArea>
+          }
         </AccordionContent>
       </AccordionItem>
       <AccordionItem value="item-2">

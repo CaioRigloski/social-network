@@ -25,9 +25,13 @@ const config = {
   			ring: 'hsl(var(--ring))',
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
+        color: {
+          DEFAULT: 'hsl(var(--color))',
+          secondary: 'hsl(var(--secondary-color))',
+        },
   			primary: {
   				DEFAULT: 'hsl(var(--primary))',
-  				foreground: 'hsl(var(--primary-foreground))'
+  				foreground: 'hsl(var(--primary-foreground))',
   			},
   			secondary: {
   				DEFAULT: 'hsl(var(--secondary))',
@@ -95,7 +99,7 @@ const config = {
   },
   plugins: [
 		require("tailwindcss-animate"),
-		function ({ addComponents }: PluginAPI) {
+		function ({ addComponents, addVariant }: PluginAPI) {
 			addComponents({
 				'.comment-line-limit': {
           display: '-webkit-box',
@@ -112,7 +116,8 @@ const config = {
         '.hide-scrollbar::-webkit-scrollbar': {
           display: 'none',
         }
-			})
+			}),
+      addVariant('standard', '.standard &')
 		}
 	],
 } satisfies Config

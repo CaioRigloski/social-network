@@ -4,11 +4,11 @@ import { newFriendSchema } from "@/lib/zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import useSWR from "swr"
-import { ScrollArea } from "@/components/ui/scroll-area"
 import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
 import { z } from "zod"
 import { API_ROUTES } from "@/lib/apiRoutes"
+import { Card } from "@/components/ui/card"
+import { ProfileCard } from "@/components/ProfileCard/ProfileCard"
 
 
 export function FriendSuggestions() {
@@ -18,7 +18,7 @@ export function FriendSuggestions() {
     resolver: zodResolver(newFriendSchema),
   })
 
-  async function mutateFriendsSuggestions(newFriendId: string) {
+  async function addAndMutateFriendsSuggestions(newFriendId: string) {
     addNewFriendForm.setValue("newFriendId", newFriendId)
     sendFriendRequest(addNewFriendForm.getValues()).then(() => {
       friendsSuggestions.mutate(friendsSuggestions.data?.filter(user => user.id !== newFriendId), {
@@ -28,25 +28,18 @@ export function FriendSuggestions() {
     })
   }
 
+  async function ignoreAndMutateFriendsSuggestions(newFriendId: string) {
+    friendsSuggestions.mutate(friendsSuggestions.data?.filter(user => user.id !== newFriendId), {
+      revalidate: false,
+      optimisticData: currentData => currentData?.filter(user => user.id !== newFriendId) || []
+    })
+  }
+
+  if (friendsSuggestions.data?.length === 0 || !friendsSuggestions.data?.[0]) return null
+  
+  const firstUser = friendsSuggestions.data?.[0]
+
   return (
-  <ScrollArea className="h-72 w-56 rounded-md border self-start shadow-md" style={{position: "static"}}>
-    <div className="p-4">
-      <h4 className="mb-4 text-sm font-medium leading-none">Friend suggestions</h4>
-      {
-        friendsSuggestions.data?.length !== 0 ?
-        friendsSuggestions.data?.map((suggestion) => 
-          <div key={"suggestion" + suggestion.id}>
-            <div className="text-sm">
-              {suggestion.username}
-            </div>
-            <Button type="button" onClick={() => mutateFriendsSuggestions(suggestion.id)}>ADD</Button>
-            <Separator className="my-2" />
-          </div>
-        )
-        :
-        <p className="justify-self-center">No suggestions</p>
-      }
-    </div>
-  </ScrollArea>
+    <ProfileCard cardTitle="Friend suggestions" user={firstUser} leftButtonText={"Add friend"} rightButtonText={"Ignore"} leftButtonAction={() => addAndMutateFriendsSuggestions(firstUser.id)} rightButtonAction={() => ignoreAndMutateFriendsSuggestions(firstUser.id)}/>
   )
-}
+} 

@@ -1,9 +1,9 @@
 
 import { Badge } from "@/components/ui/badge"
-import NotificationCountInterface from "@/interfaces/NotificationCount.interface"
+import NotificationCountInterface from "@/interfaces/notificationCount.interface"
 
 export default function NotificationCount(props: NotificationCountInterface) {
   return (
-    <Badge variant={"outline"}>{props.count}</Badge>
+    <Badge variant={"outline"} className="text-color bg-foreground text-color ml-1">{props.count}</Badge>
   )
 }

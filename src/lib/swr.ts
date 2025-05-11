@@ -2,19 +2,42 @@ import ChatInterface from "@/interfaces/chat/chat.interface"
 import PostInterface from "@/interfaces/post/post.interface"
 import UserInterface from "@/interfaces/feed/user.interface"
 
+async function fetcherErrorHandler<T>(url: string, options?: RequestInit): Promise<T> {
+  const response = await fetch(url, options)
 
-export const userFetcher = (url: string): Promise<UserInterface> => fetch(url).then(r => r.json())
+  if (!response.ok) {
+    const errorData = await response.json()
+    const error = new Error(errorData.error || 'An error occurred');
+    (error as any).details = errorData.details;
+    (error as any).status = response.status;
+    throw error
+  }
 
-export const friendsFetcher = (url: string): Promise<UserInterface[]> => fetch(url).then(r => r.json())
+  return response.json()
+}
 
-export const friendsRequestsFetcher = (url: string): Promise<UserInterface[]> => fetch(url).then(r => r.json())
+export const userFetcher = (url: string): Promise<UserInterface> => 
+  fetcherErrorHandler<UserInterface>(url)
 
-export const postsFetcher = (url: string, friendsIds?: string[]): Promise<PostInterface[]> => fetch(`${url}${friendsIds && friendsIds.length > 0 ? `?friendsIds=${friendsIds.join(",")}`: ''}`).then(r => r.json())
+export const friendsFetcher = (url: string): Promise<UserInterface[]> => 
+  fetcherErrorHandler<UserInterface[]>(url)
 
-export const postsOfUserFetcher = (url: string): Promise<PostInterface[]> => fetch(url).then(r => r.json())
+export const friendsRequestsFetcher = (url: string): Promise<UserInterface[]> => 
+  fetcherErrorHandler<UserInterface[]>(url)
 
-export const friendsSuggestionsFetcher = (url: string): Promise<UserInterface[]> => fetch(url).then(r => r.json())
+export const postsFetcher = (url: string, friendsIds?: string[]): Promise<PostInterface[]> => 
+  fetcherErrorHandler<PostInterface[]>(
+    `${url}${friendsIds && friendsIds.length > 0 ? `?friendsIds=${friendsIds.join(",")}`: ''}`
+  )
 
-export const chatsFetcher = (url: string): Promise<ChatInterface[]> => fetch(url).then(r => r.json())
+export const postsOfUserFetcher = (url: string): Promise<PostInterface[]> => 
+  fetcherErrorHandler<PostInterface[]>(url)
 
-export const chatFetcher = ([url, id]: [url: string, id: string]): Promise<ChatInterface> => fetch(`${url}?id=${id}`).then(r => r.json())
+export const friendsSuggestionsFetcher = (url: string): Promise<UserInterface[]> => 
+  fetcherErrorHandler<UserInterface[]>(url)
+
+export const chatsFetcher = (url: string): Promise<ChatInterface[]> => 
+  fetcherErrorHandler<ChatInterface[]>(url)
+
+export const chatFetcher = ([url, id]: [url: string, id: string]): Promise<ChatInterface> => 
+  fetcherErrorHandler<ChatInterface>(`${url}?id=${id}`)

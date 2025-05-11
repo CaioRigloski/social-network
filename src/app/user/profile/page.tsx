@@ -98,7 +98,7 @@ export default function Profile() {
         </Dialog>
         {
           usernameEditIsOpen ?
-          <input type="text" placeholder={username} autoFocus onChange={e => setNewUsername(e.target.value)} onKeyUp={e => detectEnterKey(e) && newUsername && changeUsernameAndMutate()}/>
+          <input type="text" placeholder={username} autoFocus onChange={e => setNewUsername(e.target.value)} onKeyDown={e => detectEnterKey(e) && newUsername && changeUsernameAndMutate()}/>
           :
           <p onClick={() => setusernameEditIsOpen(true)}>{username}</p>
         }

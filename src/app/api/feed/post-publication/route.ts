@@ -10,6 +10,12 @@ export async function POST(req: Request){
     })
     return NextResponse.json( data )
   } catch (err) {
-    throw new Error("Post publication error")
+    return NextResponse.json(
+      {
+        error: "Post publication error",
+        details: err instanceof Error ? err.message : "Unknown error"
+      },
+      { status: 500 }
+    )
   }
 }

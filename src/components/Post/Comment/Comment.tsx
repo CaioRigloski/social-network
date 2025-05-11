@@ -1,6 +1,5 @@
 import { deleteComment, editComment } from "@/app/post/comment/actions"
 import { Textarea } from "@/components/ui/textarea"
-import CommentInterface from "@/interfaces/post/comment/comment.interface"
 import PostInterface from "@/interfaces/post/post.interface"
 import { detectEnterKey } from "@/lib/utils"
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu"
@@ -11,9 +10,10 @@ import { Separator } from "@/components/ui/separator"
 import { AvatarComponent } from "@/components/Avatar/Avatar"
 import Link from "next/link"
 import { API_ROUTES } from "@/lib/apiRoutes"
+import CommentComponentInterface from "../../../interfaces/post/commentComponent/commentComponent.interface"
 
-export function Comment(props: { comment: CommentInterface, isOwn?: boolean }) {
-  const [ editedComment, setEditedComment ] = useState<string>("")
+export function Comment(props: CommentComponentInterface) {
+  const [ editedComment, setEditedComment ] = useState<string>(props.comment.text)
   const [ commentEditionIsOpen, setCommentEditionIsOpen ] = useState<boolean>(false)
   const [isTruncated, setIsTruncated] = useState(false)
   const [isExpanded, setIsExpanded] = useState(false)
@@ -38,11 +38,14 @@ export function Comment(props: { comment: CommentInterface, isOwn?: boolean }) {
       mutate<PostInterface[]>(API_ROUTES.feed.getPosts, data => {
         if (data) {
           return data.map(post => {
-            return {
-              ...post,
-              comments: post.comments.filter(comment => comment.id !== props.comment.id),
-              commentsCount: post.commentsCount - 1
+            if(post.id === props.postId) {
+              return {
+                ...post,
+                comments: post.comments.filter(comment => comment.id !== props.comment.id),
+                commentsCount: post.commentsCount - 1
+              }
             }
+            return post
           })
         }
         return data
@@ -67,7 +70,6 @@ export function Comment(props: { comment: CommentInterface, isOwn?: boolean }) {
   return (
     !commentEditionIsOpen ?
     <div>
-
       <div className="flex min-w-0 gap-x-4 p-4">
         <AvatarComponent user={props.comment.user}/>
         <div className="min-w-0 flex-auto">
@@ -75,7 +77,7 @@ export function Comment(props: { comment: CommentInterface, isOwn?: boolean }) {
             <Link href={props.isOwn ? "/user/profile" : `user/profile/${id}`}>{username}</Link>
             </p>
           <p ref={textRef} className={`${isExpanded && "block"} mt-1 text-xs leading-5 text-gray-500 comment-line-limit`}>{props.comment.text}</p>
-          {isTruncated && !isExpanded && <button className="mt-1 text-xs leading-5 text-sky-700" onClick={() => setIsExpanded(true)}>See more</button>}
+          {isTruncated && !isExpanded && <button className="mt-1 text-xs leading-5 text-sky-700" onClick={() => setIsExpanded(true)}>view more</button>}
           {isExpanded && <button className="mt-1 text-xs leading-5 text-sky-700" onClick={() => setIsExpanded(false)}>view less</button>}
         </div>
         {
@@ -84,7 +86,7 @@ export function Comment(props: { comment: CommentInterface, isOwn?: boolean }) {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button>
-                  <MoreVertical/>
+                  <MoreVertical className="h-[0.8rem]"/>
                 </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
@@ -102,6 +104,6 @@ export function Comment(props: { comment: CommentInterface, isOwn?: boolean }) {
       <Separator/>
     </div>
     :
-    <Textarea placeholder={props.comment.text} onChange={e => setEditedComment(e.target.value)} onKeyUp={e => detectEnterKey(e) && editCommentAndMutatePostsData() }/>
+    <Textarea value={editedComment} onChange={e => setEditedComment(e.target.value)} onKeyDown={e => detectEnterKey(e) && editCommentAndMutatePostsData()} maxLength={500}/>
   )
 }

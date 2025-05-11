@@ -19,10 +19,28 @@ import { FriendSuggestions } from "@/components/feed/FriendSuggestions/FriendSug
 import { AvatarComponent } from "@/components/Avatar/Avatar"
 import { API_ROUTES } from "@/lib/apiRoutes"
 import { ProfileCard } from "@/components/ProfileCard/ProfileCard"
+import { ChangeEvent, useEffect, useState } from "react"
+import UserInterface from "@/interfaces/feed/user.interface"
+import { Input } from "@/components/ui/input"
 
 export default function Friends() {
   const friends = useSWR(API_ROUTES.user.getFriends, friendsFetcher)
+  const [filteredFriends, setFilteredFriends] = useState<UserInterface[] | undefined>(friends.data)
+  const [search, setSearch] = useState<string>("")
  
+  useEffect(() => {
+    setFilteredFriends(friends.data)
+  }, [friends.data])
+
+  function handleSearch(e: ChangeEvent<HTMLInputElement>) {
+    setSearch(e.target.value)
+    if(e.target.value.length > 0) {
+      setFilteredFriends(friends.data?.filter(friend => friend.username.toLowerCase().includes(e.target.value.toLowerCase())))
+    } else {
+      setFilteredFriends(friends.data)
+    }
+  }
+
   if(friends.data?.length === 0) {
     return (
       <div className="grid justify-items-center">
@@ -55,9 +73,12 @@ export default function Friends() {
 
   return (
     <main className="h-[calc(100vh-var(--header-height)-var(--header-padding))]">
+      <div className="place-items-center p-2">
+        <Input type="text" placeholder="Search friends" className="w-64 outline-none focus-visible:ring-transparent focus:border-2 border-foreground border-[1.5px]" value={search} onChange={handleSearch}/>
+      </div>
       <div className="grid grid-cols-8 grid-rows-auto p-5">
         {
-          friends.data?.map(friend => 
+          filteredFriends?.map(friend => 
             <ProfileCard key={friend.id} user={friend} rightButtonText="Remove" rightButtonAction={() => removeFriendAndMutateFriendsData(friend.id)} style={{position: "static"}}/>
           )
         }

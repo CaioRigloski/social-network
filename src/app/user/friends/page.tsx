@@ -73,8 +73,8 @@ export default function Friends() {
 
   return (
     <main className="h-[calc(100vh-var(--header-height)-var(--header-padding))]">
-      <div className="place-items-center p-2">
-        <Input type="text" placeholder="Search friends" className="w-64 outline-none focus-visible:ring-transparent focus:border-2 border-foreground border-[1.5px]" value={search} onChange={handleSearch}/>
+      <div className="place-items-left pt-5 px-5">
+        <Input type="text" placeholder="Search friends" className="w-64 h-8 outline-none focus-visible:ring-transparent focus:border-2 border-foreground border-[1.5px]" value={search} onChange={handleSearch}/>
       </div>
       <div className="grid grid-cols-8 grid-rows-auto p-5">
         {

@@ -73,6 +73,14 @@ model VerificationRequest {
   @@unique([identifier, token])
 }
 
+model Label {
+  id        String   @id @default(cuid())
+  name      String   @db.VarChar(255) @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  posts     Post[]   @relation("PostLabels")
+}
+
 model Post {
   id String @id @default(cuid())
   createdAt DateTime @default(now())
@@ -83,6 +91,7 @@ model Post {
   picture String?
   comments Comment[]
   likes Like[]
+  labels Label[] @relation("PostLabels")
 }
 
 model Comment {

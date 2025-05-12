@@ -39,6 +39,15 @@ export async function GET(req: Request) {
                 },
               },
             },
+            {
+              labels: {
+                some: {
+                  name: {
+                    contains: query || ""
+                  }
+                }
+              }
+            }
           ],
         },
         select: postSelect,

@@ -2,7 +2,7 @@ import PostInterface from "@/interfaces/post/post.interface"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card"
 import { imageFormats, path } from "@/lib/utils"
 import { useSession } from "next-auth/react"
-import { mutate } from "swr"
+import { Key, mutate } from "swr"
 import { deletePost } from "@/app/post/actions"
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu"
 import { MoreVertical } from "lucide-react"
@@ -17,7 +17,7 @@ import { ChatBubbleIcon } from "@radix-ui/react-icons"
 import { Comment } from "./Comment/Comment"
 
 
-export function Post(props: { post: PostInterface, className?: string }) {
+export function Post(props: { post: PostInterface, swrKey: Key, className?: string }) {
   const session = useSession()
   const [ commentModalIsOpen, setCommentModalIsOpen ] = useState<boolean>(false)
 
@@ -95,7 +95,7 @@ export function Post(props: { post: PostInterface, className?: string }) {
                 <p>{props.post.commentsCount}</p>
               </div>
           }
-          <LikeModal postId={props.post.id} likes={props.post.likes} likesCount={props.post.likesCount}/>
+          <LikeModal postId={props.post.id} likes={props.post.likes} likesCount={props.post.likesCount} swrKey={props.swrKey}/>
         </div>
           {
             !props.post.picture &&

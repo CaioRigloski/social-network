@@ -4,10 +4,11 @@ import { HeartFilledIcon, HeartIcon } from "@radix-ui/react-icons"
 import { Like } from "../Like/Like"
 import { useSession } from "next-auth/react"
 import { useEffect, useState } from "react"
-import { createNewLike, unlike } from "@/app/post/like/actions"
+import { unlike } from "@/app/post/like/actions"
 import { mutate } from "swr"
 import PostInterface from "@/interfaces/post/post.interface"
 import { API_ROUTES } from "@/lib/apiRoutes"
+import { useLikeMutation } from "@/hooks/post"
 
 export default function LikeModal(props: LikeModalInterface) {
   const session = useSession()
@@ -30,23 +31,6 @@ export default function LikeModal(props: LikeModalInterface) {
     )
   }
 
-  async function likeAndMutatePostsData() {
-    createNewLike({postId: props.postId}).then((newLike) => {
-      mutate<PostInterface[]>(API_ROUTES.feed.getPosts, data => {
-        return data?.map(post => {
-          if (post.id === props.postId && newLike) {
-            return {
-              ...post,
-              likes: [newLike, ...post.likes],
-              likesCount: post.likesCount + 1
-            }
-          }
-          return post
-        })
-      }, false)
-    })
-  }
-
   useEffect(() => {
     const userLikeId = props.likes?.find(like => like.user.id === session.data?.user?.id)
     if(userLikeId) {
@@ -62,7 +46,7 @@ export default function LikeModal(props: LikeModalInterface) {
         likeId.length > 0 ?
           <HeartFilledIcon width={25} height={25} color="red" cursor={"pointer"} onClick={unlikeAndMutatePostsData}/>
           :
-          <HeartIcon width={25} height={25} cursor={"pointer"} onClick={likeAndMutatePostsData}/>
+          <HeartIcon width={25} height={25} cursor={"pointer"} onClick={() => props.swrKey && useLikeMutation(props.postId, props.swrKey)}/>
       }
       <Dialog>
         <DialogTrigger asChild>

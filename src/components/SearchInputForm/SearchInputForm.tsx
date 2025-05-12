@@ -13,9 +13,12 @@ import { Form, FormControl, FormField, FormItem } from "../ui/form"
 import { searchSchema } from "@/lib/zod"
 import { useEffect } from "react"
 import { toast } from "sonner"
+import { useRouter } from "next/navigation"
 
 
 export function SearchInputForm() {
+  const router = useRouter()
+
   const form = useForm<z.infer<typeof searchSchema>>({
     resolver: zodResolver(searchSchema),
     defaultValues: {
@@ -26,7 +29,7 @@ export function SearchInputForm() {
   })
 
   function onSubmit(values: z.infer<typeof searchSchema>) {
-    console.log(values)
+    router.push(`/search?query=${values.query}&posts=${values.posts}&users=${values.users}`)
   }
 
   useEffect(() => {

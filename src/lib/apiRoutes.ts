@@ -13,5 +13,8 @@ export const API_ROUTES = {
   feed: {
     getPosts: '/api/feed/get-posts',
     postPublication: '/api/feed/post-publication'
+  },
+  search: {
+    getSearch: '/api/search/get-search',
   }
 } as const

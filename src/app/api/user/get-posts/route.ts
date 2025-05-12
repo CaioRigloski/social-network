@@ -1,4 +1,4 @@
-import { postSelect, prisma } from "@/lib/prisma"
+import { userPostsSelect, prisma } from "@/lib/prisma"
 import PostInterface from "@/interfaces/post/post.interface"
 import { NextRequest, NextResponse } from "next/server"
 import { auth } from "../../auth/[nextauth]/route"
@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
       where: {
         id: userId
       },
-      select: postSelect
+      select: userPostsSelect
     })
     
     if(user) {

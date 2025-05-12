@@ -27,9 +27,7 @@ import { CheckIcon, ExitIcon } from "@radix-ui/react-icons"
 import { AvatarComponent } from "../Avatar/Avatar"
 import { API_ROUTES } from "@/lib/apiRoutes"
 import { toast } from "sonner"
-import { Input } from "../ui/input"
-import { SearchIcon } from "lucide-react"
-import { Button } from "../ui/button"
+import { SearchInputForm } from "../SearchInputForm/SearchInputForm"
 
 
 export default function Header() {
@@ -131,12 +129,7 @@ export default function Header() {
             </NavigationMenuContent>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <div className="relative">
-              <Input type="text" placeholder="Search" className="w-64 h-8 outline-none border-foreground border-[1.5px] focus:border-2 text-color-secondary" style={{ boxShadow: "revert" }}/>
-              <Button type="button" className="absolute right-2 top-1/2 -translate-y-1/2 bg-transparent h-fit w-fit p-0 m-0 hover:bg-transparent">
-                <SearchIcon width={22} height={22} className="text-foreground hover:text-color-secondary" />
-              </Button>
-            </div>
+            <SearchInputForm />
           </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>

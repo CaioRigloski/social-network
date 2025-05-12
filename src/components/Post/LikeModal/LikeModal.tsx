@@ -4,48 +4,11 @@ import { HeartFilledIcon, HeartIcon } from "@radix-ui/react-icons"
 import { Like } from "../Like/Like"
 import { useSession } from "next-auth/react"
 import { useEffect, useState } from "react"
-import { createNewLike, unlike } from "@/app/post/like/actions"
-import { mutate } from "swr"
-import PostInterface from "@/interfaces/post/post.interface"
-import { API_ROUTES } from "@/lib/apiRoutes"
+import { useLikeMutation, useUnlikeMutation } from "@/hooks/post"
 
 export default function LikeModal(props: LikeModalInterface) {
   const session = useSession()
   const [ likeId, setLikeId ] = useState<string>("")
-
-  async function unlikeAndMutatePostsData() {
-    unlike({postId: props.postId, likeId: likeId}).then(() => 
-      mutate<PostInterface[]>(API_ROUTES.feed.getPosts, data => {
-        return data?.map(post => {
-          if (post.id === props.postId) {
-            return {
-              ...post,
-              likes: post.likes.filter(like => like.id !== likeId),
-              likesCount: post.likesCount - 1
-            }
-          }
-          return post
-        })
-      }, false)
-    )
-  }
-
-  async function likeAndMutatePostsData() {
-    createNewLike({postId: props.postId}).then((newLike) => {
-      mutate<PostInterface[]>(API_ROUTES.feed.getPosts, data => {
-        return data?.map(post => {
-          if (post.id === props.postId && newLike) {
-            return {
-              ...post,
-              likes: [newLike, ...post.likes],
-              likesCount: post.likesCount + 1
-            }
-          }
-          return post
-        })
-      }, false)
-    })
-  }
 
   useEffect(() => {
     const userLikeId = props.likes?.find(like => like.user.id === session.data?.user?.id)
@@ -60,9 +23,9 @@ export default function LikeModal(props: LikeModalInterface) {
     <div className="flex flex-col items-center gap-1">
       {
         likeId.length > 0 ?
-          <HeartFilledIcon width={25} height={25} color="red" cursor={"pointer"} onClick={unlikeAndMutatePostsData}/>
+          <HeartFilledIcon width={25} height={25} color="red" cursor={"pointer"} onClick={() => useUnlikeMutation(props.postId, likeId, props.swrKey)}/>
           :
-          <HeartIcon width={25} height={25} cursor={"pointer"} onClick={likeAndMutatePostsData}/>
+          <HeartIcon width={25} height={25} cursor={"pointer"} onClick={() => useLikeMutation(props.postId, props.swrKey)}/>
       }
       <Dialog>
         <DialogTrigger asChild>

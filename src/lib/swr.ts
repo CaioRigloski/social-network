@@ -1,6 +1,8 @@
 import ChatInterface from "@/interfaces/chat/chat.interface"
 import PostInterface from "@/interfaces/post/post.interface"
 import UserInterface from "@/interfaces/feed/user.interface"
+import SearchResultInterface from "@/interfaces/search/searchResult/searchResult.interface"
+import SearchInterface from "@/interfaces/search/search.interface"
 
 async function fetcherErrorHandler<T>(url: string, options?: RequestInit): Promise<T> {
   const response = await fetch(url, options)
@@ -41,3 +43,8 @@ export const chatsFetcher = (url: string): Promise<ChatInterface[]> =>
 
 export const chatFetcher = ([url, id]: [url: string, id: string]): Promise<ChatInterface> => 
   fetcherErrorHandler<ChatInterface>(`${url}?id=${id}`)
+
+export const searchFetcher = (url: string, query: string, posts?: boolean, users?: boolean): Promise<SearchResultInterface> => 
+  fetcherErrorHandler<SearchInterface>(
+    `${url}?query=${query}${posts ? `&posts=true` : ''}${users ? `&users=true` : ''}`
+  )

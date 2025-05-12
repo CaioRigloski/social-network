@@ -30,6 +30,27 @@ export const likeSelect = {
 }
 
 export const postSelect = {
+  id: true,
+  picture: true,
+  description: true,
+  user: {
+    select: userSelect,
+  },
+  comments: {
+    select: commentSelect,
+  },
+  likes: {
+    select: likeSelect,
+  },
+  _count: {
+    select: {
+      likes: true,
+      comments: true,
+    },
+  },
+}
+
+export const userPostsSelect = {
   ...userSelect,
   posts: {
     select: {

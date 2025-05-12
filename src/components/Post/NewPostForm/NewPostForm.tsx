@@ -122,7 +122,7 @@ export function NewPostForm(props: NewPostFormInterface) {
             </FormItem>
           )}
         />
-        { inputImage && <Image src={URL.createObjectURL(inputImage)} width={500} height={500} alt="image" className="w-auto h-auto"/> }
+        { inputImage && <Image src={URL.createObjectURL(inputImage)} width={500} height={500} alt="image" className="w-auto h-auto self-stretch"/> }
         <FormMessage/>
       </form>
     </Form>

@@ -19,6 +19,7 @@ const Chat = dynamic(() => import('@/components/Chat/Chat').then(mod => mod.Chat
 
 export default function Feed() {
   const router = useRouter()
+
   const session = useSession({
     required: true,
     onUnauthenticated() {
@@ -26,12 +27,13 @@ export default function Feed() {
     }
   })
 
+  const shouldFetch = session.status === "authenticated"
   
   const { chatId } = useChat()
-  const friends = useSWR(API_ROUTES.user.getFriends, friendsFetcher)
+  const friends = useSWR(shouldFetch && API_ROUTES.user.getFriends, friendsFetcher)
   const friendsIds = friends?.data?.map(friend => friend.id)
   const postsData = useSWR(
-    friendsIds ? API_ROUTES.feed.getPosts : null,
+    shouldFetch && friendsIds && API_ROUTES.feed.getPosts,
     () => postsFetcher(API_ROUTES.feed.getPosts, friendsIds),
   )
   

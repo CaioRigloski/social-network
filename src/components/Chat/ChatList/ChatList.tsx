@@ -153,7 +153,7 @@ export function ChatList() {
       {
         chats.data?.map((chat) => (
           chat.messages[0] &&
-            <div key={chat.id} onClick={() => { !optionsIsOnHover && addChat(chat.id) }} className="flex flex-col items-start gap-2 whitespace-nowrap border-b p-4 text-sm leading-tight last:border-b-0 hover:bg-primary-foreground hover:text-color-secondary w-11/12 rounded-lg justify-self-center cursor-pointer h-18">
+            <div key={chat.id} onClick={() => { !optionsIsOnHover && addChat(chat.id) }} className="group/avatar flex flex-col items-start gap-2 whitespace-nowrap border-b p-4 text-sm leading-tight last:border-b-0 hover:bg-primary-foreground hover:text-color-secondary w-11/12 rounded-lg justify-self-center cursor-pointer h-18">
               <div className="flex w-full items-center gap-2">
                 <div className='flex flex-row items-center gap-2'>
                   {

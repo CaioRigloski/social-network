@@ -6,17 +6,17 @@ import Link from "next/link"
 import { useSession } from "next-auth/react"
 import { forwardRef } from "react"
 
-export const AvatarComponent = forwardRef<HTMLDivElement, { user: UserInterface | User, disabled?: boolean }>(
+export const AvatarComponent = forwardRef<HTMLSpanElement, { user: UserInterface | User, disabled?: boolean, className?: string }>(
   (props, ref) => {
     const session = useSession()
 
     const avatarContent = (
-      <Avatar ref={ref} className="static">
+      <Avatar ref={ref} className={`static hover:opacity-75 duration-300 ${props.className}`}>
         <AvatarImage 
           src={`/images/${path.profile}/${props.user.profilePicture}.${imageFormats.profilePicture}`} 
           alt={`@${props.user.username}`} 
         />
-        <AvatarFallback className="text-black text-sm">
+        <AvatarFallback className="text-primary text-sm bg-secondary standard:group-hover/avatar:border standard:group-hover/avatar:border-black">
           {props.user.username?.charAt(0).toUpperCase()}
         </AvatarFallback>
       </Avatar>
@@ -31,5 +31,3 @@ export const AvatarComponent = forwardRef<HTMLDivElement, { user: UserInterface 
     )
   }
 )
-
-AvatarComponent.displayName = 'AvatarComponent'

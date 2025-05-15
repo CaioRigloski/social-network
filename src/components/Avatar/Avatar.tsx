@@ -4,10 +4,9 @@ import { imageFormats, path } from "@/lib/utils"
 import { User } from "next-auth"
 import Link from "next/link"
 import { useSession } from "next-auth/react"
-import { forwardRef } from "react"
+import React from "react"
 
-export const AvatarComponent = forwardRef<HTMLSpanElement, { user: UserInterface | User, disabled?: boolean, className?: string }>(
-  (props, ref) => {
+function AvatarComponentFn(props: { user: UserInterface | User, disabled?: boolean, className?: string }, ref: React.Ref<HTMLSpanElement>){
     const session = useSession()
 
     const avatarContent = (
@@ -30,4 +29,5 @@ export const AvatarComponent = forwardRef<HTMLSpanElement, { user: UserInterface
       </Link>
     )
   }
-)
+
+  export const AvatarComponent = React.forwardRef(AvatarComponentFn)

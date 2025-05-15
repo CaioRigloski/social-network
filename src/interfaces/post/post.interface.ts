@@ -12,5 +12,5 @@ export default interface PostInterface extends Omit<Post, "createdAt" | "updated
   commentsCount: number
   likes: LikeInterface[]
   likesCount: number
-  picture: string
+  picture: string | null
 }

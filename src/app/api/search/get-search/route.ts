@@ -12,30 +12,32 @@ export async function GET(req: Request) {
     const includePosts = searchParams.get("posts") === "true"
     const results: SearchResultInterface = {}
     
-    if(includeUsers) {
+    if(includeUsers && query) {
       results.users = await prisma.user.findMany({
         where: {
           username: {
-            startsWith: query || ""
+            startsWith: query,
+            contains: query
           }
         },
         select: userSelect
       })
     }
     
-    if(includePosts) {
+    if(includePosts && query) {
       const rawPosts = await prisma.post.findMany({
         where: {
           OR: [
             {
               description: {
-                contains: query || "",
+                contains: query
               },
             },
             {
               user: {
                 username: {
-                  startsWith: query || "",
+                  startsWith: query,
+                  contains: query
                 },
               },
             },
@@ -43,7 +45,7 @@ export async function GET(req: Request) {
               labels: {
                 some: {
                   name: {
-                    contains: query || ""
+                    contains: query
                   }
                 }
               }
@@ -51,11 +53,14 @@ export async function GET(req: Request) {
           ],
         },
         select: postSelect,
+        orderBy: {
+          createdAt: "desc"
+        }
       })
       
       results.posts = rawPosts.map(post => ({
         ...post,
-        picture: post.picture || "",
+        picture: post.picture,
         commentsCount: post._count?.comments || 0,
         likesCount: post._count?.likes || 0,
       }))

@@ -68,6 +68,7 @@ export default function Header() {
     const res = await signOutAction()
 
     if(res.success) {
+      router.push("/user/login")
       router.refresh()
     } else {
       toast(res.message)

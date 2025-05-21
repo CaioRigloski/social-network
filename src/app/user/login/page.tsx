@@ -9,14 +9,9 @@ import { toast } from "sonner"
 
 export default function Login() {
   const session = useSession()
-  const router = useRouter()
-
+  
   const searchParams = useSearchParams() as LoginParamsInterface
   const status = searchParams.get("status")
-
-  useEffect(() => {
-    if(session.status === "authenticated") router.push("/feed")
-  }, [session, router])
 
   useEffect(() => {
     if(status === "created") {

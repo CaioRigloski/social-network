@@ -19,13 +19,16 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
-
+import { useSearchParams } from "next/navigation"
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
   const router = useRouter()
+
+  const searchParams = useSearchParams()
+  const from = searchParams.get("from")
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -39,6 +42,7 @@ export function LoginForm({
     const res = await checkCredentials(values)
 
     if(res.success) {
+      router.push(from || "/feed")
       router.refresh()
     } else {
       toast(res.message)
@@ -56,7 +60,7 @@ export function LoginForm({
         </CardHeader>
         <CardContent>
           <Form {...form}>
-          <form onSubmit={form.handleSubmit(values => checkCredentialsAndRedirect(values))} className="space-y-8" method="POST">
+          <form onSubmit={form.handleSubmit(checkCredentialsAndRedirect)} className="space-y-8" method="POST">
               <div className="flex flex-col gap-6">
                 <div className="grid gap-2">
                 <FormField

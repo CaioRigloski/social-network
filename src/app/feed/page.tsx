@@ -18,29 +18,16 @@ import { useSession } from "next-auth/react"
 const Chat = dynamic(() => import('@/components/Chat/Chat').then(mod => mod.Chat), { ssr: false })
 
 export default function Feed() {
-  const router = useRouter()
-
-  const session = useSession({
-    required: true,
-    onUnauthenticated() {
-      router.push("/user/login")
-    }
-  })
-
-  const shouldFetch = session.status === "authenticated"
-  
   const { chatId } = useChat()
-  const friends = useSWR(shouldFetch && API_ROUTES.user.getFriends, friendsFetcher)
+  const friends = useSWR(API_ROUTES.user.getFriends, friendsFetcher)
   const friendsIds = friends?.data?.map(friend => friend.id)
   const postsData = useSWR(
-    shouldFetch && friendsIds && API_ROUTES.feed.getPosts,
+    friendsIds && API_ROUTES.feed.getPosts,
     () => postsFetcher(API_ROUTES.feed.getPosts, friendsIds),
   )
   
   const [ hasImage, setHasImage ] = useState<boolean>(false)
   const [isOnHover, setIsOnHover ] = useState<boolean>(false)
-  
-  if(session.status === "loading") return <div>Loading...</div>
 
   function handleImageSelected(hasImage: boolean) {
     setHasImage(hasImage)

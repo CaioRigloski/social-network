@@ -4,7 +4,7 @@ import CommentInterface from "./comment/comment.interface"
 import LikeInterface from "./like/like.interface"
 
 
-export default interface PostInterface extends Omit<Post, "createdAt" | "updatedAt" | "userId"> {
+export default interface PostInterface extends Omit<Post, "updatedAt" | "userId"> {
   id: string
   user: UserInterface
   description: string | null
@@ -13,4 +13,5 @@ export default interface PostInterface extends Omit<Post, "createdAt" | "updated
   likes: LikeInterface[]
   likesCount: number
   picture: string | null
+  createdAt: Date
 }

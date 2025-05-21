@@ -66,7 +66,8 @@ export async function GET(req: Request) {
         comments: post.comments,
         commentsCount: post._count.comments,
         likes: post.likes,
-        likesCount: post._count.likes
+        likesCount: post._count.likes,
+        createdAt: post.createdAt
       }
     }) as PostInterface[]
  

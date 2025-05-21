@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
   const userId = searchParams.get("id")
   console.log(userId)
 
-  if(!userId) return NextResponse.json("ID do usuário não especificado", { status: 400 })
+  if(!userId) return NextResponse.json("User ID not specified", { status: 400 })
     
   try {
     if (userId) {

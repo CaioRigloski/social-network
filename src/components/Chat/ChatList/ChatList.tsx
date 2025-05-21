@@ -19,6 +19,8 @@ import { io } from "socket.io-client"
 import { DeleteMessage } from "@/interfaces/socket/data/deleteMessage.interface"
 import { EditMessage } from "@/interfaces/socket/data/editMessage.interface"
 import { DeleteChat } from "@/interfaces/socket/data/deleteChat.interface"
+import { formatDate } from "@/lib/utils"
+import { Time } from "@/components/common/Time/Time"
 
 
 export function ChatList() {
@@ -121,25 +123,6 @@ export function ChatList() {
     }
   }, [socket])
 
-  function formatDate(date: Date) {
-    const today = new Date()
-    const isToday = new Date(date).toDateString() === today.toDateString()
-    
-    if (isToday) {
-      return `Today ${new Date(date).toLocaleTimeString(navigator.language, {
-        hour: "2-digit",
-        minute: "2-digit"
-      }).replace(",", "")}`
-    } else {
-      return new Date(date).toLocaleTimeString(navigator.language, {
-        day: "2-digit",
-        month: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit"
-      }).replace(",", "")
-    }
-  }
-
   async function deleteChatAndMutateChatData(chatId: string) {
     deleteChat({chatId: chatId}).then(() => {
       socket.emit<SocketEvent>("delete_chat", { chatId: chatId, userId: session.data?.user.id } as DeleteChat)
@@ -171,10 +154,7 @@ export function ChatList() {
                 </div>
                 <span className="ml-auto text-xs">
                   {
-                    chat.messages[0] &&
-                    <time className="ml-auto text-[0.50rem]" dateTime={chat.messages[0].createdAt.toString()}>
-                      { formatDate(chat.messages[0].createdAt) } 
-                    </time>
+                    chat.messages[0] && <Time className="ml-auto text-[0.50rem]" date={chat.messages[0].createdAt} />
                   }
                 </span>
                   <DropdownMenu modal={false}>

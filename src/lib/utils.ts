@@ -47,3 +47,21 @@ export function detectEnterKey(event: KeyboardEvent<HTMLTextAreaElement | HTMLIn
   }
 }
 
+export function formatDate(date: Date) {
+    const today = new Date()
+    const isToday = new Date(date).toDateString() === today.toDateString()
+    
+    if (isToday) {
+      return `Today ${new Date(date).toLocaleTimeString(navigator.language, {
+        hour: "2-digit",
+        minute: "2-digit"
+      }).replace(",", "")}`
+    } else {
+      return new Date(date).toLocaleTimeString(navigator.language, {
+        day: "2-digit",
+        month: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit"
+      }).replace(",", "")
+    }
+  }

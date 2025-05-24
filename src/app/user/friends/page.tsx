@@ -76,7 +76,7 @@ export default function Friends() {
       <div className="place-items-left pt-5 px-5">
         <Input type="text" placeholder="Search friends" className="w-64 h-8 outline-none focus-visible:ring-transparent focus:border-2 border-foreground border-[1.5px]" value={search} onChange={handleSearch}/>
       </div>
-      <div className="grid grid-cols-8 grid-rows-auto p-5">
+      <div className="flex flex-row flex-wrap p-5 gap-1">
         {
           filteredFriends?.map(friend => 
             <ProfileCard key={friend.id} user={friend} rightButtonText="Remove" rightButtonAction={() => removeFriendAndMutateFriendsData(friend.id)} style={{position: "static"}}/>

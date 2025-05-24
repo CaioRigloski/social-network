@@ -39,7 +39,7 @@ export function SearchInputForm() {
 
     const message = postsError || usersError || queryError
     if (message) {
-      toast(message.toString())
+      toast.error(message.toString())
     }
   }, [form.formState.errors.posts, form.formState.errors.users, form.formState.errors.query])
 

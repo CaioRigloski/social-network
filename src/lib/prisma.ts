@@ -33,6 +33,7 @@ export const postSelect = {
   id: true,
   picture: true,
   description: true,
+  createdAt: true,
   user: {
     select: userSelect,
   },
@@ -57,6 +58,7 @@ export const userPostsSelect = {
       id: true,
       picture: true,
       description: true,
+      createdAt: true,
       comments: {
         select: {
           ...commentSelect

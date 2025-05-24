@@ -68,9 +68,10 @@ export default function Header() {
     const res = await signOutAction()
 
     if(res.success) {
+      router.push("/user/login")
       router.refresh()
     } else {
-      toast(res.message)
+      toast.error(res.message)
     }
   }
 
@@ -98,10 +99,10 @@ export default function Header() {
       <NavigationMenu>
         <NavigationMenuList>
           <NavigationMenuItem>
-            <NavigationMenuLink href="/feed" className={`${navigationMenuTriggerStyle()} text-color bg-foreground`}>Feed</NavigationMenuLink>
+            <Link href="/feed" className={`${navigationMenuTriggerStyle()} text-color bg-foreground`}>Feed</Link>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <NavigationMenuLink href="/user/friends" className={`${navigationMenuTriggerStyle()} text-color bg-foreground`}>Friends list</NavigationMenuLink>
+            <Link href="/user/friends" className={`${navigationMenuTriggerStyle()} text-color bg-foreground`}>Friends list</Link>
           </NavigationMenuItem>
           <NavigationMenuItem>
             <NavigationMenuTrigger disabled={isFriendRequestsTriggerDisabled} className="text-color bg-foreground">

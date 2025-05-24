@@ -9,7 +9,7 @@ export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams as ThirdUserProfileParamsInterface
   const userId = searchParams.get("id") || session?.user?.id
 
-  if(!userId) return NextResponse.json("ID do usuário não especificado", { status: 400 })
+  if(!userId) return NextResponse.json("User ID not specified", { status: 400 })
 
   try {
     const user = await prisma.user.findUnique({
@@ -33,7 +33,8 @@ export async function GET(req: NextRequest) {
           comments: post.comments,
           commentsCount: post._count.comments,
           likes: post.likes,
-          likesCount: post._count.likes
+          likesCount: post._count.likes,
+          createdAt: post.createdAt
         }
       })
  

@@ -7,7 +7,7 @@ export const API_ROUTES = {
     getFriendRequests: '/api/user/get-friend-requests',
     getFriendSuggestions: '/api/user/get-friend-suggestions',
     getFriends: '/api/user/get-friends',
-    getPosts: '/api/user/get-posts',
+    getPosts: (id?: string) => id ? `/api/user/get-posts?id=${id}` : '/api/user/get-posts?id=',
     getUserInfo: '/api/user/get-user-info',
   },
   feed: {

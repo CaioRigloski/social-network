@@ -8,7 +8,7 @@ export async function checkCredentials(values: z.infer<typeof loginSchema>) {
   try {
     await signIn("credentials", {
       ...values,
-      redirect: false,
+      redirect: false
     })
     
     return {

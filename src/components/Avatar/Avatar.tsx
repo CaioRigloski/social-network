@@ -4,19 +4,19 @@ import { imageFormats, path } from "@/lib/utils"
 import { User } from "next-auth"
 import Link from "next/link"
 import { useSession } from "next-auth/react"
-import { forwardRef } from "react"
+import React from "react"
 
-export const AvatarComponent = forwardRef<HTMLDivElement, { user: UserInterface | User, disabled?: boolean }>(
-  (props, ref) => {
+function AvatarComponentFn(props: { user: UserInterface | User, disabled?: boolean, className?: string }, ref: React.Ref<HTMLSpanElement>){
     const session = useSession()
 
     const avatarContent = (
-      <Avatar ref={ref} className="static">
+      <Avatar ref={ref} className={`static hover:opacity-75 duration-300 ${props.className}`}>
         <AvatarImage 
           src={`/images/${path.profile}/${props.user.profilePicture}.${imageFormats.profilePicture}`} 
-          alt={`@${props.user.username}`} 
+          alt={`@${props.user.username}`}
+          className="object-cover"
         />
-        <AvatarFallback className="text-black text-sm">
+        <AvatarFallback className="text-primary text-sm bg-secondary standard:group-hover/avatar:border standard:group-hover/avatar:border-black">
           {props.user.username?.charAt(0).toUpperCase()}
         </AvatarFallback>
       </Avatar>
@@ -30,6 +30,5 @@ export const AvatarComponent = forwardRef<HTMLDivElement, { user: UserInterface 
       </Link>
     )
   }
-)
 
-AvatarComponent.displayName = 'AvatarComponent'
+  export const AvatarComponent = React.forwardRef(AvatarComponentFn)

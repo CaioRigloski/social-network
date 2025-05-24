@@ -29,7 +29,7 @@ export const newPostSchema = z.object({
 
 export const deletePostSchema = z.object({
   postId: z.string(),
-  imageName: z.string().optional()
+  imageName: z.string().nullable().optional()
 })
 
 export const newCommentSchema = z.object({

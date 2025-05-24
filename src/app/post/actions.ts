@@ -1,5 +1,6 @@
 'use server'
 
+import vision from '@google-cloud/vision'
 import { commentSelect, likeSelect, prisma, userSelect } from "@/lib/prisma"
 import { auth } from "../api/auth/[nextauth]/route"
 import { deletePostSchema, newPostSchema } from "@/lib/zod"
@@ -12,6 +13,7 @@ import { mkdir } from "fs/promises"
 
 
 export async function createNewPost(values: z.infer<typeof newPostSchema>) {
+  const client = new vision.ImageAnnotatorClient()
   const session = await auth()
   
   try {
@@ -20,7 +22,18 @@ export async function createNewPost(values: z.infer<typeof newPostSchema>) {
     }
     
     const UUID = randomUUID()
-    values.picture && writeFileSync(`${path.public_post_images}/${UUID}.${imageFormats.posts}`, Buffer.from(values.picture.replace(/^data:image\/\w+;base64,/, ""), "base64"))
+    let labels: string[] = []
+
+    if (values.picture) {
+      const imageBuffer = Buffer.from(values.picture.replace(/^data:image\/\w+;base64,/, ""), 'base64')
+      const imageName = `${UUID}.${imageFormats.posts}`
+      const imagePath = `${path.public_post_images}/${imageName}`
+      
+      writeFileSync(imagePath, imageBuffer)
+
+      const [result] = await client.labelDetection(imagePath)
+      labels = result.labelAnnotations?.map(l => l.description!).filter(Boolean) ?? []
+    }
 
     const res = await prisma.post.create({
       data: {
@@ -29,6 +42,12 @@ export async function createNewPost(values: z.infer<typeof newPostSchema>) {
         },
         picture: values.picture && UUID.toString(),
         description: values.description,
+        labels: {
+          connectOrCreate: labels.map((labelName) => ({
+            where: { name: labelName },
+            create: { name: labelName },
+          }))
+        }
       },
       include: {
         user: {
@@ -57,7 +76,8 @@ export async function createNewPost(values: z.infer<typeof newPostSchema>) {
       comments: res.comments,
       commentsCount: res._count.comments,
       likes: res.likes,
-      likesCount: res._count.likes
+      likesCount: res._count.likes,
+      createdAt: res.createdAt
     } as PostInterface
   } catch (err) {
     throw new Error("Failed to create a new post. Please try again later.")

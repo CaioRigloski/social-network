@@ -21,7 +21,7 @@ export default function Search() {
 
   if(noResults) {
     return (
-      <main className="place-items-center h-[calc(100vh-var(--header-height))]">
+      <main className="place-items-center h-[calc(100vh-var(--header-height))] grid items-center">
         <Alert className="bg-foreground text-color w-[var(--post-width)]">
           <AlertTitle>:&#40;</AlertTitle>
           <AlertDescription>

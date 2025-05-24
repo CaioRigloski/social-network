@@ -1,6 +1,6 @@
 import PostInterface from "@/interfaces/post/post.interface"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card"
-import { imageFormats, path } from "@/lib/utils"
+import { formatDate, imageFormats, path } from "@/lib/utils"
 import { useSession } from "next-auth/react"
 import { Key, mutate } from "swr"
 import { deletePost } from "@/app/post/actions"
@@ -15,6 +15,7 @@ import { CommentModal } from "./CommentModal/CommentModal"
 import { useEffect, useRef, useState } from "react"
 import { ChatBubbleIcon } from "@radix-ui/react-icons"
 import { Comment } from "./Comment/Comment"
+import { Time } from "../common/Time/Time"
 
 
 export function Post(props: { post: PostInterface, swrKey: Key, className?: string }) {
@@ -43,7 +44,7 @@ export function Post(props: { post: PostInterface, swrKey: Key, className?: stri
   }
  
   return (
-    <Card className={`${props.className} shadow-md break-all whitespace-pre-wrap text-color w-[var(--post-width)]`}>
+    <Card className={`${props.className} shadow-md break-all whitespace-pre-wrap text-color w-[var(--post-width)] h-fit`}>
       <CardHeader className="flex flex-row rounded-t-md bg-foreground h-14 items-center">
         <CardTitle className="flex items-center gap-2">
           <AvatarComponent user={props.post.user}/>
@@ -85,30 +86,33 @@ export function Post(props: { post: PostInterface, swrKey: Key, className?: stri
       }
       <Separator/>
       <CardFooter className="p-0 pb-4 flex flex-col rounded-b-md bg-foreground text-color">
-        <div className="p-1 flex flex-row gap-2 justify-end w-full ml-auto mr-auto">
-          {
-            props.post.picture ?
-              <CommentModal isOpen={commentModalIsOpen} setIsOpen={setCommentModalIsOpen} post={props.post}/>
-              :
-              <div className="grid justify-items-center cursor-pointer gap-1">
-                <ChatBubbleIcon width={22} height={22}/>
-                <p>{props.post.commentsCount}</p>
-              </div>
-          }
-          <LikeModal postId={props.post.id} likes={props.post.likes} likesCount={props.post.likesCount} swrKey={props.swrKey}/>
+        <div className="before:content-[''] grid grid-cols-3 w-full">
+          <Time className="p-1 text-xs opacity-50 hover:opacity-100 cursor-default h-fit justify-self-center" date={props.post.createdAt} />
+          <div className="p-1 flex flex-row gap-2 justify-self-end">
+            {
+              props.post.picture ?
+                <CommentModal isOpen={commentModalIsOpen} setIsOpen={setCommentModalIsOpen} post={props.post}/>
+                :
+                <div className="grid justify-items-center cursor-pointer gap-1">
+                  <ChatBubbleIcon width={22} height={22}/>
+                  <p>{props.post.commentsCount}</p>
+                </div>
+            }
+            <LikeModal postId={props.post.id} likes={props.post.likes} likesCount={props.post.likesCount} swrKey={props.swrKey}/>
+          </div>
         </div>
-          {
-            !props.post.picture &&
-            <div className="w-full p-3">
-              <div className="grid grid-cols-1 overflow-y-auto max-h-[10rem] w-full bg-white rounded-sm">
-                {
-                  props.post.comments.map(comment =>
-                    <Comment key={comment.id} postId={props.post.id} comment={comment} isOwn={comment.user.id === session.data?.user?.id} />
-                  )
-                }
-              </div>
+        {
+          !props.post.picture &&
+          <div className="w-full p-3">
+            <div className="grid grid-cols-1 overflow-y-auto max-h-[10rem] w-full bg-white rounded-sm">
+              {
+                props.post.comments.map(comment =>
+                  <Comment key={comment.id} postId={props.post.id} comment={comment} isOwn={comment.user.id === session.data?.user?.id} />
+                )
+              }
             </div>
-          }
+          </div>
+        }
       </CardFooter>
     </Card>
   )

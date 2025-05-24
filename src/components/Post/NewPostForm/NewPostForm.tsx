@@ -46,13 +46,13 @@ export function NewPostForm(props: NewPostFormInterface) {
       setInputImage(undefined)
       props.onImageSelected(false)
 
-      toast("Succesfully published post")
+      toast.success("Succesfully published post")
     } catch (err) {
 
       if (err instanceof Error) {
-        toast(err.message)
+        toast.error(err.message)
       } else {
-        toast("An unknown error occurred.")
+        toast.error("An unknown error occurred.")
       }
     }
   }
@@ -77,8 +77,12 @@ export function NewPostForm(props: NewPostFormInterface) {
   }
 
   useEffect(() => {
-    if(newPostForm.formState.errors) {
-      toast(newPostForm.formState.errors.picture?.message?.toString() || newPostForm.formState.errors.description?.message?.toString())
+    const pictureError = newPostForm.formState.errors.picture?.message
+    const descriptionError = newPostForm.formState.errors.description?.message
+
+    const message = pictureError || descriptionError
+    if (message) {
+      toast.error(message.toString())
     }
   }, [newPostForm.formState.errors.description, newPostForm.formState.errors.picture])
 
@@ -122,7 +126,7 @@ export function NewPostForm(props: NewPostFormInterface) {
             </FormItem>
           )}
         />
-        { inputImage && <Image src={URL.createObjectURL(inputImage)} width={500} height={500} alt="image" className="w-auto h-auto"/> }
+        { inputImage && <Image src={URL.createObjectURL(inputImage)} width={500} height={500} alt="image" className="w-auto h-auto self-stretch"/> }
         <FormMessage/>
       </form>
     </Form>

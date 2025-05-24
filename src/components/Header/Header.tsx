@@ -71,7 +71,7 @@ export default function Header() {
       router.push("/user/login")
       router.refresh()
     } else {
-      toast(res.message)
+      toast.error(res.message)
     }
   }
 

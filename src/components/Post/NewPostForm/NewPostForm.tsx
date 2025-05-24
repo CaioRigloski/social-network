@@ -46,13 +46,13 @@ export function NewPostForm(props: NewPostFormInterface) {
       setInputImage(undefined)
       props.onImageSelected(false)
 
-      toast("Succesfully published post")
+      toast.success("Succesfully published post")
     } catch (err) {
 
       if (err instanceof Error) {
-        toast(err.message)
+        toast.error(err.message)
       } else {
-        toast("An unknown error occurred.")
+        toast.error("An unknown error occurred.")
       }
     }
   }
@@ -82,7 +82,7 @@ export function NewPostForm(props: NewPostFormInterface) {
 
     const message = pictureError || descriptionError
     if (message) {
-      toast(message.toString())
+      toast.error(message.toString())
     }
   }, [newPostForm.formState.errors.description, newPostForm.formState.errors.picture])
 

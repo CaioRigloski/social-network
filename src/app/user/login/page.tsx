@@ -15,7 +15,7 @@ export default function Login() {
 
   useEffect(() => {
     if(status === "created") {
-      toast("User succesfully created!", {
+      toast.success("User succesfully created!", {
         description: "Login with your credentials"
       })
     }

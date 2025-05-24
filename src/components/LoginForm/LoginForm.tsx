@@ -45,7 +45,7 @@ export function LoginForm({
       router.push(from || "/feed")
       router.refresh()
     } else {
-      toast(res.message)
+      toast.error(res.message)
     }
   }
 

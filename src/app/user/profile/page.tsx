@@ -17,6 +17,8 @@ import Image from "next/image"
 import { changeProfilePicture, changeUsername } from "./actions"
 import { AvatarComponent } from "@/components/Avatar/Avatar"
 import { CameraIcon } from "@radix-ui/react-icons"
+import { Post } from "@/components/Post/Post"
+import { API_ROUTES } from "@/lib/apiRoutes"
 
 
 export default function Profile() {
@@ -28,7 +30,7 @@ export default function Profile() {
   const [ pictureEditIsOpen, setPictureEditIsOpen ] = useState<boolean>(false)
   const [ usernameEditIsOpen, setusernameEditIsOpen] = useState<boolean>(false)
 
-  const posts = useSWR(`/api/user/get-posts?id=${data?.user?.id}`, postsOfUserFetcher)
+  const posts = useSWR(API_ROUTES.user.getPosts(data?.user.id), postsOfUserFetcher)
 
   const newProfilePictureForm = useForm<z.infer<typeof newProfilePictureSchema>>({
     resolver: zodResolver(newProfilePictureSchema),
@@ -65,20 +67,21 @@ export default function Profile() {
   }
 
   return (
-    <main>
+    <main className="bg-secondary">
       <section>
-        {
-          usernameEditIsOpen ?
-          <input type="text" placeholder={username} autoFocus onChange={e => setNewUsername(e.target.value)} onKeyDown={e => detectEnterKey(e) && newUsername && changeUsernameAndMutate()}/>
-          :
-          <p onClick={() => setusernameEditIsOpen(true)}>{username}</p>
-        }
-        
-        <div className="relative group w-fit">
-          {data?.user && <AvatarComponent user={data.user}/>}
-          <button type="button" onClick={() => setPictureEditIsOpen(true)} className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity rounded-full">
-            <CameraIcon className="text-white text-2xl" />
-          </button>
+        <div className="place-items-center p-5">
+          <div className="relative group w-fit">
+            {data?.user && <AvatarComponent user={data.user} className="h-[25rem] w-[25rem]"/>}
+            <button type="button" onClick={() => setPictureEditIsOpen(true)} className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity rounded-full">
+              <CameraIcon className="text-white" />
+            </button>
+          </div>
+          {
+            usernameEditIsOpen ?
+            <input type="text" placeholder={username} autoFocus onChange={e => setNewUsername(e.target.value)} onKeyDown={e => detectEnterKey(e) && newUsername && changeUsernameAndMutate()}/>
+            :
+            <p onClick={() => setusernameEditIsOpen(true)} className="text-3xl mt-3 cursor-pointer">{ username }</p>
+          }
         </div>
 
         <Dialog open={pictureEditIsOpen} onOpenChange={() => setPictureEditIsOpen(false)}>
@@ -110,11 +113,11 @@ export default function Profile() {
           </DialogContent>
         </Dialog>
       </section>
-      <section>
-        <div>
+      <section className="p-5">
+        <div className="flex flex-wrap justify-center bg-secondary gap-5">
           {
             posts.data?.map(post =>
-              <img key={post.id} alt="post picture" width={0} height={0} src={`/images/${path.posts}/${post.picture}.jpeg`} className="w-80 h-auto"/>
+              <Post key={post.id} post={post} swrKey={data && API_ROUTES.user.getPosts(data.user.id)} className="border-primary"/>
             )
           }
         </div>

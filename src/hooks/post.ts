@@ -18,8 +18,8 @@ export async function useLikeMutation(postId: string, key: Key) {
       return post
     })
   }
-  
-  if(key === API_ROUTES.feed.getPosts) {
+
+  if(key === API_ROUTES.feed.getPosts || key?.toString().startsWith(API_ROUTES.user.getPosts())) {
     createNewLike({postId: postId}).then((newLike) => {
       mutate<PostInterface[]>(key, data => mutatePost(data, newLike), false)
     })
@@ -53,8 +53,8 @@ export async function useUnlikeMutation(postId: string, likeId: string, key: Key
       return post
     })
   }
-  
-  if(key === API_ROUTES.feed.getPosts) {
+
+  if(key === API_ROUTES.feed.getPosts || key?.toString().startsWith(API_ROUTES.user.getPosts())) {
     unlike({postId: postId, likeId: likeId}).then(() => 
       mutate<PostInterface[]>(key, data => mutatePost(data, likeId), false)
     )

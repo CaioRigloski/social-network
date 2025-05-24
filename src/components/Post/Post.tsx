@@ -44,7 +44,7 @@ export function Post(props: { post: PostInterface, swrKey: Key, className?: stri
   }
  
   return (
-    <Card className={`${props.className} shadow-md break-all whitespace-pre-wrap text-color w-[var(--post-width)]`}>
+    <Card className={`${props.className} shadow-md break-all whitespace-pre-wrap text-color w-[var(--post-width)] h-fit`}>
       <CardHeader className="flex flex-row rounded-t-md bg-foreground h-14 items-center">
         <CardTitle className="flex items-center gap-2">
           <AvatarComponent user={props.post.user}/>

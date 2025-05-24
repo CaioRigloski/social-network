@@ -13,7 +13,8 @@ function AvatarComponentFn(props: { user: UserInterface | User, disabled?: boole
       <Avatar ref={ref} className={`static hover:opacity-75 duration-300 ${props.className}`}>
         <AvatarImage 
           src={`/images/${path.profile}/${props.user.profilePicture}.${imageFormats.profilePicture}`} 
-          alt={`@${props.user.username}`} 
+          alt={`@${props.user.username}`}
+          className="object-cover"
         />
         <AvatarFallback className="text-primary text-sm bg-secondary standard:group-hover/avatar:border standard:group-hover/avatar:border-black">
           {props.user.username?.charAt(0).toUpperCase()}

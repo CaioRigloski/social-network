@@ -77,8 +77,12 @@ export function NewPostForm(props: NewPostFormInterface) {
   }
 
   useEffect(() => {
-    if(newPostForm.formState.errors) {
-      toast(newPostForm.formState.errors.picture?.message?.toString() || newPostForm.formState.errors.description?.message?.toString())
+    const pictureError = newPostForm.formState.errors.picture?.message
+    const descriptionError = newPostForm.formState.errors.description?.message
+
+    const message = pictureError || descriptionError
+    if (message) {
+      toast(message.toString())
     }
   }, [newPostForm.formState.errors.description, newPostForm.formState.errors.picture])
 

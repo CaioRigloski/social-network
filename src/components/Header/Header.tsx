@@ -28,6 +28,7 @@ import { AvatarComponent } from "../Avatar/Avatar"
 import { API_ROUTES } from "@/lib/apiRoutes"
 import { toast } from "sonner"
 import { SearchInputForm } from "../SearchInputForm/SearchInputForm"
+import { ThemeToggle } from "../ThemeToggle/ThemeToggle"
 
 
 export default function Header() {
@@ -88,6 +89,7 @@ export default function Header() {
             </Link>
           </div>
         </div>
+        <ThemeToggle />
         <form className="flex justify-end w-fit" action={signOutAndRefresh}>
           <button type="submit" title="Sign out">
             <ExitIcon/>

@@ -117,7 +117,8 @@ const config = {
           display: 'none',
         }
 			}),
-      addVariant('standard', '.standard &')
+      addVariant('standard', '.standard &'),
+      addVariant('light', '.light &')
 		}
 	],
 } satisfies Config

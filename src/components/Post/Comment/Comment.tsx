@@ -73,12 +73,12 @@ export function Comment(props: CommentComponentInterface) {
       <div className="flex min-w-0 gap-x-4 p-4">
         <AvatarComponent user={props.comment.user}/>
         <div className="min-w-0 flex-auto">
-          <p className="text-sm font-semibold leading-6 text-gray-900">
+          <p className="text-sm font-semibold leading-6 text-color">
             <Link href={props.isOwn ? "/user/profile" : `user/profile/${id}`}>{username}</Link>
             </p>
-          <p ref={textRef} className={`${isExpanded && "block"} mt-1 text-xs leading-5 text-gray-500 comment-line-limit`}>{props.comment.text}</p>
-          {isTruncated && !isExpanded && <button className="mt-1 text-xs leading-5 text-sky-700" onClick={() => setIsExpanded(true)}>view more</button>}
-          {isExpanded && <button className="mt-1 text-xs leading-5 text-sky-700" onClick={() => setIsExpanded(false)}>view less</button>}
+          <p ref={textRef} className={`${isExpanded && "block"} mt-1 text-xs leading-5 comment-line-limit text-color`}>{props.comment.text}</p>
+          {isTruncated && !isExpanded && <button className="mt-1 text-xs leading-5 text-sky-700 standard:text-color font-medium" onClick={() => setIsExpanded(true)}>view more</button>}
+          {isExpanded && <button className="mt-1 text-xs leading-5 text-sky-700 standard:text-color font-medium" onClick={() => setIsExpanded(false)}>view less</button>}
         </div>
         {
           props.isOwn &&
@@ -104,6 +104,6 @@ export function Comment(props: CommentComponentInterface) {
       <Separator/>
     </div>
     :
-    <Textarea value={editedComment} onChange={e => setEditedComment(e.target.value)} onKeyDown={e => detectEnterKey(e) && editCommentAndMutatePostsData()} maxLength={500}/>
+    <Textarea value={editedComment} onChange={e => setEditedComment(e.target.value)} onKeyDown={e => detectEnterKey(e) && editCommentAndMutatePostsData()} maxLength={500} className="outline-none focus-visible:ring-1 focus-visible:ring-none border-none focus:border-none text-color-secondary" />
   )
 }

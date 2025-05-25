@@ -56,7 +56,7 @@ export function SearchInputForm() {
                   type="text"
                   placeholder="Search"
                   {...field}
-                  className="w-64 h-8 outline-none border-foreground border-[1.5px] focus:border-2 text-color-secondary"
+                  className="w-64 h-8 outline-none standard:border-foreground border-[1.5px] focus:border-2 standard:text-color-secondary"
                   style={{ boxShadow: "revert" }}
                 />
               </FormControl>

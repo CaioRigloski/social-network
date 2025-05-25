@@ -67,7 +67,7 @@ export default function Profile() {
   }
 
   return (
-    <main className="bg-secondary">
+    <main className="standard:bg-secondary">
       <section>
         <div className="place-items-center p-5">
           <div className="relative group w-fit">
@@ -114,10 +114,10 @@ export default function Profile() {
         </Dialog>
       </section>
       <section className="p-5">
-        <div className="flex flex-wrap justify-center bg-secondary gap-5">
+        <div className="flex flex-wrap justify-center standard:bg-secondary gap-5">
           {
             posts.data?.map(post =>
-              <Post key={post.id} post={post} swrKey={data && API_ROUTES.user.getPosts(data.user.id)} className="border-primary"/>
+              <Post key={post.id} post={post} swrKey={data && API_ROUTES.user.getPosts(data.user.id)} className="standard:border-primary"/>
             )
           }
         </div>

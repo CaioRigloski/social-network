@@ -1,4 +1,4 @@
-import { deleteComment, editComment } from "@/app/post/comment/actions"
+import { deleteComment, editComment } from "@/components/Post/Comment/actions"
 import { Textarea } from "@/components/ui/textarea"
 import PostInterface from "@/interfaces/post/post.interface"
 import { detectEnterKey } from "@/lib/utils"

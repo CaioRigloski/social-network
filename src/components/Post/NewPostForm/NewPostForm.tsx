@@ -1,7 +1,7 @@
 'use client'
 
 
-import { createNewPost } from "@/app/post/actions"
+import { createNewPost } from "@/components/Post/actions"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { newPostSchema } from "@/lib/zod"
 import { zodResolver } from "@hookform/resolvers/zod"

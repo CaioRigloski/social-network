@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { formatDate, imageFormats, path } from "@/lib/utils"
 import { useSession } from "next-auth/react"
 import { Key, mutate } from "swr"
-import { deletePost } from "@/app/post/actions"
+import { deletePost } from "@/components/Post/actions"
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu"
 import { MoreVertical } from "lucide-react"
 import { AvatarComponent } from "../Avatar/Avatar"

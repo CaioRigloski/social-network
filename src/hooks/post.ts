@@ -1,4 +1,4 @@
-import { createNewLike, unlike } from "@/app/post/like/actions"
+import { createNewLike, unlike } from "@/components/Post/Like/actions"
 import LikeInterface from "@/interfaces/post/like/like.interface"
 import PostInterface from "@/interfaces/post/post.interface"
 import SearchResultInterface from "@/interfaces/search/searchResult/searchResult.interface"

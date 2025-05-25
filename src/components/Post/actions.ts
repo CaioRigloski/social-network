@@ -2,7 +2,7 @@
 
 import vision from '@google-cloud/vision'
 import { commentSelect, likeSelect, prisma, userSelect } from "@/lib/prisma"
-import { auth } from "../api/auth/[nextauth]/route"
+import { auth } from "../../app/api/auth/[nextauth]/route"
 import { deletePostSchema, newPostSchema } from "@/lib/zod"
 import { z } from "zod"
 import { randomUUID } from "crypto"

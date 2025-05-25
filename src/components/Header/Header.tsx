@@ -41,8 +41,6 @@ export default function Header() {
     resolver: zodResolver(newFriendSchema),
   })
 
-  if (session.status === "unauthenticated") return null
-
   async function mutateFriendAndPostDatas(newFriendId: string) {
     addNewFriendForm.setValue("newFriendId", newFriendId)
     const res = await acceptFriendRequest(addNewFriendForm.getValues())
@@ -85,7 +83,7 @@ export default function Header() {
             {session.data?.user && <AvatarComponent user={session.data.user}/>}
             <Link href="/user/profile">
               <p className="font-semibold text-color">
-                  {session.status === "authenticated" && session.data.user?.username}
+                  { session.data?.user.username }
               </p>
             </Link>
           </div>
@@ -117,7 +115,7 @@ export default function Header() {
                       <div className="flex place-items-center gap-2">
                         <AvatarComponent user={user}/>
                         <Link href={`/user/profile/${user.id}`}>
-                          <p className="text-color">{user.username}</p>
+                          <p className="text-color">{ user.username }</p>
                         </Link>
                       </div>
                       <button title="Accept request" onClick={() => mutateFriendAndPostDatas(user.id)} className="flex items-center justify-center bg-white hover:bg-white rounded-full">

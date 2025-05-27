@@ -18,31 +18,21 @@ async function fetcherErrorHandler<T>(url: string, options?: RequestInit): Promi
   return response.json()
 }
 
-export const userFetcher = (url: string): Promise<UserInterface> => 
-  fetcherErrorHandler<UserInterface>(url)
+export const userFetcher = (url: string): Promise<UserInterface> => fetcherErrorHandler<UserInterface>(url)
 
-export const friendsFetcher = (url: string): Promise<UserInterface[]> => 
-  fetcherErrorHandler<UserInterface[]>(url)
+export const friendsFetcher = (url: string): Promise<UserInterface[]> => fetcherErrorHandler<UserInterface[]>(url)
 
-export const friendsRequestsFetcher = (url: string): Promise<UserInterface[]> => 
-  fetcherErrorHandler<UserInterface[]>(url)
+export const friendsRequestsFetcher = (url: string): Promise<UserInterface[]> => fetcherErrorHandler<UserInterface[]>(url)
 
-export const postsFetcher = (url: string, friendsIds?: string[]): Promise<PostInterface[]> => 
-  fetcherErrorHandler<PostInterface[]>(
-    `${url}${friendsIds && friendsIds.length > 0 ? `?friendsIds=${friendsIds.join(",")}`: ''}`
-  )
+export const postsFetcher = (url: string): Promise<PostInterface[]> => fetcherErrorHandler<PostInterface[]>(url)
 
-export const postsOfUserFetcher = (url: string): Promise<PostInterface[]> => 
-  fetcherErrorHandler<PostInterface[]>(url)
+export const postsOfUserFetcher = (url: string): Promise<PostInterface[]> => fetcherErrorHandler<PostInterface[]>(url)
 
-export const friendsSuggestionsFetcher = (url: string): Promise<UserInterface[]> => 
-  fetcherErrorHandler<UserInterface[]>(url)
+export const friendsSuggestionsFetcher = (url: string): Promise<UserInterface[]> => fetcherErrorHandler<UserInterface[]>(url)
 
-export const chatsFetcher = (url: string): Promise<ChatInterface[]> => 
-  fetcherErrorHandler<ChatInterface[]>(url)
+export const chatsFetcher = (url: string): Promise<ChatInterface[]> => fetcherErrorHandler<ChatInterface[]>(url)
 
-export const chatFetcher = ([url, id]: [url: string, id: string]): Promise<ChatInterface> => 
-  fetcherErrorHandler<ChatInterface>(`${url}?id=${id}`)
+export const chatFetcher = ([url, id]: [url: string, id: string]): Promise<ChatInterface> => fetcherErrorHandler<ChatInterface>(`${url}?id=${id}`)
 
 export const searchFetcher = (url: string, query: string, posts?: boolean, users?: boolean): Promise<SearchResultInterface> => 
   fetcherErrorHandler<SearchInterface>(

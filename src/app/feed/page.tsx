@@ -3,7 +3,7 @@
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Post } from "@/components/Post/Post"
 import { FriendSuggestions } from "@/components/feed/FriendSuggestions/FriendSuggestions"
-import { friendsFetcher, postsFetcher } from "@/lib/swr"
+import { postsFetcher } from "@/lib/swr"
 import useSWR from "swr"
 import { FriendsAvatars } from "@/components/FriendsAvatars/FriendsAvatars"
 import { ChatAccordion } from "@/components/Chat/ChatAccordion/ChatAccordion"
@@ -12,19 +12,14 @@ import { useChat } from "@/contexts/ChatContext/ChatContext"
 import { NewPostForm } from "@/components/Post/NewPostForm/NewPostForm"
 import { useState } from "react"
 import { API_ROUTES } from "@/lib/apiRoutes"
-import { useRouter } from "next/navigation"
-import { useSession } from "next-auth/react"
+
 
 const Chat = dynamic(() => import('@/components/Chat/Chat').then(mod => mod.Chat), { ssr: false })
 
 export default function Feed() {
   const { chatId } = useChat()
-  const friends = useSWR(API_ROUTES.user.getFriends, friendsFetcher)
-  const friendsIds = friends?.data?.map(friend => friend.id)
-  const postsData = useSWR(
-    friendsIds && API_ROUTES.feed.getPosts,
-    () => postsFetcher(API_ROUTES.feed.getPosts, friendsIds),
-  )
+
+  const postsData = useSWR(API_ROUTES.feed.getPosts, postsFetcher)
   
   const [ hasImage, setHasImage ] = useState<boolean>(false)
   const [isOnHover, setIsOnHover ] = useState<boolean>(false)

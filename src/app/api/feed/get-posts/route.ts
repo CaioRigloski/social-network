@@ -2,27 +2,29 @@ import PostInterface from "@/interfaces/post/post.interface"
 import { commentSelect, likeSelect, prisma, userSelect } from "@/lib/prisma"
 import { NextResponse } from "next/server"
 import { auth } from "../../auth/[nextauth]/route"
-import { GetPostsParamsInterface } from "@/interfaces/params/feed/getPosts.interface"
-
 
 export async function GET(req: Request) {
   const session = await auth()
 
   try {
-    const url = new URL(req.url)
-    const searchParams = url.searchParams as GetPostsParamsInterface
-    const friendsIds = searchParams.get('friendsIds')?.split(',') || []
-
-    if(session?.user?.id) {
-      friendsIds.push(session.user.id)
-    }
- 
     const posts = await prisma.post.findMany({
       where: {
         user: {
-          id: {
-            in: friendsIds
-          }
+          OR: [
+            {
+              friends: {
+                every: { id: session?.user.id }
+              }
+            },
+            {
+              friendOf: {
+                every: { id: session?.user.id }
+              }
+            },
+            {
+              id: session?.user.id
+            }
+          ],
         }
       },
       omit: {
@@ -52,7 +54,7 @@ export async function GET(req: Request) {
         }
       }
     })
-
+ 
     const modeledPosts = posts.map(post => {
       return {
         id: post.id,

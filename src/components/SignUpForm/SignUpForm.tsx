@@ -32,10 +32,10 @@ export function SignUpForm({
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card>
+      <Card className="bg-foreground text-color">
         <CardHeader>
           <CardTitle className="text-2xl">Sign up</CardTitle>
-          <CardDescription>
+          <CardDescription className="standard:text-color">
             Enter your username and password below to create your account
           </CardDescription>
         </CardHeader>
@@ -51,9 +51,9 @@ export function SignUpForm({
                     <FormItem>
                       <FormLabel>Username</FormLabel>
                       <FormControl>
-                        <Input placeholder="..." {...field} type="text"/>
+                        <Input placeholder="..." {...field} type="text" className="text-color-secondary"/>
                       </FormControl>
-                      <FormDescription>
+                      <FormDescription className="standard:text-color">
                         This is your public display name.
                       </FormDescription>
                       <FormMessage />
@@ -70,7 +70,7 @@ export function SignUpForm({
                       <FormItem className="w-full">
                         <FormLabel>Password</FormLabel>
                         <FormControl>
-                          <Input placeholder="..." {...field} type="password"/>
+                          <Input placeholder="..." {...field} type="password" className="text-color-secondary"/>
                         </FormControl>
                         <FormMessage />
                       </FormItem>

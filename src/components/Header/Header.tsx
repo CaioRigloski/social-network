@@ -10,7 +10,7 @@ import {
   navigationMenuTriggerStyle
 } from "@/components/ui/navigation-menu"
 import Link from "next/link"
-import NotificationCount from "./NotificationsCount/NotificationCount"
+import NotificationCount from "../NotificationsCount/NotificationCount"
 import useSWR, { mutate } from "swr"
 import { friendsRequestsFetcher } from "@/lib/swr"
 import { useForm } from "react-hook-form"

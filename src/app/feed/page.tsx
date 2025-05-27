@@ -2,7 +2,7 @@
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Post } from "@/components/Post/Post"
-import { FriendSuggestions } from "@/components/feed/FriendSuggestions/FriendSuggestions"
+import { FriendSuggestions } from "@/components/FriendSuggestions/FriendSuggestions"
 import { postsFetcher } from "@/lib/swr"
 import useSWR from "swr"
 import { FriendsAvatars } from "@/components/FriendsAvatars/FriendsAvatars"

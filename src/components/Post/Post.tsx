@@ -15,7 +15,7 @@ import { CommentModal } from "./CommentModal/CommentModal"
 import { useEffect, useRef, useState } from "react"
 import { ChatBubbleIcon } from "@radix-ui/react-icons"
 import { Comment } from "./Comment/Comment"
-import { Time } from "../common/Time/Time"
+import { Time } from "../Time/Time"
 
 
 export function Post(props: { post: PostInterface, swrKey: Key, className?: string }) {

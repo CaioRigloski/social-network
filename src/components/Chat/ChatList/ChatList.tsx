@@ -20,7 +20,7 @@ import { DeleteMessage } from "@/interfaces/socket/data/deleteMessage.interface"
 import { EditMessage } from "@/interfaces/socket/data/editMessage.interface"
 import { DeleteChat } from "@/interfaces/socket/data/deleteChat.interface"
 import { formatDate } from "@/lib/utils"
-import { Time } from "@/components/common/Time/Time"
+import { Time } from "@/components/Time/Time"
 
 
 export function ChatList() {

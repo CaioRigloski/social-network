@@ -4,11 +4,13 @@ import { HeartFilledIcon, HeartIcon } from "@radix-ui/react-icons"
 import { Like } from "../Like/Like"
 import { useSession } from "next-auth/react"
 import { useEffect, useState } from "react"
-import { useLikeMutation, useUnlikeMutation } from "@/hooks/post"
+import { useLike } from "@/hooks/use-like"
 
 export default function LikeModal(props: LikeModalInterface) {
   const session = useSession()
   const [ likeId, setLikeId ] = useState<string>("")
+
+  const { like, unlike } = useLike(session.data)
 
   useEffect(() => {
     const userLikeId = props.likes?.find(like => like.user.id === session.data?.user?.id)
@@ -23,9 +25,9 @@ export default function LikeModal(props: LikeModalInterface) {
     <div className="flex flex-col items-center gap-1">
       {
         likeId.length > 0 ?
-          <HeartFilledIcon width={25} height={25} color="red" cursor={"pointer"} onClick={() => useUnlikeMutation(props.postId, likeId, props.swrKey)}/>
+          <HeartFilledIcon width={25} height={25} color="red" cursor={"pointer"} onClick={() => unlike(props.postId, likeId, props.swrKey)}/>
           :
-          <HeartIcon width={25} height={25} cursor={"pointer"} onClick={() => useLikeMutation(props.postId, props.swrKey)}/>
+          <HeartIcon width={25} height={25} cursor={"pointer"} onClick={() => like(props.postId, props.swrKey)}/>
       }
       <Dialog>
         <DialogTrigger asChild>

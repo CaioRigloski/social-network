@@ -20,7 +20,7 @@ export function CommentModal(props: CommentModalInterface) {
 
   async function commentAndMutatePostsData() {
     createNewComment({postId: props.post.id, text: comment}).then((newComment) => 
-      mutate<PostInterface[]>(API_ROUTES.feed.getPosts, data => {
+      mutate<PostInterface[]>(API_ROUTES.posts, data => {
         return data?.map(post => {
           if (post.id === props.post.id && newComment) {
             return {

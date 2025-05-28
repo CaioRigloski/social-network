@@ -1,14 +1,19 @@
 import { prisma, userSelect } from "@/lib/prisma"
-import { auth } from "../../auth/[nextauth]/route"
+import { auth } from "../../../auth/[nextauth]/route"
 import { NextResponse } from "next/server"
+import { checkUserAuthorization } from "@/lib/dal"
 
-export async function GET() {
-  const session = await auth()
+export async function GET(req: Request, context: { params: { userId: string } }) {
+  const userId = context.params.userId
+
+  const { authorized, response } = await checkUserAuthorization(userId)
+    
+    if (!authorized) return response
  
   try {
     const res = await prisma.user.findUnique({
       where: {
-        id: session?.user?.id
+        id: userId
       },
       select: {
         friendRequestOf: {

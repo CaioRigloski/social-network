@@ -1,24 +1,20 @@
 import { messageSelect, prisma, userSelect } from "@/lib/prisma"
-import { auth } from "../../../auth/[nextauth]/route"
 import { NextResponse } from "next/server"
-import { GetChatParamsInterface } from "@/interfaces/params/user/chat/getChat.interface"
+import { checkUserAuthorization } from "@/lib/dal"
 
-export async function GET(req: Request) {
-  const session = await auth()
+export async function GET(req: Request, context: { params: { userId: string, chatId: string } }) {
+  const userId = context.params.userId
+  const chatId = context.params.chatId
 
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  const { authorized, response } = await checkUserAuthorization(userId)
+
+  if (!authorized) return response
+
+  if (!chatId) {
+    return NextResponse.json({ error: 'Chat ID is required' }, { status: 400 })
   }
 
   try {
-    const url = new URL(req.url)
-    const searchParams = url.searchParams as GetChatParamsInterface
-    const chatId = searchParams.get('id')
-
-    if (!chatId) {
-      return NextResponse.json({ error: 'Chat ID is required' }, { status: 400 })
-    }
-
     const chat = await prisma.chat.findUnique({
       where: {
         id: chatId

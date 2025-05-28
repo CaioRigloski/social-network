@@ -22,9 +22,12 @@ import { ProfileCard } from "@/components/ProfileCard/ProfileCard"
 import { ChangeEvent, useEffect, useState } from "react"
 import UserInterface from "@/interfaces/feed/user.interface"
 import { Input } from "@/components/ui/input"
+import { useSession } from "next-auth/react"
 
 export default function Friends() {
-  const friends = useSWR(API_ROUTES.user.getFriends, friendsFetcher)
+  const session = useSession()
+
+  const friends = useSWR(session.data && API_ROUTES.users(session.data?.user.id).friends, friendsFetcher)
   const [filteredFriends, setFilteredFriends] = useState<UserInterface[] | undefined>(friends.data)
   const [search, setSearch] = useState<string>("")
  

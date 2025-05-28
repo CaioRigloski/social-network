@@ -37,7 +37,7 @@ export function Chat() {
 
   if(!chatId) return null
 
-  const chatResult = useSWR([API_ROUTES.user.chat.getChat, chatId], chatFetcher)
+  const chatResult = useSWR(session.data && API_ROUTES.users(session.data?.user.id).chats(chatId), chatFetcher)
   const chat = chatResult.data
 
   useEffect(() => {

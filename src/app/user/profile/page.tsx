@@ -22,15 +22,15 @@ import { API_ROUTES } from "@/lib/apiRoutes"
 
 
 export default function Profile() {
-  const { data, update } = useSession()
+  const session = useSession()
 
-  const [ username, setUsername ] = useState<string | undefined>(data?.user?.username || undefined)
+  const [ username, setUsername ] = useState<string | undefined>(session.data?.user?.username || undefined)
   const [ newUsername, setNewUsername ] = useState<string | null>(null)
   const [ inputImage, setInputImage ] = useState<File | undefined>(undefined)
   const [ pictureEditIsOpen, setPictureEditIsOpen ] = useState<boolean>(false)
   const [ usernameEditIsOpen, setusernameEditIsOpen] = useState<boolean>(false)
 
-  const posts = useSWR(API_ROUTES.user.getPosts(data?.user.id), postsOfUserFetcher)
+  const posts = useSWR(session.data && API_ROUTES.users(session.data?.user.id).posts, postsOfUserFetcher)
 
   const newProfilePictureForm = useForm<z.infer<typeof newProfilePictureSchema>>({
     resolver: zodResolver(newProfilePictureSchema),
@@ -42,26 +42,26 @@ export default function Profile() {
   async function updateSessionData() {
     const { fileName } = await changeProfilePicture({ picture: await toDataUrl(inputImage as File) })
     const newSession = {
-      ...data,
+      ...session.data,
       user: {
-        ...data?.user,
+        ...session.data?.user,
         profilePicture: fileName
       }
     }
     
-    await update(newSession)
+    await session.update(newSession)
   }
  
   async function changeUsernameAndMutate() {
     newUsername && await changeUsername({newUsername: newUsername}).then(async () => {
       const newSession = {
-        ...data,
+        ...session.data,
         user: {
-          ...data?.user,
+          ...session.data?.user,
           username: newUsername
         }
       }
-      await update(newSession)
+      await session.update(newSession)
       setusernameEditIsOpen(false)
     })
   }
@@ -71,7 +71,7 @@ export default function Profile() {
       <section>
         <div className="place-items-center p-5">
           <div className="relative group w-fit">
-            {data?.user && <AvatarComponent user={data.user} className="h-[25rem] w-[25rem]"/>}
+            {session.data?.user && <AvatarComponent user={session.data.user} className="h-[25rem] w-[25rem]"/>}
             <button type="button" onClick={() => setPictureEditIsOpen(true)} className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity rounded-full">
               <CameraIcon className="text-white" />
             </button>
@@ -117,7 +117,7 @@ export default function Profile() {
         <div className="flex flex-wrap justify-center standard:bg-secondary gap-5">
           {
             posts.data?.map(post =>
-              <Post key={post.id} post={post} swrKey={data && API_ROUTES.user.getPosts(data.user.id)} className="standard:border-primary"/>
+              <Post key={post.id} post={post} swrKey={session.data && API_ROUTES.users(session.data?.user.id).posts} className="standard:border-primary"/>
             )
           }
         </div>

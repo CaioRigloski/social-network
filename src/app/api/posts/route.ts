@@ -1,7 +1,7 @@
 import PostInterface from "@/interfaces/post/post.interface"
 import { commentSelect, likeSelect, prisma, userSelect } from "@/lib/prisma"
 import { NextResponse } from "next/server"
-import { auth } from "../../auth/[nextauth]/route"
+import { auth } from "../auth/[nextauth]/route"
 
 export async function GET(req: Request) {
   const session = await auth()

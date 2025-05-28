@@ -1,6 +1,6 @@
 import { friendSuggestionsSelect, prisma } from "@/lib/prisma"
 import { NextResponse } from "next/server"
-import { auth } from "../../auth/[nextauth]/route"
+import { auth } from "../../../auth/[nextauth]/route"
 
 
 export async function GET() {

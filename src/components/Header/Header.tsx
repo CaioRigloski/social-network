@@ -36,7 +36,7 @@ export default function Header() {
   const session = useSession()
   const pathName = usePathname()
 
-  const friendRequests = useSWR(API_ROUTES.user.getFriendRequests, friendsRequestsFetcher)
+  const friendRequests = useSWR(session.data && API_ROUTES.users(session.data?.user.id).friendRequests, friendsRequestsFetcher)
   
   const addNewFriendForm = useForm<z.infer<typeof newFriendSchema>>({
     resolver: zodResolver(newFriendSchema),
@@ -48,16 +48,16 @@ export default function Header() {
     friendRequests.mutate(friendRequests.data?.filter(user => user.id ! == newFriendId))
 
     if(pathName === "/feed") {
-      const newFriendPostsResult = await fetch(`${API_ROUTES.user.getPosts}?id=${newFriendId}`)
+      const newFriendPostsResult = await fetch(`${API_ROUTES.users(newFriendId).posts}`)
       const newFriendPosts: PostInterface[] =  await newFriendPostsResult.json()
 
-      mutate<PostInterface[]>(API_ROUTES.feed.getPosts, data => {
+      mutate<PostInterface[]>(API_ROUTES.posts, data => {
         if (data) return [...data, ...newFriendPosts]
       }, { populateCache: true })
     }
 
     if(pathName === "/user/friends") {
-      mutate<UserInterface[]>(API_ROUTES.user.getFriends, data => {
+      mutate<UserInterface[]>(session.data && API_ROUTES.users(session.data?.user.id).friends, data => {
         if (data && res.user) return [...data, res.user]
       }, { populateCache: true })
     }

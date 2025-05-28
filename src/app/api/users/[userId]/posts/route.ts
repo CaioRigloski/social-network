@@ -1,13 +1,11 @@
 import { userPostsSelect, prisma } from "@/lib/prisma"
 import PostInterface from "@/interfaces/post/post.interface"
 import { NextRequest, NextResponse } from "next/server"
-import { auth } from "../../auth/[nextauth]/route"
-import { ThirdUserProfileParamsInterface } from "@/interfaces/params/user/thirdProfile.interface"
+import { auth } from "../../../auth/[nextauth]/route"
 
-export async function GET(req: NextRequest) {
+export async function GET(req: NextRequest, context: { params: { userId: string } }) {
   const session = await auth()
-  const searchParams = req.nextUrl.searchParams as ThirdUserProfileParamsInterface
-  const userId = searchParams.get("id") || session?.user?.id
+  const userId = context.params.userId || session?.user?.id
 
   if(!userId) return NextResponse.json("User ID not specified", { status: 400 })
 

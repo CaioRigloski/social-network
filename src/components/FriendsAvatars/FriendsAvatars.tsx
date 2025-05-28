@@ -3,9 +3,12 @@ import { ScrollArea } from "../ui/scroll-area"
 import useSWR from "swr"
 import { AvatarComponent } from "../Avatar/Avatar"
 import { API_ROUTES } from "@/lib/apiRoutes"
+import { useSession } from "next-auth/react"
 
 export function FriendsAvatars() {
-  const friends = useSWR(API_ROUTES.user.getFriends, friendsFetcher)
+  const session = useSession()
+
+  const friends = useSWR(session.data && API_ROUTES.users(session.data?.user.id).friends, friendsFetcher)
 
   return (
     <ScrollArea className="h-72 w-56 max-w-56 max-h-72 border shadow-md self-start rounded-md bg-foreground text-color">

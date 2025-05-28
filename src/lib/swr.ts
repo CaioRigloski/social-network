@@ -32,7 +32,7 @@ export const friendsSuggestionsFetcher = (url: string): Promise<UserInterface[]>
 
 export const chatsFetcher = (url: string): Promise<ChatInterface[]> => fetcherErrorHandler<ChatInterface[]>(url)
 
-export const chatFetcher = ([url, id]: [url: string, id: string]): Promise<ChatInterface> => fetcherErrorHandler<ChatInterface>(`${url}?id=${id}`)
+export const chatFetcher = (url: string): Promise<ChatInterface> => fetcherErrorHandler<ChatInterface>(url)
 
 export const searchFetcher = (url: string, query: string, posts?: boolean, users?: boolean): Promise<SearchResultInterface> => 
   fetcherErrorHandler<SearchInterface>(

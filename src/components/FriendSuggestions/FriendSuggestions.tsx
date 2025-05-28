@@ -9,10 +9,13 @@ import { z } from "zod"
 import { API_ROUTES } from "@/lib/apiRoutes"
 import { Card } from "@/components/ui/card"
 import { ProfileCard } from "@/components/ProfileCard/ProfileCard"
+import { useSession } from "next-auth/react"
 
 
 export function FriendSuggestions() {
-  const friendsSuggestions = useSWR(API_ROUTES.user.getFriendSuggestions, friendsSuggestionsFetcher)
+  const session = useSession()
+
+  const friendsSuggestions = useSWR(session.data && API_ROUTES.users(session.data?.user.id).friendSuggestions, friendsSuggestionsFetcher)
 
   const addNewFriendForm = useForm<z.infer<typeof newFriendSchema>>({
     resolver: zodResolver(newFriendSchema),

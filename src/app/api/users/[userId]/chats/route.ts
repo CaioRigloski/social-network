@@ -1,20 +1,24 @@
+import { checkUserAuthorization } from "@/lib/dal"
 import { messageSelect, prisma, userSelect } from "@/lib/prisma"
-import { auth } from "../../../auth/[nextauth]/route"
 import { NextResponse } from "next/server"
 
 
-export async function GET() {
-  const session = await auth()
+export async function GET(req: Request, context: { params: { userId: string } }) {
+  const userId = context.params.userId
+
+  const { authorized, response } = await checkUserAuthorization(userId)
+  
+  if (!authorized) return response
 
   try {
     const chats = await prisma.chat.findMany({
       where: {
         OR: [
           {
-            userId: session?.user?.id
+            userId: userId
           },
           {
-            friendId: session?.user?.id
+            friendId: userId
           }
         ]
       },

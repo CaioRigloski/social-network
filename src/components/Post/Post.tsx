@@ -1,6 +1,6 @@
 import PostInterface from "@/interfaces/post/post.interface"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card"
-import { formatDate, imageFormats, path } from "@/lib/utils"
+import { imageFormats, path } from "@/lib/utils"
 import { useSession } from "next-auth/react"
 import { Key, mutate } from "swr"
 import { deletePost } from "@/components/Post/actions"
@@ -39,7 +39,7 @@ export function Post(props: { post: PostInterface, swrKey: Key, className?: stri
 
   async function deletePostAndMutatePostsData() {
     deletePost({postId: props.post.id, imageName: props.post.picture}).then(() => 
-      mutate<PostInterface[]>(API_ROUTES.feed.getPosts, data => data?.filter((post: PostInterface) => post.id !== props.post.id), false)
+      mutate<PostInterface[]>(session.data && API_ROUTES.posts, data => data?.filter((post: PostInterface) => post.id !== props.post.id), false)
     )
   }
  

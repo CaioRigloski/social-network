@@ -8,10 +8,14 @@ import UserInterface from "@/interfaces/feed/user.interface"
 import { useChat } from "@/contexts/ChatContext/ChatContext"
 import { createChat } from "../actions"
 import { API_ROUTES } from "@/lib/apiRoutes"
+import { useSession } from "next-auth/react"
 
 export function ChatAccordion() {
+  const session = useSession()
+
   const { addChat } = useChat()
-  const friends = useSWR(API_ROUTES.user.getFriends, friendsFetcher)
+
+  const friends = useSWR(session.data && API_ROUTES.users(session.data?.user.id).friends, friendsFetcher)
 
   async function newChat(friend: UserInterface) {
     const newChat = await createChat({ friendId: friend.id })

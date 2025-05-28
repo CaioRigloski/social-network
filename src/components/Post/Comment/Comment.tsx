@@ -11,8 +11,11 @@ import { AvatarComponent } from "@/components/Avatar/Avatar"
 import Link from "next/link"
 import { API_ROUTES } from "@/lib/apiRoutes"
 import CommentComponentInterface from "../../../interfaces/post/commentComponent/commentComponent.interface"
+import { useSession } from "next-auth/react"
 
 export function Comment(props: CommentComponentInterface) {
+  const session = useSession()
+
   const [ editedComment, setEditedComment ] = useState<string>(props.comment.text)
   const [ commentEditionIsOpen, setCommentEditionIsOpen ] = useState<boolean>(false)
   const [isTruncated, setIsTruncated] = useState(false)
@@ -35,7 +38,7 @@ export function Comment(props: CommentComponentInterface) {
 
   async function deleteCommentAndMutatePostsData() {
     deleteComment({commentId: props.comment.id}).then(() => {
-      mutate<PostInterface[]>(API_ROUTES.feed.getPosts, data => {
+      mutate<PostInterface[]>(session.data && API_ROUTES.posts, data => {
         if (data) {
           return data.map(post => {
             if(post.id === props.postId) {
@@ -55,7 +58,7 @@ export function Comment(props: CommentComponentInterface) {
 
   async function editCommentAndMutatePostsData() {
     await editComment({commentId: props.comment.id, text: editedComment}).then(() =>
-      mutate<PostInterface[]>(API_ROUTES.feed.getPosts, data => {
+      mutate<PostInterface[]>(session.data && API_ROUTES.posts, data => {
         if (data) {
           data.map(post => post.comments.map(comment => {
             if (comment.id === props.comment.id) comment.text = editedComment

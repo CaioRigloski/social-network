@@ -19,7 +19,6 @@ import { io } from "socket.io-client"
 import { DeleteMessage } from "@/interfaces/socket/data/deleteMessage.interface"
 import { EditMessage } from "@/interfaces/socket/data/editMessage.interface"
 import { DeleteChat } from "@/interfaces/socket/data/deleteChat.interface"
-import { formatDate } from "@/lib/utils"
 import { Time } from "@/components/Time/Time"
 
 
@@ -27,7 +26,7 @@ export function ChatList() {
   const session = useSession()
   const socket = io()
 
-  const chats = useSWR(API_ROUTES.user.chat.getChats, chatsFetcher)
+  const chats = useSWR(session.data && API_ROUTES.users(session.data?.user.id).chats(), chatsFetcher)
 
   const { addChat } = useChat()
 

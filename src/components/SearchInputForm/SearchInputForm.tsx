@@ -14,6 +14,7 @@ import { searchSchema } from "@/lib/zod"
 import { useEffect } from "react"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
+import { API_ROUTES } from "@/lib/apiRoutes"
 
 
 export function SearchInputForm() {
@@ -29,6 +30,7 @@ export function SearchInputForm() {
   })
 
   function onSubmit(values: z.infer<typeof searchSchema>) {
+    API_ROUTES.search(values.query, values.posts, values.users)
     router.push(`/search?query=${values.query}&posts=${values.posts}&users=${values.users}`)
   }
 

@@ -1,5 +1,5 @@
 import { prisma, userSelect } from "@/lib/prisma"
-import { auth } from "../../auth/[nextauth]/route"
+import { auth } from "../../../auth/[nextauth]/route"
 import { NextResponse } from "next/server"
 import UserInterface from "@/interfaces/feed/user.interface"
 

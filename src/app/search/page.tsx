@@ -15,7 +15,9 @@ export default function Search() {
   const posts = searchParams.get("posts") ? searchParams.get("posts") === "true" : true
   const users = searchParams.get("users") ? searchParams.get("users") === "true" : true
 
-  const results = useSWR([API_ROUTES.search.getSearch, query, posts, users], ([_, query, posts, users]) => searchFetcher(API_ROUTES.search.getSearch, query, posts, users))
+  const swrKey = API_ROUTES.search(posts, users, query)
+
+  const results = useSWR(swrKey, searchFetcher)
   
   const noResults = results.data && (!results.data.users?.length && !results.data.posts?.length)
 
@@ -38,7 +40,7 @@ export default function Search() {
         { results.data?.users?.map(user => <ProfileCard key={user.id} user={user} leftButtonText="Add friend" leftButtonAction={() => {}} />) }
       </div>
       <div className="grid gap-10">
-        { results.data?.posts?.map(post => <Post key={post.id} swrKey={[API_ROUTES.search.getSearch, query, posts, users]} post={post} />)}
+        { results.data?.posts?.map(post => <Post key={post.id} swrKey={swrKey} post={post} />)}
       </div>
       {
         results.data?.posts && results.data?.posts?.length > 0|| results.data?.users && results.data?.users?.length > 0 && <p className="p-5 text-gray-300">No more results.</p>

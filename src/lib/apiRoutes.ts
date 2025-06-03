@@ -1,7 +1,7 @@
 export const API_ROUTES = {
   posts: '/api/posts',
 
-  search: (query?: string, posts?: boolean, users?: boolean) =>
+  search: (posts: boolean, users: boolean, query?: string) =>
     `/api/search?query=${query ?? ''}&posts=${posts ?? ''}&users=${users ?? ''}`,
 
   users: (userId: string) => ({

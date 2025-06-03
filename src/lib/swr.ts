@@ -34,7 +34,4 @@ export const chatsFetcher = (url: string): Promise<ChatInterface[]> => fetcherEr
 
 export const chatFetcher = (url: string): Promise<ChatInterface> => fetcherErrorHandler<ChatInterface>(url)
 
-export const searchFetcher = (url: string, query: string, posts?: boolean, users?: boolean): Promise<SearchResultInterface> => 
-  fetcherErrorHandler<SearchInterface>(
-    `${url}?query=${query}${posts ? `&posts=true` : ''}${users ? `&users=true` : ''}`
-  )
+export const searchFetcher = (url: string, query: string, posts?: boolean, users?: boolean): Promise<SearchResultInterface> => fetcherErrorHandler<SearchInterface>(url)

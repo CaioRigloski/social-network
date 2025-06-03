@@ -35,102 +35,101 @@ export function Chat() {
   const [ editedMessage, setEditedMessage ] = useState<string>("")
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
-  if(!chatId) return null
-
   const chatResult = useSWR(session.data && API_ROUTES.users(session.data?.user.id).chats(chatId), chatFetcher)
   const chat = chatResult.data
 
   useEffect(() => {
     socket.emit<SocketEvent>("join_room", chat?.id)
-  }, [socket])
+  }, [socket, chat])
 
   // scroll to bottom on new message with instant behavior
   useEffect(() => {
     scrollToBottom()
   }, [chat?.messages])
 
-  function handleEditMessage(msg: EditMessage) {
-    if(msg.chatId === chat?.id) {
-      chatResult.mutate(chatData => {
-        if(chatData) {
-          return {
-            ...chatData,
-            messages: chatData.messages.map(message => {
-              if(message.id === msg.messageId) {
-                return {
-                  ...message,
-                  text: msg.text,
-                  updatedAt: msg.updatedAt
-                }
-              }
-              return message
-            })
-          }
-        }
-      }, false)
-    }
-  }
-
-  function handleReceiveMessage(msg: ReceiveMessage) {
-    if(msg.chatId === chat?.id) {
-      chatResult.mutate(chatData => {
-        if(chatData && msg.message.user.id !== session.data?.user.id) {
-          return {
-            ...chatData,
-            messages: [...chatData.messages, msg.message]
-          }
-        } else {
-          return chatData
-        }
-      }, false)
-    }
-  }
-
-  function handleDeleteMessage(msg: DeleteMessage) {
-    if(msg.chatId === chat?.id) {
-      chatResult.mutate(chatData => {
-        if(chatData) {
-          return {
-            ...chatData,
-            messages: chatData.messages.map(message => {
-              if(message.id === msg.messageId) {
-                return {
-                  ...message,
-                  deleted: true
-                }
-              } else {
-                return message
-              }
-            })
-          }
-        }
-      }, false)
-    }
-  }
-
-  function handleDeleteChat(msg: DeleteChat) {
-    if(msg.chatId === chat?.id) {
-      chatResult.mutate(chatData => {
-        if(chatData) {
-          return {
-            ...chatData,
-            messages: chat?.messages.map(message => {
-              if(message.user.id === msg.userId) {
-                return {
-                  ...message,
-                  deleted: true
-                }
-              } else {
-                return message
-              }
-            })
-          }
-        }
-      }, false)
-    }
-  }
-
+  
   useEffect(() => {
+    function handleEditMessage(msg: EditMessage) {
+      if(msg.chatId === chat?.id) {
+        chatResult.mutate(chatData => {
+          if(chatData) {
+            return {
+              ...chatData,
+              messages: chatData.messages.map(message => {
+                if(message.id === msg.messageId) {
+                  return {
+                    ...message,
+                    text: msg.text,
+                    updatedAt: msg.updatedAt
+                  }
+                }
+                return message
+              })
+            }
+          }
+        }, false)
+      }
+    }
+  
+    function handleReceiveMessage(msg: ReceiveMessage) {
+      if(msg.chatId === chat?.id) {
+        chatResult.mutate(chatData => {
+          if(chatData && msg.message.user.id !== session.data?.user.id) {
+            return {
+              ...chatData,
+              messages: [...chatData.messages, msg.message]
+            }
+          } else {
+            return chatData
+          }
+        }, false)
+      }
+    }
+  
+    function handleDeleteMessage(msg: DeleteMessage) {
+      if(msg.chatId === chat?.id) {
+        chatResult.mutate(chatData => {
+          if(chatData) {
+            return {
+              ...chatData,
+              messages: chatData.messages.map(message => {
+                if(message.id === msg.messageId) {
+                  return {
+                    ...message,
+                    deleted: true
+                  }
+                } else {
+                  return message
+                }
+              })
+            }
+          }
+        }, false)
+      }
+    }
+  
+    function handleDeleteChat(msg: DeleteChat) {
+      if(msg.chatId === chat?.id) {
+        chatResult.mutate(chatData => {
+          if(chatData) {
+            return {
+              ...chatData,
+              messages: chat?.messages.map(message => {
+                if(message.user.id === msg.userId) {
+                  return {
+                    ...message,
+                    deleted: true
+                  }
+                } else {
+                  return message
+                }
+              })
+            }
+          }
+        }, false)
+      }
+    }
+
     socket.on<SocketEvent>("receive_message", handleReceiveMessage)
     socket.on<SocketEvent>("delete_message", handleDeleteMessage)
     socket.on<SocketEvent>("edit_message", handleEditMessage)
@@ -142,7 +141,7 @@ export function Chat() {
       socket.off<SocketEvent>("edit_message", handleEditMessage)
       socket.off<SocketEvent>("delete_chat", handleDeleteChat)
     }
-  }, [socket])
+  }, [socket, chat, chatResult, session.data?.user.id])
 
 
   function scrollToBottom() {
@@ -212,6 +211,8 @@ export function Chat() {
     setIsMessageEditOpen(false)
     setMessageToEdit(undefined)
   }
+
+  if(!chatId) return null
 
   return (
     <div className="flex flex-1 flex-col gap-4 pb-2 w-[25rem] max-w-[25rem] fixed bottom-0 right-[10rem] z-50 bg-white shadow-lg rounded-t-xl">  

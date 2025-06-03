@@ -23,7 +23,7 @@ export function ChatAccordion() {
   }
 
   return (
-    <Accordion type="single" collapsible className="w-[20rem] shadow-md bg-foreground text-color">
+    <Accordion type="single" collapsible className="w-[20rem] shadow-md bg-foreground text-color rounded-md">
       <AccordionItem value="item-1">
         <AccordionTrigger className="p-4">Lets talk to someone?</AccordionTrigger>
         <AccordionContent>

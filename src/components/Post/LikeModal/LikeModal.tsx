@@ -19,7 +19,7 @@ export default function LikeModal(props: LikeModalInterface) {
     } else {
       setLikeId("")
     }
-  }, [props.likes])
+  }, [props.likes, session.data?.user.id])
 
   return (
     <div className="flex flex-col items-center gap-1">

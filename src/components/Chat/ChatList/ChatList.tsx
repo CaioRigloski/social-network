@@ -146,7 +146,7 @@ export function ChatList() {
                     </>
                     :
                     <>
-                      <AvatarComponent user={chat.user} disabled/>
+                      <AvatarComponent user={chat.friend} disabled/>
                       <span>{chat.friend.username}</span>
                     </>
                   }

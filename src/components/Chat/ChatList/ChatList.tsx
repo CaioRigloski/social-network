@@ -21,10 +21,10 @@ import { EditMessage } from "@/interfaces/socket/data/editMessage.interface"
 import { DeleteChat } from "@/interfaces/socket/data/deleteChat.interface"
 import { Time } from "@/components/Time/Time"
 
+const socket = io()
 
 export function ChatList() {
   const session = useSession()
-  const socket = io()
 
   const chats = useSWR(session.data && API_ROUTES.users(session.data?.user.id).chats(), chatsFetcher)
 
@@ -120,7 +120,7 @@ export function ChatList() {
       socket.off<SocketEvent>("edit_message")
       socket.off<SocketEvent>("delete_chat")
     }
-  }, [socket])
+  }, [chats.data])
 
   async function deleteChatAndMutateChatData(chatId: string) {
     deleteChat({chatId: chatId}).then(() => {

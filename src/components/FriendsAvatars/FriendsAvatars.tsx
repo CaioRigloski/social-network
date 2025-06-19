@@ -16,7 +16,7 @@ export function FriendsAvatars() {
   return (
     <ScrollArea className="h-72 w-56 max-w-56 max-h-72 border shadow-md self-start rounded-md bg-foreground text-color">
       <div className="p-4">
-        <h4 className="mb-4 text-sm font-medium leading-none">{t("friends")}</h4>
+        <h4 className="mb-4 text-sm font-medium leading-none">{t("myFriends")}</h4>
         <div className="flex gap-2 flex-wrap">
           {
             friends.data?.map(friend =>

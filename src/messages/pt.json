@@ -1,5 +1,17 @@
 {
+  "header": {
+    "feed": "Início",
+    "friendsList": "Lista de amigos",
+    "friendRequests": "Solicitações de amizade",
+    "search": "Busca",
+    "find": "Buscar",
+    "filters": "Filtros",
+    "posts": "Publicações",
+    "users": "Usuários",
+    "toggleTheme": "Trocar tema",
+    "signOut": "Sair"
+  },
   "common": {
-    "friends": "Amigos"
+    "myFriends": "Meus amigos"
   }
 }

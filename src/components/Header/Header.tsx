@@ -29,9 +29,12 @@ import { API_ROUTES } from "@/lib/apiRoutes"
 import { toast } from "sonner"
 import { SearchInputForm } from "../SearchInputForm/SearchInputForm"
 import { ThemeToggle } from "../ThemeToggle/ThemeToggle"
+import { useTranslations } from "next-intl"
 
 
 export default function Header() {
+  const t = useTranslations("header")
+
   const router = useRouter()
   const session = useSession()
   const pathName = usePathname()
@@ -91,7 +94,7 @@ export default function Header() {
         </div>
         <ThemeToggle />
         <form className="flex justify-end w-fit" action={signOutAndRefresh}>
-          <button type="submit" title="Sign out">
+          <button type="submit" title={t('signOut')}>
             <ExitIcon/>
           </button>
         </form>
@@ -99,14 +102,14 @@ export default function Header() {
       <NavigationMenu>
         <NavigationMenuList>
           <NavigationMenuItem>
-            <Link href="/feed" className={`${navigationMenuTriggerStyle()} text-color bg-foreground`}>Feed</Link>
+            <Link href="/feed" className={`${navigationMenuTriggerStyle()} text-color bg-foreground`}>{t('feed')}</Link>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <Link href="/user/friends" className={`${navigationMenuTriggerStyle()} text-color bg-foreground`}>Friends list</Link>
+            <Link href="/user/friends" className={`${navigationMenuTriggerStyle()} text-color bg-foreground`}>{t('friendsList')}</Link>
           </NavigationMenuItem>
           <NavigationMenuItem>
             <NavigationMenuTrigger disabled={isFriendRequestsTriggerDisabled} className="text-color bg-foreground">
-              <p>Friend requests</p>
+              <p>{t('friendRequests')}</p>
               <NotificationCount count={friendRequests.data ? friendRequests.data.length : 0}></NotificationCount>
             </NavigationMenuTrigger>
             <NavigationMenuContent>

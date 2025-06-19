@@ -15,9 +15,12 @@ import { useEffect } from "react"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
 import { API_ROUTES } from "@/lib/apiRoutes"
+import { useTranslations } from "next-intl"
 
 
 export function SearchInputForm() {
+  const t = useTranslations("header")
+
   const router = useRouter()
 
   const form = useForm<z.infer<typeof searchSchema>>({
@@ -30,7 +33,7 @@ export function SearchInputForm() {
   })
 
   function onSubmit(values: z.infer<typeof searchSchema>) {
-    API_ROUTES.search(values.query, values.posts, values.users)
+    API_ROUTES.search(values.posts ?? false, values.users ?? false, values.query)
     router.push(`/search?query=${values.query}&posts=${values.posts}&users=${values.users}`)
   }
 
@@ -56,7 +59,7 @@ export function SearchInputForm() {
               <FormControl>
                 <Input
                   type="text"
-                  placeholder="Search"
+                  placeholder={t('search')}
                   {...field}
                   className="w-64 h-8 outline-none standard:border-foreground border-[1.5px] focus:border-2 standard:text-color-secondary"
                   style={{ boxShadow: "revert" }}
@@ -69,6 +72,7 @@ export function SearchInputForm() {
           <Button
             type="submit"
             className="bg-transparent h-fit w-fit p-0 m-0 hover:bg-transparent"
+            title={t('find')}
           >
             <SearchIcon
               width={22}
@@ -81,6 +85,7 @@ export function SearchInputForm() {
               <Button
                 type="button"
                 className="bg-transparent h-fit w-fit p-0 m-0 hover:bg-transparent"
+                title={t('filters')}
               >
                 <FilterIcon
                   width={22}
@@ -89,10 +94,10 @@ export function SearchInputForm() {
                 />
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="text-sm w-36 p-3">
+            <PopoverContent className="text-sm min-w-36 w-fit max-w-48 p-3">
               <ul className="flex flex-col gap-2">
                 <li className="grid grid-cols-2 place-items-center">
-                  <p>Posts</p>
+                  <p className="place-self-start">{t('posts')}</p>
                   <FormField
                     control={form.control}
                     name="posts"
@@ -108,7 +113,7 @@ export function SearchInputForm() {
                 </li>
                 <Separator />
                 <li className="grid grid-cols-2 place-items-center">
-                  <p>Users</p>
+                  <p className="place-self-start">{t('users')}</p>
                   <FormField
                     control={form.control}
                     name="users"

@@ -1,5 +1,17 @@
 {
+  "header": {
+    "feed": "Feed",
+    "friendsList": "Friends list",
+    "friendRequests": "Friends requests",
+    "search": "Search",
+    "find": "Find",
+    "filters": "Filters",
+    "posts": "Posts",
+    "users": "Users",
+    "toogleTheme": "Toggle theme",
+    "signOut": "Sign out"
+  },
   "common": {
-    "friends": "Friends"
+    "myFriends": "My friends"
   }
 }

@@ -1,20 +1,9 @@
 'use client'
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Button } from "@/components/ui/button"
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
 import { friendsFetcher } from "@/lib/swr"
 import useSWR from "swr"
 import removeFriend from "./actions"
-import Link from "next/link"
 import { FriendSuggestions } from "@/components/FriendSuggestions/FriendSuggestions"
 import { AvatarComponent } from "@/components/Avatar/Avatar"
 import { API_ROUTES } from "@/lib/apiRoutes"

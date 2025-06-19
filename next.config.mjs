@@ -1,3 +1,7 @@
+import createNextIntlPlugin from 'next-intl/plugin'
+
+const withNextIntl = createNextIntlPlugin()
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   env: {
@@ -5,7 +9,7 @@ const nextConfig = {
   },
   experimental: {
     serverActions: {
-      bodySizeLimit: "5mb"
+      bodySizeLimit: 5 * 1024 * 1024
     }
   },
   typescript: {
@@ -13,4 +17,4 @@ const nextConfig = {
   }
 }
 
-export default nextConfig;
+export default withNextIntl(nextConfig);

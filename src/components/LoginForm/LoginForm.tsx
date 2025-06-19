@@ -10,7 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { checkCredentials } from "@/app/user/login/actions"
+import { checkCredentials } from "@/app/[locale]/user/login/actions"
 import { loginSchema } from "@/lib/zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"

@@ -1,4 +1,4 @@
-import { sendFriendRequest } from "@/app/feed/actions"
+import { sendFriendRequest } from "./actions"
 import { friendsSuggestionsFetcher } from "@/lib/swr"
 import { newFriendSchema } from "@/lib/zod"
 import { zodResolver } from "@hookform/resolvers/zod"

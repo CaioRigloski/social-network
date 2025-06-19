@@ -2,7 +2,7 @@
 
 import { newFriendSchema } from '@/lib/zod'
 import { z } from 'zod'
-import { auth } from '../api/auth/[nextauth]/route'
+import { auth } from '@/app/api/auth/[nextauth]/route'
 import { prisma } from '@/lib/prisma'
 
 

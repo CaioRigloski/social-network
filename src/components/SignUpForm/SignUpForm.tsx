@@ -16,7 +16,7 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
 import Link from "next/link"
-import { createUser } from "@/app/user/sign-up/actions"
+import { createUser } from "@/app/[locale]/user/sign-up/actions"
 
 export function SignUpForm({
   className,

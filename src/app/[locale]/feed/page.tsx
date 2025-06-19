@@ -18,7 +18,7 @@ const Chat = dynamic(() => import('@/components/Chat/Chat').then(mod => mod.Chat
 
 export default function Feed() {
   const { chatId } = useChat()
-
+  
   const postsData = useSWR(API_ROUTES.posts, postsFetcher)
   
   const [ hasImage, setHasImage ] = useState<boolean>(false)

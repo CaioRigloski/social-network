@@ -1,43 +1,66 @@
 import { auth } from '@/app/api/auth/[nextauth]/route'
 import { NextResponse } from 'next/server'
-import { AUTHENTICATED_REDIRECT, PUBLIC_ROUTES, SIGN_IN_URL } from './lib/routes'
-import { GlobalParamsInterface } from './interfaces/params/common/global.interface'
+import createMiddleware from 'next-intl/middleware'
+import { type NextRequest } from 'next/server'
+import { PUBLIC_ROUTES } from './lib/routes'
 
+const locales = ['en', 'pt'] as const
+const defaultLocale = 'en'
 
-export default auth((req) => {
- const { nextUrl } = req
+const intlMiddleware = createMiddleware({
+  locales,
+  defaultLocale,
+  localePrefix: 'always'
+})
 
- const searchParams = nextUrl.searchParams as GlobalParamsInterface
+export default auth(async function middleware(request: NextRequest) {
+  const session = await auth()
+  const pathname = request.nextUrl.pathname
+  const { nextUrl } = request
 
- const from = searchParams.get("from")
- 
- // Check if is authenticated
- const isAuthenticated = !!req.auth
+  // Check if current path is public route
+  const isPublicRoute = PUBLIC_ROUTES.some(route => nextUrl.pathname.includes(route))
 
- // Check if current path is public route
- const isPublicRoute = PUBLIC_ROUTES.includes(nextUrl.pathname)
+  // Get user's preferred language
+  const acceptLanguage = request.headers.get('accept-language')?.split(',')[0] || defaultLocale
+  const preferredLocale = acceptLanguage.startsWith('pt') ? 'pt' : 'en'
+  
+  // Check if URL already has a locale
+  const pathnameHasLocale = locales.some(
+    locale => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
+  )
+  
+  // If no locale in URL, redirect to preferred locale
+  if (!pathnameHasLocale) {
+    const newUrl = new URL(request.url)
+    newUrl.pathname = `/${preferredLocale}${pathname}`
+    return NextResponse.redirect(newUrl)
+  }
+  
+  // Get current locale from URL
+  const currentLocale = pathname.split('/')[1]
 
- // No main page is used, so it redirects to a page with credentials check
- if(nextUrl.pathname === "/") {
-  return NextResponse.redirect(new URL(SIGN_IN_URL, nextUrl))
- }
+  // Redirecionar se não estiver autenticado e for rota privada
+  if (!session && !isPublicRoute) {
+    const newUrl = nextUrl.clone()
+    newUrl.pathname = `/${currentLocale}/user/login`
+    return NextResponse.redirect(newUrl)
+  }
 
- // If it's a public path can be continued
- if (!isAuthenticated && isPublicRoute) {
-   return NextResponse.next()
- }
+  // Redirecionar se já estiver autenticado e acessar login ou signup
+  if (session && isPublicRoute) {
+    return NextResponse.redirect(new URL(`/${currentLocale}/feed`, nextUrl))
+  }
 
- // If it's not authenticated and path is not already for sign-in (to prevent loop), it's redirected.
- if (!isAuthenticated && nextUrl.pathname != "/user/login") {
-   return NextResponse.redirect(new URL(SIGN_IN_URL + `/?from=${nextUrl.pathname}`, nextUrl))
- }
-
- // If authenticated gets the search param to continue with it if exists or goes to /feed
- if(isAuthenticated && AUTHENTICATED_REDIRECT.includes(nextUrl.pathname)) {
-  return NextResponse.redirect(new URL(from ? from: "/feed", nextUrl))
- }
+  // Apply intl middleware with locale
+  const response = intlMiddleware(request)
+  
+  // Add locale to response headers for client access
+  response.headers.set('x-locale', currentLocale)
+  
+  return response
 })
 
 export const config = {
- matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)']
 }

@@ -94,7 +94,7 @@ export function Post(props: { post: PostInterface, swrKey: Key, className?: stri
           <div className="p-1 flex flex-row gap-2 justify-self-end">
             {
               props.post.picture ?
-                <CommentModal isOpen={commentModalIsOpen} setIsOpen={setCommentModalIsOpen} post={props.post}/>
+                <CommentModal isOpen={commentModalIsOpen} setIsOpen={setCommentModalIsOpen} post={props.post} swrKey={props.swrKey} />
                 :
                 <div className="grid justify-items-center cursor-pointer gap-1">
                   <ChatBubbleIcon width={22} height={22}/>
@@ -110,7 +110,7 @@ export function Post(props: { post: PostInterface, swrKey: Key, className?: stri
             <div className="grid grid-cols-1 overflow-y-auto max-h-[10rem] w-full bg-white rounded-sm">
               {
                 props.post.comments.map(comment =>
-                  <Comment key={comment.id} postId={props.post.id} comment={comment} isOwn={comment.user.id === session.data?.user?.id} />
+                  <Comment key={comment.id} postId={props.post.id} comment={comment} isOwn={comment.user.id === session.data?.user?.id} swrKey={props.swrKey} />
                 )
               }
             </div>

@@ -1,7 +1,9 @@
 import { auth } from "@/app/api/auth/[nextauth]/route"
 import { type ClassValue, clsx } from "clsx"
+import { Session } from "next-auth"
 import { KeyboardEvent } from "react"
 import { twMerge } from "tailwind-merge"
+import { API_ROUTES } from "./apiRoutes"
 
 
 export function cn(...inputs: ClassValue[]) {
@@ -65,3 +67,11 @@ export function formatDate(date: Date) {
       }).replace(",", "")
     }
   }
+
+export function getKeys(session: Session | null) {
+    const userPostsKey = session?.user ? API_ROUTES.users(session.user.id).posts : undefined
+    const postsBaseKey = session?.user ? API_ROUTES.posts : undefined
+    const searchBaseKey = API_ROUTES.search(false, false, '').split("?")[0]
+
+    return { userPostsKey, postsBaseKey, searchBaseKey }
+}

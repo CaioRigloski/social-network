@@ -2,17 +2,10 @@ import { createNewLike, unlike as unlikeAction } from "@/components/Post/Like/ac
 import LikeInterface from "@/interfaces/post/like/like.interface"
 import PostInterface from "@/interfaces/post/post.interface"
 import SearchResultInterface from "@/interfaces/search/searchResult/searchResult.interface"
-import { API_ROUTES } from "@/lib/apiRoutes"
+import { getKeys } from "@/lib/utils"
 import { Session } from "next-auth"
 import { Key, mutate } from "swr"
 
-function getKeys(session: Session | null) {
-    const userPostsKey = session?.user ? API_ROUTES.users(session.user.id).posts : undefined
-    const postsBaseKey = session?.user ? API_ROUTES.posts : undefined
-    const searchBaseKey = API_ROUTES.search(false, false, '').split("?")[0]
-
-    return { userPostsKey, postsBaseKey, searchBaseKey }
-}
 
 export function useLike(session: Session | null) {
   const { userPostsKey, postsBaseKey, searchBaseKey } = getKeys(session)
@@ -46,7 +39,7 @@ export function useLike(session: Session | null) {
               posts: mutatePost(data.posts, newLike)
             };
           }
-          return data;
+          return data
         }, false)
       })
     }
@@ -79,9 +72,9 @@ export function useLike(session: Session | null) {
             return {
               ...data,
               posts: mutatePost(data.posts, likeId)
-            };
+            }
           }
-          return data;
+          return data
         }, false)
       })
     }

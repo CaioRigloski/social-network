@@ -13,6 +13,7 @@ import { API_ROUTES } from "@/lib/apiRoutes"
 import CommentComponentInterface from "../../../interfaces/post/commentComponent/commentComponent.interface"
 import { useSession } from "next-auth/react"
 import { useTranslations } from "next-intl"
+import { useComment } from "@/hooks/use-comment"
 
 
 export function Comment(props: CommentComponentInterface) {
@@ -25,6 +26,8 @@ export function Comment(props: CommentComponentInterface) {
   const [isTruncated, setIsTruncated] = useState(false)
   const [isExpanded, setIsExpanded] = useState(false)
   const textRef = useRef<HTMLParagraphElement>(null)
+
+  const { edit, remove } = useComment(session.data)
 
   const id = props.comment.user.id
   const username = props.comment.user.username
@@ -40,37 +43,9 @@ export function Comment(props: CommentComponentInterface) {
     checkIfTruncated()
   }, [props.comment.text])
 
-  async function deleteCommentAndMutatePostsData() {
-    deleteComment({commentId: props.comment.id}).then(() => {
-      mutate<PostInterface[]>(session.data && API_ROUTES.posts, data => {
-        if (data) {
-          return data.map(post => {
-            if(post.id === props.postId) {
-              return {
-                ...post,
-                comments: post.comments.filter(comment => comment.id !== props.comment.id),
-                commentsCount: post.commentsCount - 1
-              }
-            }
-            return post
-          })
-        }
-        return data
-      }, false)
-    })
-  }
-
   async function editCommentAndMutatePostsData() {
-    await editComment({commentId: props.comment.id, text: editedComment}).then(() =>
-      mutate<PostInterface[]>(session.data && API_ROUTES.posts, data => {
-        if (data) {
-          data.map(post => post.comments.map(comment => {
-            if (comment.id === props.comment.id) comment.text = editedComment
-          }))
-        }
-        return data
-      }, false)
-    )
+    edit(props.postId, props.comment.id, editedComment, props.swrKey)
+    
     setCommentEditionIsOpen(false)
   }
 
@@ -97,7 +72,7 @@ export function Comment(props: CommentComponentInterface) {
                 </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuItem onClick={deleteCommentAndMutatePostsData}>
+                <DropdownMenuItem onClick={() => remove(props.postId, props.comment.id, props.swrKey)}>
                   { t('common.delete') }
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setCommentEditionIsOpen(true)}>

@@ -22,7 +22,7 @@ export default function Feed() {
   const postsData = useSWR(API_ROUTES.posts, postsFetcher)
   
   const [ hasImage, setHasImage ] = useState<boolean>(false)
-  const [isOnHover, setIsOnHover ] = useState<boolean>(false)
+  const [ isOnHover, setIsOnHover ] = useState<boolean>(false)
 
   function handleImageSelected(hasImage: boolean) {
     setHasImage(hasImage)

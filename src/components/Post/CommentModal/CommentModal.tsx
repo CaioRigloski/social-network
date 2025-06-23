@@ -8,12 +8,9 @@ import { Comment } from "../Comment/Comment"
 import { detectEnterKey, imageFormats, path } from "@/lib/utils"
 import { useSession } from "next-auth/react"
 import { useState } from "react"
-import { createNewComment } from "@/components/Post/Comment/actions"
-import { mutate } from "swr"
-import PostInterface from "@/interfaces/post/post.interface"
-import { API_ROUTES } from "@/lib/apiRoutes"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { useTranslations } from "next-intl"
+import { useComment } from "@/hooks/use-comment"
 
 
 export function CommentModal(props: CommentModalInterface) {
@@ -22,21 +19,10 @@ export function CommentModal(props: CommentModalInterface) {
   const session = useSession()
   const [ comment, setComment ] = useState<string>("")
 
+  const { create } = useComment(session.data)
+
   async function commentAndMutatePostsData() {
-    createNewComment({postId: props.post.id, text: comment}).then((newComment) => 
-      mutate<PostInterface[]>(API_ROUTES.posts, data => {
-        return data?.map(post => {
-          if (post.id === props.post.id && newComment) {
-            return {
-              ...post,
-              comments: [newComment, ...post.comments],
-              commentsCount: post.commentsCount + 1
-            }
-          }
-          return post
-        })
-      }, false)
-    )
+    create(props.post.id, comment, props.swrKey).then(() => setComment(""))
   }
 
   return (
@@ -66,7 +52,7 @@ export function CommentModal(props: CommentModalInterface) {
             props.post.comments && props.post.comments.length > 0 ?
             <ScrollArea className="col-span-1 h-[70vh]">
               {
-                props.post.comments?.map(comment => <Comment key={comment.id} postId={props.post.id} comment={comment} isOwn={comment.user.id === session.data?.user?.id}/>)
+                props.post.comments?.map(comment => <Comment key={comment.id} postId={props.post.id} comment={comment} isOwn={comment.user.id === session.data?.user?.id} swrKey={props.swrKey}/>)
               }
             </ScrollArea>
             :
@@ -74,7 +60,7 @@ export function CommentModal(props: CommentModalInterface) {
               <p className="text-color">{ t('post.noCommentsYet') }</p>
             </div>
           }
-          <Textarea className="col-span-3 resize-none outline-none focus-visible:ring-1 focus-visible:ring-none border light:border-muted-foreground focus:border-2 standard:text-color-secondary" placeholder={ t('post.leaveAComment') } onChange={e => setComment(e.target.value)} onKeyDown={e => detectEnterKey(e) && commentAndMutatePostsData()} maxLength={500}/>
+          <Textarea className="col-span-3 resize-none outline-none focus-visible:ring-1 focus-visible:ring-none border light:border-muted-foreground focus:border-2 standard:text-color-secondary" placeholder={ t('post.leaveAComment') } value={comment} onChange={e => setComment(e.target.value)} onKeyDown={e => detectEnterKey(e) && commentAndMutatePostsData()} maxLength={500}/>
         </div>
         <DialogDescription className="hidden">
           { t('post.seePostDetails') }

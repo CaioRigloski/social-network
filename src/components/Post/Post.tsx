@@ -16,9 +16,12 @@ import { useEffect, useRef, useState } from "react"
 import { ChatBubbleIcon } from "@radix-ui/react-icons"
 import { Comment } from "./Comment/Comment"
 import { Time } from "../Time/Time"
+import { useTranslations } from "next-intl"
 
 
 export function Post(props: { post: PostInterface, swrKey: Key, className?: string }) {
+  const t = useTranslations()
+
   const session = useSession()
   const [ commentModalIsOpen, setCommentModalIsOpen ] = useState<boolean>(false)
 
@@ -62,8 +65,8 @@ export function Post(props: { post: PostInterface, swrKey: Key, className?: stri
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  <DropdownMenuItem onClick={deletePostAndMutatePostsData}>
-                    Delete
+                  <DropdownMenuItem onClick={deletePostAndMutatePostsData} className="cursor-pointer">
+                    { t('common.delete') }
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -76,8 +79,8 @@ export function Post(props: { post: PostInterface, swrKey: Key, className?: stri
           { props.post.description }
         </CardDescription>
       }
-      { isTruncated && !isExpanded && <button className="mt-1 text-xs leading-5 text-sky-700 ml-5" onClick={() => setIsExpanded(true)}>view more</button> }
-      { isExpanded && <button className="mt-1 text-xs leading-5 text-sky-700 ml-5" onClick={() => setIsExpanded(false)}>view less</button> }
+      { isTruncated && !isExpanded && <button className="mt-1 text-xs leading-5 text-sky-700 ml-5" onClick={() => setIsExpanded(true)}>{ t('common.viewMore') }</button> }
+      { isExpanded && <button className="mt-1 text-xs leading-5 text-sky-700 ml-5" onClick={() => setIsExpanded(false)}>{ t('common.viewLess') }</button> }
       {
         props.post.picture &&
         <CardContent className="p-1 w-[var(--post-width)] h-[var(--post-image-height)] ml-auto mr-auto border">

@@ -9,8 +9,12 @@ import { useChat } from "@/contexts/ChatContext/ChatContext"
 import { createChat } from "../actions"
 import { API_ROUTES } from "@/lib/apiRoutes"
 import { useSession } from "next-auth/react"
+import { useTranslations } from "next-intl"
+
 
 export function ChatAccordion() {
+  const t = useTranslations()
+
   const session = useSession()
 
   const { addChat } = useChat()
@@ -25,11 +29,11 @@ export function ChatAccordion() {
   return (
     <Accordion type="single" collapsible className="w-[20rem] shadow-md bg-foreground text-color rounded-md">
       <AccordionItem value="item-1">
-        <AccordionTrigger className="p-4">Lets talk to someone?</AccordionTrigger>
+        <AccordionTrigger className="p-4">{ t('chat.letsTalkToSomeone') }</AccordionTrigger>
         <AccordionContent>
           {
             friends.data?.length === 0 ?
-            <p className="text-center">No friends to talk!</p>
+            <p className="text-center">{ t('chat.noFriendsToTalk') }</p>
             :
             <ScrollArea className="h-[20rem]">
             {
@@ -45,7 +49,7 @@ export function ChatAccordion() {
         </AccordionContent>
       </AccordionItem>
       <AccordionItem value="item-2">
-        <AccordionTrigger className="p-4">Chats</AccordionTrigger>
+        <AccordionTrigger className="p-4">{ t('chat.chats') }</AccordionTrigger>
         <AccordionContent>
           <ChatList/>
         </AccordionContent>

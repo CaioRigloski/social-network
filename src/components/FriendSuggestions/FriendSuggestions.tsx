@@ -4,15 +4,16 @@ import { newFriendSchema } from "@/lib/zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import useSWR from "swr"
-import { Button } from "@/components/ui/button"
 import { z } from "zod"
 import { API_ROUTES } from "@/lib/apiRoutes"
-import { Card } from "@/components/ui/card"
 import { ProfileCard } from "@/components/ProfileCard/ProfileCard"
 import { useSession } from "next-auth/react"
+import { useTranslations } from "next-intl"
 
 
 export function FriendSuggestions() {
+  const t = useTranslations()
+
   const session = useSession()
 
   const friendsSuggestions = useSWR(session.data && API_ROUTES.users(session.data?.user.id).friendSuggestions, friendsSuggestionsFetcher)
@@ -43,6 +44,6 @@ export function FriendSuggestions() {
   const firstUser = friendsSuggestions.data?.[0]
 
   return (
-    <ProfileCard cardTitle="Friend suggestions" user={firstUser} leftButtonText={"Add friend"} rightButtonText={"Ignore"} leftButtonAction={() => addAndMutateFriendsSuggestions(firstUser.id)} rightButtonAction={() => ignoreAndMutateFriendsSuggestions(firstUser.id)} />
+    <ProfileCard cardTitle="Friend suggestions" user={firstUser} leftButtonText={ t('common.addFriend') } rightButtonText={"Ignore"} leftButtonAction={() => addAndMutateFriendsSuggestions(firstUser.id)} rightButtonAction={() => ignoreAndMutateFriendsSuggestions(firstUser.id)} />
   )
 } 

@@ -17,11 +17,15 @@ import { z } from "zod"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
 import Link from "next/link"
 import { createUser } from "@/app/[locale]/user/sign-up/actions"
+import { useTranslations } from "next-intl"
+
 
 export function SignUpForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
+  const t = useTranslations()
+
   const form = useForm<z.infer<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -34,9 +38,9 @@ export function SignUpForm({
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="bg-foreground text-color">
         <CardHeader>
-          <CardTitle className="text-2xl">Sign up</CardTitle>
+          <CardTitle className="text-2xl">{ t('common.signUp') }</CardTitle>
           <CardDescription className="standard:text-color">
-            Enter your username and password below to create your account
+            { t('common.enterYourUsernameSignUp') }
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -49,12 +53,12 @@ export function SignUpForm({
                   name="username"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Username</FormLabel>
+                      <FormLabel>{ t('common.username') }</FormLabel>
                       <FormControl>
                         <Input placeholder="..." {...field} type="text" className="text-color-secondary"/>
                       </FormControl>
                       <FormDescription className="standard:text-color">
-                        This is your public display name.
+                        { t('common.publicDisplayName') }
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -68,7 +72,7 @@ export function SignUpForm({
                     name="password"
                     render={({ field }) => (
                       <FormItem className="w-full">
-                        <FormLabel>Password</FormLabel>
+                        <FormLabel>{ t('common.password') }</FormLabel>
                         <FormControl>
                           <Input placeholder="..." {...field} type="password" className="text-color-secondary"/>
                         </FormControl>
@@ -79,13 +83,13 @@ export function SignUpForm({
                   </div>
                 </div>
                 <Button type="submit" className="w-full">
-                  Sign up
+                  { t('common.signUp') }
                 </Button>
               </div>
               <div className="mt-4 text-center text-sm">
-                Already have an account?{" "}
+                { t('common.haveAnAccount') }{" "}
                 <Link href="/user/login" className="underline underline-offset-4">
-                  Login
+                  { t('common.login') }
                 </Link>
               </div>
             </form>

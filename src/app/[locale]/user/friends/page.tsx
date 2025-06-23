@@ -5,15 +5,18 @@ import { friendsFetcher } from "@/lib/swr"
 import useSWR from "swr"
 import removeFriend from "./actions"
 import { FriendSuggestions } from "@/components/FriendSuggestions/FriendSuggestions"
-import { AvatarComponent } from "@/components/Avatar/Avatar"
 import { API_ROUTES } from "@/lib/apiRoutes"
 import { ProfileCard } from "@/components/ProfileCard/ProfileCard"
 import { ChangeEvent, useEffect, useState } from "react"
 import UserInterface from "@/interfaces/feed/user.interface"
 import { Input } from "@/components/ui/input"
 import { useSession } from "next-auth/react"
+import { useTranslations } from "next-intl"
+
 
 export default function Friends() {
+  const t = useTranslations()
+
   const session = useSession()
 
   const friends = useSWR(session.data && API_ROUTES.users(session.data?.user.id).friends, friendsFetcher)
@@ -39,7 +42,7 @@ export default function Friends() {
         <Alert>
           <AlertTitle>:(</AlertTitle>
           <AlertDescription>
-            You don&apos;t have friends, make some!
+            { t('common.dontHaveFriends') }
           </AlertDescription>
         </Alert>
         <FriendSuggestions/>
@@ -52,7 +55,7 @@ export default function Friends() {
       <Alert>
         <AlertTitle>:(</AlertTitle>
         <AlertDescription>
-          Error. Please contact the administrator.
+          { t('common.contactAdmin') }
         </AlertDescription>
       </Alert>
     )
@@ -66,12 +69,12 @@ export default function Friends() {
   return (
     <main className="h-[calc(100vh-var(--header-height))]">
       <div className="place-items-left pt-5 px-5">
-        <Input type="text" placeholder="Search friends" className="w-64 h-8 outline-none focus-visible:ring-transparent focus:border-2 border-foreground border-[1.5px]" value={search} onChange={handleSearch}/>
+        <Input type="text" placeholder={ t('common.searchFriends') } className="w-64 h-8 outline-none focus-visible:ring-transparent focus:border-2 border-foreground border-[1.5px]" value={search} onChange={handleSearch}/>
       </div>
       <div className="flex flex-row flex-wrap p-5 gap-1">
         {
           filteredFriends?.map(friend => 
-            <ProfileCard key={friend.id} user={friend} rightButtonText="Remove" rightButtonAction={() => removeFriendAndMutateFriendsData(friend.id)} style={{position: "static"}}/>
+            <ProfileCard key={friend.id} user={friend} rightButtonText={t('common.remove')} rightButtonAction={() => removeFriendAndMutateFriendsData(friend.id)} style={{position: "static"}}/>
           )
         }
       </div>

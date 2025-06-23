@@ -20,10 +20,13 @@ import { DeleteMessage } from "@/interfaces/socket/data/deleteMessage.interface"
 import { EditMessage } from "@/interfaces/socket/data/editMessage.interface"
 import { DeleteChat } from "@/interfaces/socket/data/deleteChat.interface"
 import { Time } from "@/components/Time/Time"
+import { useTranslations } from "next-intl"
 
 const socket = io()
 
 export function ChatList() {
+  const t = useTranslations()
+
   const session = useSession()
 
   const chats = useSWR(session.data && API_ROUTES.users(session.data?.user.id).chats(), chatsFetcher)
@@ -128,7 +131,7 @@ export function ChatList() {
     })
   }
 
-  if(chats.data?.length === 0) return <p className="text-center">No chats yet!</p>
+  if(chats.data?.length === 0) return <p className="text-center">{ t('chat.noChatsYet') }</p>
 
   return (
     <ScrollArea className="h-[20rem]">
@@ -164,13 +167,13 @@ export function ChatList() {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
                       <DropdownMenuItem className="cursor-pointer" onClick={() => deleteChatAndMutateChatData(chat.id)}>
-                        Delete
+                        { t('common.delete') }
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
               </div>
               <span className="line-clamp-2 w-[260px] whitespace-break-spaces text-xs">
-                {chat.messages[0].deleted ? "Deleted message" : chat.messages[0].text}
+                {chat.messages[0].deleted ? t('chat.deletedMessage') : chat.messages[0].text}
               </span>
             </div>
         ))

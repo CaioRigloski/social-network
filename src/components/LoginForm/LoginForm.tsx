@@ -20,11 +20,14 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { useSearchParams } from "next/navigation"
+import { useTranslations } from "next-intl"
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
+  const t = useTranslations()
+
   const router = useRouter()
 
   const searchParams = useSearchParams()
@@ -53,9 +56,9 @@ export function LoginForm({
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="bg-foreground text-color">
         <CardHeader>
-          <CardTitle className="text-2xl">Login</CardTitle>
+          <CardTitle className="text-2xl">{ t('common.login') }</CardTitle>
           <CardDescription className="standard:text-color">
-            Enter your username below to Login to your account
+            { t('common.enterYourUsername') }
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -68,7 +71,7 @@ export function LoginForm({
                     name="username"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Username</FormLabel>
+                        <FormLabel>{ t('common.username') }</FormLabel>
                         <FormControl>
                           <Input placeholder="John Doe" {...field} type="text" className="text-color-secondary"/>
                         </FormControl>
@@ -84,7 +87,7 @@ export function LoginForm({
                       name="password"
                       render={({ field }) => (
                         <FormItem className="w-full">
-                          <FormLabel>Password</FormLabel>
+                          <FormLabel>{ t('common.password') }</FormLabel>
                           <FormControl>
                             <Input placeholder="..." {...field} type="password" className="text-color-secondary"/>
                           </FormControl>
@@ -95,13 +98,13 @@ export function LoginForm({
                   </div>
                 </div>
                 <Button type="submit" className="w-full">
-                  Login
+                  { t('common.login') }
                 </Button>
               </div>
               <div className="mt-4 text-center text-sm">
-                Don&apos;t have an account?{" "}
+                { t('common.dontHaveAccount') }{" "}
                 <Link href="/user/sign-up" className="underline underline-offset-4">
-                  Sign up
+                  { t('common.signUp') }
                 </Link>
               </div>
             </form>

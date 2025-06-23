@@ -11,7 +11,48 @@
     "toogleTheme": "Toggle theme",
     "signOut": "Sign out"
   },
+  "post": {
+    "whatsOnYourMind": "What's on your mind?",
+    "addImage": "Add image",
+    "publish": "Publish",
+    "successfullyPublished": "Succesfully published",
+    "noCommentsYet": "No comments yet",
+    "leaveAComment": "Leave a comment!",
+    "postDetails": "Post details.",
+    "seePostDetails": "See the posts details!"
+  },
+  "chat": {
+    "chats": "Chats",
+    "letsTalkToSomeone": "Let's talk to someone?",
+    "noFriendsToTalk": "No friends to talk!",
+    "noChatsYet": "No chats yet!",
+    "typeHere": "Type here...",
+    "messageEdit": "Message edit",
+    "messageEditDescription": "Edit your message to perfection.",
+    "deletedMessage": "Deleted message"
+  },
   "common": {
-    "myFriends": "My friends"
+    "myFriends": "My friends",
+    "addFriend": "Add friend",
+    "searchFriends": "Search friends...",
+    "dontHaveFriends": "You don't have friends, make some!",
+    "unknownError": "An unknown error occurred",
+    "contactAdmin": "Error. Please contact the administrator.",
+    "delete": "Delete",
+    "edit": "Edit",
+    "remove": "Remove",
+    "viewMore": "view more",
+    "viewLess": "view less",
+    "noSearchResults": "There's no results for your search. Try again with a different text!",
+    "noMoreResults": "No more results.",
+    "login": "Login",
+    "enterYourUsername": "Enter your username below to Login to your account",
+    "username": "Username",
+    "password": "Password",
+    "dontHaveAccount": "Don't have an account?",
+    "signUp": "Sign up",
+    "enterYourUsernameSignUp": "Enter your username and password below to create your account",
+    "publicDisplayName": "This is your public display name.",
+    "haveAnAccount": "Already have an account?"
   }
 }

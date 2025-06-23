@@ -12,8 +12,12 @@ import Link from "next/link"
 import { API_ROUTES } from "@/lib/apiRoutes"
 import CommentComponentInterface from "../../../interfaces/post/commentComponent/commentComponent.interface"
 import { useSession } from "next-auth/react"
+import { useTranslations } from "next-intl"
+
 
 export function Comment(props: CommentComponentInterface) {
+  const t = useTranslations()
+
   const session = useSession()
 
   const [ editedComment, setEditedComment ] = useState<string>(props.comment.text)
@@ -80,8 +84,8 @@ export function Comment(props: CommentComponentInterface) {
             <Link href={props.isOwn ? "/user/profile" : `user/profile/${id}`}>{username}</Link>
             </p>
           <p ref={textRef} className={`${isExpanded && "block"} mt-1 text-xs leading-5 comment-line-limit text-color`}>{props.comment.text}</p>
-          {isTruncated && !isExpanded && <button className="mt-1 text-xs leading-5 text-sky-700 standard:text-color font-medium" onClick={() => setIsExpanded(true)}>view more</button>}
-          {isExpanded && <button className="mt-1 text-xs leading-5 text-sky-700 standard:text-color font-medium" onClick={() => setIsExpanded(false)}>view less</button>}
+          {isTruncated && !isExpanded && <button className="mt-1 text-xs leading-5 text-sky-700 standard:text-color font-medium" onClick={() => setIsExpanded(true)}>{ t('common.viewMore') }</button>}
+          {isExpanded && <button className="mt-1 text-xs leading-5 text-sky-700 standard:text-color font-medium" onClick={() => setIsExpanded(false)}>{ t('common.viewLess') }</button>}
         </div>
         {
           props.isOwn &&
@@ -94,10 +98,10 @@ export function Comment(props: CommentComponentInterface) {
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuItem onClick={deleteCommentAndMutatePostsData}>
-                  Delete
+                  { t('common.delete') }
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setCommentEditionIsOpen(true)}>
-                  Edit
+                  { t('common.edit') }
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

@@ -11,7 +11,48 @@
     "toggleTheme": "Trocar tema",
     "signOut": "Sair"
   },
+  "post": {
+    "whatsOnYourMind": "No que está pensando?",
+    "addImage": "Adicionar imagem",
+    "publish": "Publicar",
+    "successfullyPublished": "Publicado com sucesso",
+    "noCommentsYet": "Não há comentários",
+    "postDetails": "Detalhes do post.",
+    "leaveAComment": "Deixe um comentário!",
+    "seePostDetails": "Veja os detalhes do post!"
+  },
+  "chat": {
+    "chats": "Conversas",
+    "letsTalkToSomeone": "Que tal conversar com alguém?",
+    "noFriendsToTalk": "Sem amigos para conversar!",
+    "noChatsYet": "Não há conversas ainda!",
+    "typeHere": "Escreva aqui...",
+    "messageEdit": "Edição de mensagem",
+    "messageEditDescription": "Edite sua mensagem com perfeição.",
+    "deletedMessage": "Mensagem excluída"
+  },
   "common": {
-    "myFriends": "Meus amigos"
+    "myFriends": "Meus amigos",
+    "addFriend": "Adicionar amigo",
+    "searchFriends": "Buscar amigos...",
+    "dontHaveFriends": "Você não tem amigos, faça alguns!",
+    "unknownError": "Ocorreu um erro desconhecido",
+    "contactAdmin": "Erro. Por favor contate o administrador.",
+    "delete": "Excluir",
+    "edit": "Editar",
+    "remove": "Remover",
+    "viewMore": "ver mais",
+    "viewLess": "ver menos",
+    "noSearchResults": "Não há resultados para a sua busca. Tente novamente com um termo diferente!",
+    "noMoreResults": "Não há mais resultados.",
+    "login": "Acessar",
+    "enterYourUsername": "Insira seu usuário abaixo para acessar sua conta",
+    "username": "Nome de usuário",
+    "password": "Senha",
+    "dontHaveAccount": "Não tem uma conta?",
+    "signUp": "Inscrever-se",
+    "enterYourUsernameSignUp": "Insira seu usuário e senha abaixo para criar sua conta",
+    "publicDisplayName": "Esse nome será mostrado a todos os outros usuários.",
+    "haveAnAccount": "Já tem uma conta?"
   }
 }

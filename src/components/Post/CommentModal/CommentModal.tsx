@@ -13,8 +13,12 @@ import { mutate } from "swr"
 import PostInterface from "@/interfaces/post/post.interface"
 import { API_ROUTES } from "@/lib/apiRoutes"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { useTranslations } from "next-intl"
+
 
 export function CommentModal(props: CommentModalInterface) {
+  const t = useTranslations()
+
   const session = useSession()
   const [ comment, setComment ] = useState<string>("")
 
@@ -51,7 +55,7 @@ export function CommentModal(props: CommentModalInterface) {
           </h3>
         </DialogHeader>
         <DialogTitle className="hidden">
-          Post details.
+          { t('post.postDetails') }
         </DialogTitle>
         <DialogDescription className="overflow-y-auto standard:text-color">
           { props.post.description }
@@ -67,13 +71,13 @@ export function CommentModal(props: CommentModalInterface) {
             </ScrollArea>
             :
             <div className="grid items-start text-center text-gray-400">
-              <p className="text-color">No comments yet</p>
+              <p className="text-color">{ t('post.noCommentsYet') }</p>
             </div>
           }
-          <Textarea className="col-span-3 resize-none outline-none focus-visible:ring-1 focus-visible:ring-none border light:border-muted-foreground focus:border-2 standard:text-color-secondary" placeholder="Leave a comment!" onChange={e => setComment(e.target.value)} onKeyDown={e => detectEnterKey(e) && commentAndMutatePostsData()} maxLength={500}/>
+          <Textarea className="col-span-3 resize-none outline-none focus-visible:ring-1 focus-visible:ring-none border light:border-muted-foreground focus:border-2 standard:text-color-secondary" placeholder={ t('post.leaveAComment') } onChange={e => setComment(e.target.value)} onKeyDown={e => detectEnterKey(e) && commentAndMutatePostsData()} maxLength={500}/>
         </div>
         <DialogDescription className="hidden">
-          See the posts details!
+          { t('post.seePostDetails') }
         </DialogDescription>
       </DialogContent>
     </Dialog>

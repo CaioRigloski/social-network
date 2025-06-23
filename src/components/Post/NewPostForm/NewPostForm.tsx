@@ -18,9 +18,12 @@ import { Button } from "@/components/ui/button"
 import NewPostFormInterface from "@/interfaces/post/newPostForm/newPostForm.interface"
 import { API_ROUTES } from "@/lib/apiRoutes"
 import { toast } from "sonner"
+import { useTranslations } from "next-intl"
 
 
 export function NewPostForm(props: NewPostFormInterface) {
+  const t = useTranslations()
+
   const [ inputImage, setInputImage ] = useState<File | undefined>(undefined)
   const fileInputRef = useRef<HTMLInputElement>(null)
   
@@ -35,7 +38,7 @@ export function NewPostForm(props: NewPostFormInterface) {
         description: newPostForm.getValues("description")
       })
 
-      mutate<PostInterface[]>(API_ROUTES.feed.getPosts, data => {
+      mutate<PostInterface[]>(API_ROUTES.posts, data => {
         if (data && newPostData) return [newPostData, ...data]
       }, false)
 
@@ -46,13 +49,13 @@ export function NewPostForm(props: NewPostFormInterface) {
       setInputImage(undefined)
       props.onImageSelected(false)
 
-      toast.success("Succesfully published post")
+      toast.success(t('post.succesfullyPublished'))
     } catch (err) {
 
       if (err instanceof Error) {
         toast.error(err.message)
       } else {
-        toast.error("An unknown error occurred.")
+        toast.error(t('common.unknownError'))
       }
     }
   }
@@ -100,17 +103,17 @@ export function NewPostForm(props: NewPostFormInterface) {
           render={({ field }) => (
             <FormItem className="w-full">
               <FormControl>
-                <Textarea placeholder="What's on your mind?" className="resize-none focus:!ring-transparent text-black rounded-sm" {...field}/>
+                <Textarea placeholder={t('post.whatsOnYourMind')} className="resize-none focus:!ring-transparent text-black rounded-sm" {...field}/>
               </FormControl>
             </FormItem>
           )}
         />
         
         <div className="pt-2">
-          <Button type="button" variant="ghost" className="w-fit h-fit place-self-end p-1" title="Add image" onClick={openFileDialog}>
+          <Button type="button" variant="ghost" className="w-fit h-fit place-self-end p-1" title={t('post.addImage')} onClick={openFileDialog}>
             <ImageIcon width={22} height={22} />
           </Button>
-          <Button type="submit" variant="ghost" className="w-fit h-fit place-self-end p-1" disabled={isSubmitDisabled} title="Publish post">
+          <Button type="submit" variant="ghost" className="w-fit h-fit place-self-end p-1" disabled={isSubmitDisabled} title={t('post.publish')}>
             <PaperPlaneIcon width={22} height={22} />
           </Button>
         </div>

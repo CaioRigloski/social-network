@@ -24,8 +24,12 @@ import { io } from "socket.io-client"
 import { DeleteMessage } from "@/interfaces/socket/data/deleteMessage.interface"
 import { EditMessage } from "@/interfaces/socket/data/editMessage.interface"
 import { DeleteChat } from "@/interfaces/socket/data/deleteChat.interface"
+import { useTranslations } from "next-intl"
+
 
 export function Chat() {
+  const t = useTranslations()
+
   const socket = io()
   const session = useSession()
   const { chatId, addChat } = useChat()
@@ -250,7 +254,7 @@ export function Chat() {
                   message.user.id === session.data?.user?.id ?
                   <span key={message.id} className="flex w-full justify-end items-start">
                     <div className="w-fit h-fit flex flex-col items-end">
-                      <p className="text-white p-2 bg-green-500 rounded-xl w-fit whitespace-pre-wrap">{message.deleted ? "Deleted message" : message.text}</p>
+                      <p className="text-white p-2 bg-green-500 rounded-xl w-fit whitespace-pre-wrap">{message.deleted ? t('chat.deletedMessage') : message.text}</p>
                       <time className="ml-auto text-[0.50rem]" dateTime={message.createdAt.toString()}>
                         { new Date(message.createdAt).toLocaleTimeString() }
                       </time>
@@ -265,10 +269,10 @@ export function Chat() {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent>
                           <DropdownMenuItem className="cursor-pointer" onClick={() => openMessageEdit(message)}>
-                            Edit
+                            { t('common.edit') }
                           </DropdownMenuItem>
                           <DropdownMenuItem onClick={() => deleteMessageAndMutateChatData(message.id)} className="cursor-pointer">
-                            Delete
+                            { t('common.delete') }
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
@@ -276,7 +280,7 @@ export function Chat() {
                   </span>
                   :
                   <span key={message.id} className="w-fit flex flex-col">
-                    <p className="text-white p-2 bg-cyan-500 rounded-xl w-fit whitespace-pre-wrap">{message.deleted ? "Deleted message" : message.text}</p>
+                    <p className="text-white p-2 bg-cyan-500 rounded-xl w-fit whitespace-pre-wrap">{message.deleted ? t('chat.deletedMessage') : message.text}</p>
                     <time className="ml-auto text-[0.50rem] self-start ml-0" dateTime={message.createdAt.toString()}>
                       { new Date(message.createdAt).toLocaleTimeString() }
                     </time>
@@ -287,7 +291,7 @@ export function Chat() {
             </ScrollArea>
             <Separator className="w-[95%] justify-self-center mb-2"/>
             <div className="flex flex-row gap-2 p-2 items-center justify-center">
-              <Textarea value={inputValue} onChange={e => setInputValue(e.target.value)} onKeyDown={e => detectEnterKey(e) && sendMessage()} className="resize-none focus:!ring-transparent border border-2 gray-100 w-[90%] justify-self-center scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-100" placeholder="Type here..." maxLength={500}/>
+              <Textarea value={inputValue} onChange={e => setInputValue(e.target.value)} onKeyDown={e => detectEnterKey(e) && sendMessage()} className="resize-none focus:!ring-transparent border border-2 gray-100 w-[90%] justify-self-center scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-100" placeholder={t('chat.typeHere')} maxLength={500}/>
               <Button variant="ghost" onClick={() => sendMessage()} className="p-2">
                 <PaperPlaneIcon width={20} height={20}/>
               </Button>
@@ -298,10 +302,10 @@ export function Chat() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>
-              Message edit
+              { t('chat.messageEdit') }
             </DialogTitle>
             <DialogDescription>
-              Edit your message to perfection.
+              { t('chat.messageEditDescription') }
             </DialogDescription>
           </DialogHeader>
           <Textarea defaultValue={messageToEdit?.text} onChange={e => setEditedMessage(e.target.value)} maxLength={500}/>

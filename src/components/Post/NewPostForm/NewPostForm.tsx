@@ -19,12 +19,14 @@ import NewPostFormInterface from "@/interfaces/post/newPostForm/newPostForm.inte
 import { API_ROUTES } from "@/lib/apiRoutes"
 import { toast } from "sonner"
 import { useTranslations } from "next-intl"
+import { CloseButton } from "@/components/CloseButton/CloseButton"
 
 
 export function NewPostForm(props: NewPostFormInterface) {
   const t = useTranslations()
 
   const [ inputImage, setInputImage ] = useState<File | undefined>(undefined)
+  const [imageUrl, setImageUrl] = useState<string | undefined>(undefined)
   const fileInputRef = useRef<HTMLInputElement>(null)
   
   const newPostForm = useForm<z.infer<typeof newPostSchema>>({
@@ -49,9 +51,9 @@ export function NewPostForm(props: NewPostFormInterface) {
       setInputImage(undefined)
       props.onImageSelected(false)
 
-      toast.success(t('post.succesfullyPublished'))
+      toast.success(t('post.successfullyPublished'))
     } catch (err) {
-
+      console.log(err)
       if (err instanceof Error) {
         toast.error(err.message)
       } else {
@@ -89,14 +91,23 @@ export function NewPostForm(props: NewPostFormInterface) {
     }
   }, [newPostForm.formState.errors.description, newPostForm.formState.errors.picture])
 
-  const description = newPostForm.watch("description")
-  const picture = newPostForm.watch("picture")
+  useEffect(() => {
+    if (inputImage) {
+      const url = URL.createObjectURL(inputImage)
+      setImageUrl(url)
+      return () => URL.revokeObjectURL(url)
+    } else {
+      setImageUrl(undefined)
+    }
+  }, [inputImage])
 
-  const isSubmitDisabled = !description && !picture
+  const description = newPostForm.watch("description")
+
+  const isSubmitDisabled = !description && !inputImage
 
   return (
     <Form {...newPostForm}>
-      <form onSubmit={newPostForm.handleSubmit(async() => await mutatePostsData())} className="flex flex-col w-full items-end shadow-md p-2 bg-foreground text-color rounded-md" onMouseEnter={() => props.element(true)} onMouseLeave={() => props.element(false)}>
+      <form onSubmit={newPostForm.handleSubmit(async() => await mutatePostsData())} className="flex flex-col w-full items-end shadow-md p-2 bg-foreground text-color rounded-md">
         <FormField
           control={newPostForm.control}
           name="description"
@@ -129,8 +140,12 @@ export function NewPostForm(props: NewPostFormInterface) {
             </FormItem>
           )}
         />
-        { inputImage && <Image src={URL.createObjectURL(inputImage)} width={500} height={500} alt="image" className="w-auto h-auto self-stretch"/> }
-        <FormMessage/>
+        { imageUrl &&
+        <div className="relative" onMouseEnter={() => props.element(true)} onMouseLeave={() => props.element(false)}>
+          <Image src={imageUrl} width={500} height={500} alt="image" className="w-auto h-auto self-stretch"/>
+          <CloseButton onClick={() => { setInputImage(undefined), props.element(false) }} className="absolute top-2 right-2"/>
+        </div>
+        }
       </form>
     </Form>
   )

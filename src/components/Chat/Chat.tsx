@@ -25,6 +25,7 @@ import { DeleteMessage } from "@/interfaces/socket/data/deleteMessage.interface"
 import { EditMessage } from "@/interfaces/socket/data/editMessage.interface"
 import { DeleteChat } from "@/interfaces/socket/data/deleteChat.interface"
 import { useTranslations } from "next-intl"
+import { CloseButton } from "../CloseButton/CloseButton"
 
 
 export function Chat() {
@@ -244,9 +245,7 @@ export function Chat() {
                 }
                 </div>
               </div>
-              <Button variant="ghost" className="justify-self-end self-start p-1 w-fit h-fit duration-400 ease-in" onClick={() => addChat(undefined)}>
-                <Cross1Icon/>
-              </Button>
+              <CloseButton onClick={() => addChat(undefined)}/>
             </header>
             <ScrollArea className="flex flex-1 flex-col gap-2 p-4 min-h-[25rem] max-h-[25rem]">
               {

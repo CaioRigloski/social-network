@@ -13,7 +13,6 @@ import { mkdir } from "fs/promises"
 
 
 export async function createNewPost(values: z.infer<typeof newPostSchema>) {
-  const client = new vision.ImageAnnotatorClient()
   const session = await auth()
   
   try {
@@ -24,6 +23,8 @@ export async function createNewPost(values: z.infer<typeof newPostSchema>) {
     const UUID = randomUUID()
     let labels: string[] = []
 
+    const hasVision = process.env.APY_KEY && process.env.GOOGLE_APPLICATION_CREDENTIALS
+
     if (values.picture) {
       const imageBuffer = Buffer.from(values.picture.replace(/^data:image\/\w+;base64,/, ""), 'base64')
       const imageName = `${UUID}.${imageFormats.posts}`
@@ -31,8 +32,14 @@ export async function createNewPost(values: z.infer<typeof newPostSchema>) {
       
       writeFileSync(imagePath, imageBuffer)
 
-      const [result] = await client.labelDetection(imagePath)
-      labels = result.labelAnnotations?.map(l => l.description!).filter(Boolean) ?? []
+      if (hasVision) {
+        const vision = await import('@google-cloud/vision')
+        const client = new vision.ImageAnnotatorClient()
+        const [result] = await client.labelDetection(imagePath)
+        labels =
+          result.labelAnnotations?.map((l) => l.description!).filter(Boolean) ??
+          []
+      }
     }
 
     const res = await prisma.post.create({

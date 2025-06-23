@@ -33,7 +33,7 @@ export function CommentModal(props: CommentModalInterface) {
           <p>{props.post.commentsCount}</p>
         </div>
       </DialogTrigger>
-      <DialogContent className="max-w-[50vw] w-[50vw] max-h-[95vh] h-[95vh] grid grid-rows-[auto_auto_1fr] break-all bg-foreground text-color">
+      <DialogContent className="max-w-[50vw] w-[50vw] max-h-[95vh] h-[95vh] grid grid-rows-[auto_auto_1fr] break-all bg-foreground text-color border-none">
         <DialogHeader className="flex flex-row gap-2">
           <AvatarComponent user={props.post.user}/>
           <h3>

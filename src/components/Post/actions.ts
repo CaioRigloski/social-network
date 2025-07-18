@@ -23,7 +23,7 @@ export async function createNewPost(values: z.infer<typeof newPostSchema>) {
     const UUID = randomUUID()
     let labels: string[] = []
 
-    const hasVision = process.env.API_KEY && process.env.GOOGLE_APPLICATION_CREDENTIALS
+    const hasVision = process.env.GOOGLE_API_KEY && process.env.GOOGLE_APPLICATION_CREDENTIALS
 
     if (values.picture) {
       const imageBuffer = Buffer.from(values.picture.replace(/^data:image\/\w+;base64,/, ""), 'base64')

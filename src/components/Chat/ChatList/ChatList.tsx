@@ -21,8 +21,8 @@ import { EditMessage } from "@/interfaces/socket/data/editMessage.interface"
 import { DeleteChat } from "@/interfaces/socket/data/deleteChat.interface"
 import { Time } from "@/components/Time/Time"
 import { useTranslations } from "next-intl"
+import { socket } from "@/lib/socket"
 
-const socket = io()
 
 export function ChatList() {
   const t = useTranslations()

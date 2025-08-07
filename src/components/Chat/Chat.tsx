@@ -20,18 +20,17 @@ import MessageInterface from "@/interfaces/chat/message.interface"
 import updateChat from "@/components/Chat/actions"
 import { chatFetcher } from "@/lib/swr"
 import { API_ROUTES } from "@/lib/apiRoutes"
-import { io } from "socket.io-client"
 import { DeleteMessage } from "@/interfaces/socket/data/deleteMessage.interface"
 import { EditMessage } from "@/interfaces/socket/data/editMessage.interface"
 import { DeleteChat } from "@/interfaces/socket/data/deleteChat.interface"
 import { useTranslations } from "next-intl"
 import { CloseButton } from "../CloseButton/CloseButton"
+import { socket } from "@/lib/socket"
 
 
 export function Chat() {
   const t = useTranslations()
 
-  const socket = io()
   const session = useSession()
   const { chatId, addChat } = useChat()
   const [ inputValue, setInputValue ] = useState<string>("")

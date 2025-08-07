@@ -38,7 +38,7 @@
     "rootDir": "."
   },
   "include": [
-    "server.ts",
+    "socket.ts",
     "src/**/*",
     ".next/types/**/*.ts"
   ],

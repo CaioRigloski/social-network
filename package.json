@@ -3,10 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "set NODE_OPTIONS=--loader ts-node/esm&&node server.ts",
-    "build": "next build",
+    "dev": "next dev",
+    "socket": "set NODE_OPTIONS=--loader ts-node/esm&&node socket.ts",
+    "build": "next build && tsc -p tsconfig.socket.json",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+
+    "docker:build": "docker compose build",
+    "docker:db:build": "docker compose -f docker-compose-db.yml build",
+    "docker:up": "docker compose up -d",
+    "docker:db:up": "docker compose -f docker-compose-db.yml up -d"
   },
   "type": "module",
   "dependencies": {
